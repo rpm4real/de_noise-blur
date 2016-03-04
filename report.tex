@@ -10,9 +10,16 @@
 %sorting=unsrt
 %]{biblatex}
 %\addbibresource{projectsources.bib}
+\usepackage{xcolor}
 
 \usepackage[paperwidth=8.5in,paperheight=11in,centering,hmargin=1in,vmargin=1in]{geometry}
 \nipsfinalcopy
+
+%\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\usepackage{physics}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Tau}{\mathcal{T}}
 
 \begin{document}
 \title{Image Deblurring and Denoising for Various Fidelity Terms and Regularizers}
@@ -29,10 +36,26 @@ Talk about the netflix challenge\\
 Talk about the data set we're using
 
 \section{Background of Methodology and Implementation}
-blah blah 
+
 
 \subsection{Total Variation Regularization}
-blah blah
+The usual Total-Variation deblurring model, as seen in (BECK/TOUBELLE REF) can be formulated as 
+\begin{equation} \label{tv_orig}
+\min_{x} \norm{ \mathcal{A}(x) - b }^2 + 2 \lambda \mathrm{TV}(x),
+\end{equation}
+where $\norm{\cdot}$ is taken as either a Frobenius norm or a 2-norm, depending on applications, $\mathcal{A}$ is some linear map which represents blurring the image, $\lambda>0$ is a regularization parameter, and $\mathrm{TV}(x)$ is the Total-Variation semi-norm. Two choices similar choices exist for the TV-norm: the so-called isotropic type, and the $l_1$ type. In this work, we work exclusively with the $l_1$-based TV-norm, defined as 
+$$ TV_{l_1}(x) = \sum_{i=1}^{m-1} \sum_{j=1}^{n-1} \left( \abs{x_{i,j}  - x_{i+1,j} } + \abs{ x_{i,j} - x_{i,j+1}  } \right) + \sum_{i=1}^{m-1} \abs{ x_{i,n} - x_{i+1,n} } + \sum_{j=1}^{n-1} \abs{ x_{m,j} - x_{m,j+1 } },$$ for $x \in \R^{m \times n},$ and where the reflexive boundary conditions
+\begin{align*}
+x_{m+1,j} - x_{m,j} &= 0, \textrm{ for all }j \\
+ x_{i,n+1} - x_{i,n} &= 0, \textrm{ for all }i
+\end{align*}
+are assumed. We denote the transformation $\mathcal{A}(x)$ in Equation \eqref{tv_orig} with a matrix multiplication $Ax$ from here onwards, noting that $A$ represents some blur matrix. Our approach considers a more general problem
+\begin{equation} \label{tv_ours}
+\min_{x} f(Ax - b ) + 2 \lambda \mathrm{TV}_{l_1}(x),
+\end{equation}
+where $f: \R^{m \times n} \rightarrow [0,\infty)$ is any continuous functional which gives a measurement of the size of the fidelity term $Ax-b.$
+
+
 
 \subsection{1-Norm Wavelet Regularization}
 
