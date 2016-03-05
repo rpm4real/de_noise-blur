@@ -31,33 +31,42 @@ University of Washington\\
 \maketitle
 
 \section{Introduction}
-Go over what the problem we're trying to solve it\\
-Talk about the netflix challenge\\
-Talk about the data set we're using
+make your images pretty
 
 \section{Background of Methodology and Implementation}
+The general approach of to an image deblurring or denoising problem is the minimization of a loss function of the form
+\begin{equation} \label{general}
+ \min_x f(\mathcal{A}(x) -b) + g(x),
+\end{equation}
+where $\mathcal{A}(x)$ is a convolution of the desired image $x$ with a gaussian kernel creating a blur,  $f : \R^{m \times n} \rightarrow [0, \infty)$ represents some continuous measure of distance between the corrupt image $b$ and the desired image $x$, and $g:\R^{m \times n} \rightarrow [0,\infty)$ is some regularization on the allowed amount of noise in $x$. The term $f(\mathcal{A}(x)-b)$ is referred to as the \emph{fidelity term}, and the term $g(x)$ is referred to as the \emph{regularization}. We can represent the blurring convolution $\mathcal{A}(\cdot): \R^{m \times n} \rightarrow \R^{m \times n}$ by left matrix multplication with some matrix $A$, so we do so for convenience from here forward. In addition, since we require some pixel value $x_{ij} \in [0,1]$, we can add an additional term to the loss function as
+\begin{equation} \label{loss}
+ L_b(x) = f(Ax-b) + g(x) + \delta(x | [0,1] ),
+\end{equation}
+where $\delta(x | [0,1])$ is an indiciator function for the unit interval. 
 
+\emph{here we can explain the general prox-gradient approach, and go into details for specific cases in the following subsections}
 
 \subsection{Total Variation Regularization}
 The usual Total-Variation deblurring model, as seen in (BECK/TOUBELLE REF) can be formulated as 
 \begin{equation} \label{tv_orig}
-\min_{x} \norm{ \mathcal{A}(x) - b }^2 + 2 \lambda \mathrm{TV}(x),
+\min_{x} \norm{ Ax - b }^2 + 2 \lambda \mathrm{TV}(x),
 \end{equation}
-where $\norm{\cdot}$ is taken as either a Frobenius norm or a 2-norm, depending on applications, $\mathcal{A}$ is some linear map which represents blurring the image, $\lambda>0$ is a regularization parameter, and $\mathrm{TV}(x)$ is the Total-Variation semi-norm. Two choices similar choices exist for the TV-norm: the so-called isotropic type, and the $l_1$ type. In this work, we work exclusively with the $l_1$-based TV-norm, defined as 
+where $\norm{\cdot}$ is taken as either a Frobenius norm or a 2-norm, depending on applications,  $\lambda>0$ is a regularization parameter, and $\mathrm{TV}(x)$ is the Total-Variation semi-norm. Two choices similar choices exist for the TV-norm: the so-called isotropic type, and the $l_1$ type. In this work, we work exclusively with the $l_1$-based TV-norm, defined as 
 $$ TV_{l_1}(x) = \sum_{i=1}^{m-1} \sum_{j=1}^{n-1} \left( \abs{x_{i,j}  - x_{i+1,j} } + \abs{ x_{i,j} - x_{i,j+1}  } \right) + \sum_{i=1}^{m-1} \abs{ x_{i,n} - x_{i+1,n} } + \sum_{j=1}^{n-1} \abs{ x_{m,j} - x_{m,j+1 } },$$ for $x \in \R^{m \times n},$ and where the reflexive boundary conditions
 \begin{align*}
 x_{m+1,j} - x_{m,j} &= 0, \textrm{ for all }j \\
  x_{i,n+1} - x_{i,n} &= 0, \textrm{ for all }i
 \end{align*}
-are assumed. We denote the transformation $\mathcal{A}(x)$ in Equation \eqref{tv_orig} with a matrix multiplication $Ax$ from here onwards, noting that $A$ represents some blur matrix. Our approach considers a more general problem
+are assumed. Our approach considers a more general problem
 \begin{equation} \label{tv_ours}
 \min_{x} f(Ax - b ) + 2 \lambda \mathrm{TV}_{l_1}(x),
 \end{equation}
-where $f: \R^{m \times n} \rightarrow [0,\infty)$ is any continuous functional which gives a measurement of the size of the fidelity term $Ax-b.$
+where $f: \R^{m \times n} \rightarrow [0,\infty)$ is any continuous functional which gives a measurement of the size of the fidelity term.
 
 
 
 \subsection{1-Norm Wavelet Regularization}
+
 
 \section{Testing}
 
