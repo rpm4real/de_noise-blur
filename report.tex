@@ -19,6 +19,7 @@
 
 %\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
 \usepackage{physics}
+\newcommand{\prox}{\mathrm{prox}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\Tau}{\mathcal{T}}
@@ -92,6 +93,21 @@ where $\delta(x | [0,1])$ is an indiciator function for the unit interval.
 
 \emph{here we can explain the general prox-gradient approach, and go into details for specific cases in the following subsections}
 
+
+A simple way to solve for the real image $x$ is to apply the gradient descent algorithm,
+
+\begin{equation}
+x_k = x_{k-1} - t_k \nabla f(x_{k-1}),
+\end{equation}
+
+for suitable stepsize $t_k > 0$. When $f$ includes nonsmooth regluarization $R$ we can rewrite this as a proximal mapping,
+
+\begin{equation}
+\prox_R(x_{k-1} - \nabla f(x_{k-1})) = \min_x \left( \frac{1}{2}||x-x_{k-1} - \nabla f(x_{k-1})||_2^2  + \lambda R(x)\right)
+\end{equation}
+
+The advantage of this form is that many nonsmooth regularizers have a close formed solution for their $\prox$.
+
 % TV Regularization
 \subsection{Total Variation Regularization}
 The usual Total-Variation deblurring model, as seen in (BECK/TOUBELLE REF) can be formulated as 
@@ -113,6 +129,8 @@ where $f: \R^{m \times n} \rightarrow [0,\infty)$ is any continuous functional w
 
 % 1-Norm Wavelet Regularization
 \subsection{1-Norm Wavelet Regularization}
+
+Wavelet regularization implies to take $A = RW$ where  $R$ is the blur matrix and  $W$ is a wavelet basis such that multiplying by $W$ corresponds to performing the inverse wavelet transform. The primary motivation for this approach is that most images have a sparse representation in the wavelet domain that can be easily exploited by $l_1$ regularization. Once transforming our image into a wavelet domain it is clear that the normal prox gradient methods can be applied. 
 
 
 \section{Testing}
