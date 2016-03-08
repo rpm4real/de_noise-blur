@@ -234,9 +234,9 @@ $$
 
 \begin{exampleblock}{Proximal Gradient Step}
 \begin{align*}
-x^{k+1} &= \prox_{\mathcal{L}^{-1}(\lambda \|\cdot \|_{TV} + \delta_{[0,1]})} (\underbrace{x^k - \mathcal{L}^{-1} A^T\nabla f (Ax^k - b)}_{u^k}) \\
-&= \AMz \left( \|u^k - z\|_F^2 + \lambda \|z\|_{TV} + \delta(z | [0,1]) \right) \\
-&= P_{[0,1]}  \left( \AMz \left( \|u^k - z\|_F^2 + \lambda \|z\|_{TV} \right) \right)
+x^{k+1} &= \prox_{\alpha^{-1}(\lambda \|\cdot \|_{TV} + \delta_{[0,1]})} (\underbrace{x^k - \alpha^{-1} A^T\nabla f (Ax^k - b)}_{u^k}) \\
+&= \AMz \left( \|u^k - z\|_F^2 + \alpha^{-1}\lambda \|z\|_{TV} + \delta(z | [0,1]) \right) \\
+&= P_{[0,1]}  \left( \AMz \left( \|u^k - z\|_F^2 + \alpha^{-1}\lambda \|z\|_{TV} \right) \right)
 \end{align*}
 \end{exampleblock}
 
