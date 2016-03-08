@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  7 MAR 2016 17:50
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  7 MAR 2016 17:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1356,7 +1356,7 @@ Overfull \hbox (7.46361pt too wide) in paragraph at lines 279--279
 File: ../figures/gaussian_peppers.png Graphic file (type png)
 
 <use ../figures/gaussian_peppers.png>
-Package pdftex.def Info: ../figures/gaussian_peppers.png used on input line 359
+Package pdftex.def Info: ../figures/gaussian_peppers.png used on input line 360
 .
 (pdftex.def)             Requested size: 272.55751pt x 204.48575pt.
  [17
@@ -1367,7 +1367,7 @@ File: ../figures/student-t_peppers.png Graphic file (type png)
 
 <use ../figures/student-t_peppers.png>
 Package pdftex.def Info: ../figures/student-t_peppers.png used on input line 38
-3.
+4.
 (pdftex.def)             Requested size: 272.55751pt x 204.69115pt.
  [18
 
@@ -1385,11 +1385,11 @@ Package pdftex.def Info: ../figures/student-t_peppers.png used on input line 38
 \tf@snm=\write8
 \openout8 = `515slides.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 407.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 407.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 408.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 408.
  (./515slides.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 407.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 407.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 408.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 408.
 Package rerunfilecheck Info: File `515slides.out' has not changed.
 (rerunfilecheck)             Checksum: 58F656866CE9A222ADB4A08DDBECD486;367.
 
@@ -1397,12 +1397,12 @@ Package rerunfilecheck Info: File `515slides.out' has not changed.
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 407.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 408.
  ) 
 Here is how much of TeX's memory you used:
  18427 strings out of 493117
  350688 string characters out of 6135433
- 425967 words of memory out of 5000000
+ 426967 words of memory out of 5000000
  21362 multiletter control sequences out of 15000+600000
  17273 words of font info for 63 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1429,7 +1429,7 @@ ive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texliv
 e/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/
 2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/20
 14/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on 515slides.pdf (19 pages, 2226402 bytes).
+Output written on 515slides.pdf (19 pages, 2226411 bytes).
 PDF statistics:
  905 PDF objects out of 1000 (max. 8388607)
  777 compressed objects within 8 object streams

@@ -314,7 +314,8 @@ s_{ij} &= sgn(q_{ij} ) \min \{ 1, |q_{ij}| \}\\
 	\State $t^{k+1} = \frac{1 + \sqrt{1 + 4{t^k}^2}}{2}$ 
 	\State $y^{k+1} = x^k + \frac{t^k}{t^{k+1}}(z^k - x^k)$ 
 	\State \hspace{10 mm}$+ \frac{t^{k-1}}{t^{k+1}}(z^k - x^k) $
-\EndFor
+\EndFor\\
+\Return $x^N$
 \end{algorithmic}
 \end{minipage}
 \begin{minipage}{0.6\textwidth}
