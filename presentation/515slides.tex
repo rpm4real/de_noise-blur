@@ -82,28 +82,6 @@ To d:
 \item Noise: $w$ is noise drawn from a Gaussian distribution or a Student's t-distribution. 
 \end{itemize}
 \end{frame}
-% add a slide to describe A and w
-
-%\begin{frame}{Mathematical Formulation}
-%
-%\begin{exampleblock}{Artificial Blur/Noise}
-%\begin{itemize}
-%\item Blur added via convolution with Gaussian kernel.
-%\item Gaussian or Student-t noise added to blurred image.
-%\end{itemize}
-%\end{exampleblock}
-%
-%\begin{exampleblock}{Image Recovery}
-%Find an image $x$ balancing two properties
-%\begin{enumerate}
-%\item Convolution of $x$ with blur kernel is similar to $b$
-%\item Some measure of noise on $x$ is regularized
-%\end{enumerate}
-%\end{exampleblock}
-%
-%This slide kind of sucks as is :)  Anyone wanna fix it?
-%
-%\end{frame}
 
 % Naive Solution
 \begin{frame}{Naive Solution: $x = A^{-1}b$}
@@ -186,17 +164,19 @@ What is TV?
 Show two different definitions of TV from paper.
 \end{frame}
 
-% OPTIMIZATION WITH WAVELET REGULARIZATION
-\section{Optimization with Wavelet Regularization}
+% OPTIMIZATION WITH L1 WAVELET REGULARIZATION
+\section{Optimization with L1 Wavelet Regularization}
 
-\begin{frame}{Kelsey's stuff here}
-\begin{itemize}
-\item Loss function
-\item choice of lambda
-\item choice of wavelet
-\item prox gradient method
-\end{itemize}
+% Wavelet Loss Function
+\begin{frame}{L1 Wavelet Regularization}
+\begin{block}{Loss Function}
+\[ L_b(x) = f(Ax-b) + \lambda \| Wx \|_1 \vspace{1ex} \]
+\end{block}
 
+\vspace{2ex}
+\begin{block}{Proximal Gradient Step}
+\[ x^{k+1} = \prox_{\alpha^{-1}\lambda \| W \cdot \|_1} \Big(x^k - \alpha^{-1} A^T\nabla f (Ax^k - b)\Big) \vspace{1ex} \]
+\end{block}
 \end{frame}
 
 % Results: Gaussian Noise
@@ -245,6 +225,11 @@ Show two different definitions of TV from paper.
 \begin{textblock}{5}(14.1,10)
 \rotatebox{90}{Huber Loss}
 \end{textblock}
+\end{frame}
+
+% Choosing Lambda
+\begin{frame}{Choosing $\lambda$}
+
 \end{frame}
 
 % OPTIMIZATION WITH TOTAL VARIATION REGULARIZATION
