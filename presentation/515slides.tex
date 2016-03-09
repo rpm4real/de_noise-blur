@@ -78,8 +78,8 @@ To d:
 
 \vspace{-3ex}
 \begin{itemize}
-\item Blur: $Ax$ is a discrete convolution of a Gaussian kernel with symmetric boundary conditions.
-\item Noise: $w$ is noise drawn from a Gaussian distribution or a Student's t-distribution. 
+\item Blur: $Ax$ is a discrete convolution of the true image with a Gaussian kernel.
+\item Noise: $w$ is noise drawn from a Gaussian or Student's t distribution. 
 \end{itemize}
 \end{frame}
 
@@ -127,7 +127,7 @@ Since the blur operator is ill-conditioned, a better approach is to minimize a r
 	\begin{column}{0.45\linewidth}
 		\begin{block}{Regularization Terms}
 			\[ R = \left\{ \begin{matrix*}[l]
-			TV(x) \\[1ex] \| Wx \|_1
+			\| Wx \|_1 \\[1ex] TV(x)
 			\end{matrix*} \right. \]
 		\end{block}
 	\end{column}
@@ -155,13 +155,31 @@ Why use different functions than frobenius norm?  Use pictures as motivation. Sh
 
 % Regularizers
 \begin{frame}{Image Assumptions and Regularizers}
-Either assume image is sparse in wavelet domain, or assume image is smooth
 
-Talk about choice of g
-Haar, FFT
-What is TV?
+\begin{textblock}{6}(2,3.4)
+2-Level Haar Transform
+\end{textblock}
 
-Show two different definitions of TV from paper.
+\begin{textblock}{6}(8.7,3.2)
+$|x_{ij} - x_{i+1,\,j}| + |x_{ij}-x_{i,\,j+1}|$ 
+\end{textblock}
+
+\begin{center}
+\includegraphics[width=0.5\linewidth]{../figures/haarTrans.pdf} \hspace{-1em}
+\includegraphics[width=0.5\linewidth]{../figures/diff.pdf}
+\end{center}
+
+Our choices of regularizers assume that images are sparse in wavelet domains and that they are relatively smooth (low total variation).
+
+% Talk about choice of R
+% Haar, FFT
+% What is TV?
+% Show two different definitions of TV from paper.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% We could split this up into two slides so that we can have a little more info on each regularizer. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \end{frame}
 
 % OPTIMIZATION WITH L1 WAVELET REGULARIZATION
@@ -230,22 +248,22 @@ Show two different definitions of TV from paper.
 % Choosing Lambda
 \begin{frame}{Choosing $\lambda$}
 \begin{center}
-\includegraphics[width=0.9\textwidth]{../figures/changeLam.pdf}
+\includegraphics[width=0.9\textwidth]{../figures/wavLam.pdf}
 \end{center}
 
 \begin{textblock}{5}(0.9,6)
 \rotatebox{90}{Haar}
 \end{textblock}
 
-\begin{textblock}{5}(0.9,10)
-\rotatebox{90}{Cosine}
+\begin{textblock}{5}(0.9,9.5)
+\rotatebox{90}{Daubechies}
 \end{textblock}
 
-\begin{textblock}{5}(2.4,13.3)
+\begin{textblock}{5}(2.5,13.3)
 $\lambda = 10^{-4}$
 \end{textblock}
 
-\begin{textblock}{5}(6.7,13.3)
+\begin{textblock}{5}(6.9,13.3)
 $\lambda = 10^{-3}$
 \end{textblock}
 
