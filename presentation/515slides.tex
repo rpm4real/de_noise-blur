@@ -303,16 +303,42 @@ x^{k+1} &= \prox_{\alpha^{-1}(\lambda \|\cdot \|_{TV} + \delta_{[0,1]})} (\under
 \begin{frame}{Dual Form of Total Variation}
 
 \begin{exampleblock}{A Few Definitions}
-weee
+Let 
+
+\begin{itemize}
+
+\item $\mathcal{P} = \{ (p,q) \in \R^{(m-1) \times n} \times \R^{ m \times (n-1) } :  \abs{p_{i,j} } \le 1, \abs{p_{ i,j } } \le 1 ,$
+
+\item $ \mathcal{L} : \R^{(m-1) \times n} \times \R^{ m \times (n-1) } \rightarrow \R^{m \times n}$ such that
+
+$$ \mathcal{L}(p,q)_{i,j} = p_{i,j} + q_{i,j} - p_{ i-1,j } - q_{ i,j-1 }$$ for $i = 1,\dots,m$, $j = 1,\dots,n$, and 
+
+$ p_{0,j} = p_{m,j} = q_{i,0} = q_{i,n} = 0.$ 
+
+\item $P_C$ is the usual projection operator onto the set $C$
+
+\end{itemize}
 \end{exampleblock}
 
 \begin{exampleblock}{Total Variation}
-blarg
+Sam: not sure what you intended to go here
 \end{exampleblock}
 
 \end{frame}
 
 \begin{frame}{Dual Form of TV Denoising with $\|\cdot \|_F^2$}
+
+The problem:
+$$ \min_{x \in C} \norm{x - b}_F^2 + 2 \lambda \mathrm{TV}(x), C = [0,1] $$ 
+Dual problem: 
+\begin{align*}
+\min_{(p,q) \in \mathcal{P} } & \underbrace{- \norm{ H_C (b- \lambda \mathcal{L}(p,q) ) }_F^2 + \norm{ b - \lambda \mathcal{L}(p,q) }_F^2}_{h(p,q)} \\
+H_C(x) & = \underbrace{x - P_C (x)}_{\mathrm{prox}}
+\end{align*}
+
+Optimality conditions: 
+
+$$ x = P_C(b - \lambda \mathcal{L}(p,q) ).$$
 
 \end{frame}
 
