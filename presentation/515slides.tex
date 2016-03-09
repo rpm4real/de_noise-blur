@@ -78,7 +78,7 @@ To d:
 
 \vspace{-3ex}
 \begin{itemize}
-\item Blur: $Ax$ is a discrete convolution of the true image with a Gaussian kernel.
+\item Blur: $Ax$ is a discrete convolution of the true image with a Gaussian kernel (reflexive boundary conditions).
 \item Noise: $w$ is noise drawn from a Gaussian or Student's t distribution. 
 \end{itemize}
 \end{frame}
@@ -140,12 +140,17 @@ Since the blur operator is ill-conditioned, a better approach is to minimize a r
 
 \begin{center}
 \vspace{-2 mm}
-\includegraphics[scale=0.35]{../figures/gaussian_noise.png} \\
-\includegraphics[scale=0.35]{../figures/student_t_noise.png} 
+\includegraphics[scale=0.35]{../figures/gaussian_noise.png}  \\
+\includegraphics[scale=0.35]{../figures/student_t_noise.png}
 \end{center}
 
 \end{minipage} \hfill
 \begin{minipage}{0.52\textwidth}
+
+\quad \includegraphics[scale=0.1]{../figures/quadratic}
+\quad \includegraphics[scale=0.1]{../figures/huber}
+
+THIS SLIDE NEEDS HELP!
 
 What is Ax - b
 Why use different functions than frobenius norm?  Use pictures as motivation. Show quadratic and huber penalty functions, show different distributions?
@@ -156,11 +161,11 @@ Why use different functions than frobenius norm?  Use pictures as motivation. Sh
 % Regularizers
 \begin{frame}{Image Assumptions and Regularizers}
 
-\begin{textblock}{6}(2,3.4)
+\begin{textblock}{6}(2,3.2)
 2-Level Haar Transform
 \end{textblock}
 
-\begin{textblock}{6}(8.7,3.2)
+\begin{textblock}{6}(8.7,3)
 $|x_{ij} - x_{i+1,\,j}| + |x_{ij}-x_{i,\,j+1}|$ 
 \end{textblock}
 
@@ -170,6 +175,7 @@ $|x_{ij} - x_{i+1,\,j}| + |x_{ij}-x_{i,\,j+1}|$
 \end{center}
 
 Our choices of regularizers assume that images are sparse in wavelet domains and that they are relatively smooth (low total variation).
+SPLIT THIS INTO 2 SLIDES
 
 % Talk about choice of R
 % Haar, FFT
