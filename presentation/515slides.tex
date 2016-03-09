@@ -136,26 +136,30 @@ Since the blur operator is ill-conditioned, a better approach is to minimize a r
 
 % Fidelity Term
 \begin{frame}{Fidelity Term Penalty Functions}
-\begin{minipage}{0.45\textwidth}
 
+\vspace{-4ex}
 \begin{center}
-\vspace{-2 mm}
-\includegraphics[scale=0.35]{../figures/gaussian_noise.png} \includegraphics[scale=0.1]{../figures/quadratic} \\
-\includegraphics[scale=0.35]{../figures/student_t_noise.png} \includegraphics[scale=0.1]{../figures/huber}
+\includegraphics[scale=0.3]{../figures/dist_t_vs_gauss} \quad
+\includegraphics[scale=0.3]{../figures/gaussian_noise.png} \quad
+\includegraphics[scale=0.3]{../figures/student_t_noise.png}
 \end{center}
 
-\end{minipage} \hfill
-\begin{minipage}{0.52\textwidth}
+\vspace{-3ex}
+\begin{columns}[T]
+	\begin{column}{0.45\linewidth}
+		\begin{block}{Gaussian Noise}
+		Need: strong mean-centered penalization \\
+		\includegraphics[scale=0.1]{../figures/quadratic}
+		\end{block}
+	\end{column}
+	\begin{column}{0.45\linewidth}
+		\begin{block}{Student's t Noise}
+		Need: less penalization of outliers \\
+		\includegraphics[scale=0.1]{../figures/huber}
+		\end{block}
+	\end{column}
+\end{columns}
 
-\centering
-\includegraphics[scale=.3]{../figures/dist_t_vs_gauss}
-\begin{itemize}
- \item Gaussian $\implies$ strong mean-centered penalization
- \item Student's t $\implies$ less penalization of outliers
-\end{itemize}
-
-
-\end{minipage}
 \end{frame}
 
 % Regularizers
@@ -207,7 +211,7 @@ SPLIT THIS INTO 2 SLIDES
 \begin{frame}{Results: Gaussian Noise}
 \begin{center}
 \vspace{-3 mm}
-\includegraphics[width = 0.8\textwidth]{../figures/waveletGaussian.pdf} 
+\includegraphics[width = 0.8\textwidth]{../figures/wavGaussian_2.pdf} 
 \end{center}
 
 \begin{textblock}{5}(1.5,3.6)
@@ -231,7 +235,7 @@ SPLIT THIS INTO 2 SLIDES
 \begin{frame}{Results: Student's t Noise}
 \begin{center}
 \vspace{-3 mm}
-\includegraphics[width = 0.8\textwidth]{../figures/waveletStudent.pdf} 
+\includegraphics[width = 0.8\textwidth]{../figures/wavStudent_2.pdf} 
 \end{center}
 
 \begin{textblock}{5}(1.5,3.6)
