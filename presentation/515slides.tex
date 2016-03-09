@@ -286,7 +286,7 @@ $\lambda = 10^{-2}$
 
 \begin{exampleblock}{Loss Function}
 $$
-L_b(x) = f(Ax-b) + \lambda \|x\|_{TV} + \delta(x | [0,1])
+L_b(x) = f(Ax-b) + \lambda \mathrm{TV}(x) + \delta(x | [0,1])
 $$
 \end{exampleblock}
 
@@ -303,11 +303,9 @@ x^{k+1} &= \prox_{\alpha^{-1}(\lambda \|\cdot \|_{TV} + \delta_{[0,1]})} (\under
 \begin{frame}{Dual Form of Total Variation}
 
 \begin{exampleblock}{A Few Definitions}
-Let 
-
 \begin{itemize}
 
-\item $\mathcal{P} = \{ (p,q) \in \R^{(m-1) \times n} \times \R^{ m \times (n-1) } :  \abs{p_{i,j} } \le 1, \abs{p_{ i,j } } \le 1 ,$
+\item $\mathcal{P} = \{ (p,q) \in \R^{(m-1) \times n} \times \R^{ m \times (n-1) } :  \abs{p_{i,j} } \le 1, \abs{p_{ i,j } } \le 1 \},$
 
 \item $ \mathcal{L} : \R^{(m-1) \times n} \times \R^{ m \times (n-1) } \rightarrow \R^{m \times n}$ such that
 
@@ -321,7 +319,7 @@ $ p_{0,j} = p_{m,j} = q_{i,0} = q_{i,n} = 0.$
 \end{exampleblock}
 
 \begin{exampleblock}{Total Variation}
-Sam: not sure what you intended to go here
+$ \mathrm{TV}(x) = max_{p,q \in \mathcal{P}} T(x, p,q) \implies T(x,p,q) = \mathrm{Tr} ( \mathcal{L}(p,q)^T x ).$
 \end{exampleblock}
 
 \end{frame}
