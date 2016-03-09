@@ -140,20 +140,20 @@ Since the blur operator is ill-conditioned, a better approach is to minimize a r
 
 \begin{center}
 \vspace{-2 mm}
-\includegraphics[scale=0.35]{../figures/gaussian_noise.png}  \\
-\includegraphics[scale=0.35]{../figures/student_t_noise.png}
+\includegraphics[scale=0.35]{../figures/gaussian_noise.png} \includegraphics[scale=0.1]{../figures/quadratic} \\
+\includegraphics[scale=0.35]{../figures/student_t_noise.png} \includegraphics[scale=0.1]{../figures/huber}
 \end{center}
 
 \end{minipage} \hfill
 \begin{minipage}{0.52\textwidth}
 
-\quad \includegraphics[scale=0.1]{../figures/quadratic}
-\quad \includegraphics[scale=0.1]{../figures/huber}
+\centering
+\includegraphics[scale=.3]{../figures/dist_t_vs_gauss}
+\begin{itemize}
+ \item Gaussian $\implies$ strong mean-centered penalization
+ \item Student's t $\implies$ less penalization of outliers
+\end{itemize}
 
-THIS SLIDE NEEDS HELP!
-
-What is Ax - b
-Why use different functions than frobenius norm?  Use pictures as motivation. Show quadratic and huber penalty functions, show different distributions?
 
 \end{minipage}
 \end{frame}
