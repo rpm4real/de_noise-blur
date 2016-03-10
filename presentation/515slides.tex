@@ -34,15 +34,14 @@
 \subject{Amath 575} 
 
 \iffalse
-To d:
--Discuss different fidelity functions
--Discuss different regularizers
--Talk about optimization for wavelet method
--Talk about Frobenius norm denoising
--TV reg for denoising and deblurring
--Give lots of examples
--Talk about caveats of each method (parameters are a pain in the ass)
--bibliography
+To do:
+-Should we call it an objective or loss function?  Need to be consistent.
+-Add in plot comparing methods
+-On fidelity slide, what does "needs strong mean-cenetred penalization" mean?
+-Image assumptions and regularizers slide needs to be finished
+-How do we compute prox_{\| W \cdot \|_1} ? Should add in on L1 wavelet reg slide
+-Finish conclusions
+-Add in sources and citations throughout presentation
 \fi
 
 \begin{document}
@@ -142,18 +141,28 @@ The fidelity term $f(Ax-b)$ measures how well our results comply with the linear
 \begin{columns}[T]
 	\begin{column}{0.45\linewidth}
 		\begin{block}{Gaussian Noise}
+<<<<<<< HEAD
 		\quad \includegraphics[scale=0.15]{../figures/gaussian_noise.png} \hspace{1.5em}
 		\includegraphics[scale=0.1]{../figures/quadratic} \\
 		{\footnotesize Due to the lack of outliers, the quadratic penalty is sufficient} \\[1ex]
 		\hspace{3em} $f(z) = \frac{1}{2} \| z \|^2$
+=======
+		Need: strong mean-centered penalization $\Rightarrow$ Frobenius  \\ % should this be "more penalization of outliers => frobenius?"
+		\includegraphics[scale=0.1]{../figures/quadratic}
+>>>>>>> 0678f4a14120b048e60cdcbf0d475f42a9d2d773
 		\end{block}
 	\end{column}
 	\begin{column}{0.45\linewidth}
 		\begin{block}{Student's t Noise}
+<<<<<<< HEAD
 		\quad \includegraphics[scale=0.15]{../figures/student_t_noise.png} \hspace{1.5em}
 		\includegraphics[scale=0.1]{../figures/huber} \\
 		{\footnotesize Huber penalty preferred since it is more robust to heavy-tailed noise} \\[1ex]
 		$f(z) = \min_y \frac{1}{2} \| z-y \|^2 + \gamma \| y \|_1$
+=======
+		Need: less penalization of outliers $\Rightarrow$ Huber \\
+		\includegraphics[scale=0.1]{../figures/huber}
+>>>>>>> 0678f4a14120b048e60cdcbf0d475f42a9d2d773
 		\end{block}
 	\end{column}
 \end{columns}
@@ -382,7 +391,7 @@ s_{ij} &= sgn(q_{ij} ) \min \{ 1, |q_{ij}| \}\\
 
 \end{frame}
 
-\begin{frame}{Summary of Fast TV Regularization}
+\begin{frame}{Monotone FISTA TV Regularization}
 \begin{spacing}{1.6}
 \fontsize{9}{10}\selectfont
 \hspace{-3 mm}
@@ -443,7 +452,7 @@ s_{ij} &= sgn(q_{ij} ) \min \{ 1, |q_{ij}| \}\\
 
 \end{frame}
 
-\begin{frame}{Results: Student's-t Noise}
+\begin{frame}{Results: Student's t Noise}
 \begin{center}
 \vspace{-3 mm}
 \includegraphics[width = 0.8\textwidth]{../figures/student-t_peppers.png} 
@@ -469,22 +478,46 @@ s_{ij} &= sgn(q_{ij} ) \min \{ 1, |q_{ij}| \}\\
 
 \section{Discussion}
 
-\section{Discussion}
+\begin{frame}{Conclusions}
+
+\begin{block}{Wavelet vs. Total Variation}
+\begin{itemize}
+\item Total variation seems to do better for high amounts of noise.
+\item \textbf{How do they compare on timing????  Any advantages of Wavelet???}
+\end{itemize}
+\end{block}
+
+\begin{block}{Frobenius vs Huber}
+\begin{itemize}
+\item On Gaussian noise, the two are comparable.
+\item Huber outperforms Frobenius on noise with heavier tail.
+\end{itemize}
+\end{block}
+
+\begin{block}{Challenges}
+\begin{itemize}
+\item Ideal parameter values change image to image.
+\item How can we quantitatively evaluate performance?
+\item How can we optimize parameters without performance metric?
+\end{itemize}
+\end{block}
+
+\end{frame}
 
 \section*{References}
-\begin{frame}{Questions?}
+\begin{frame}{\Huge Questions?}
 \begin{thebibliography}{10}    
-\setbeamertemplate{bibliography item}[online]
-\bibitem{code} Codes used to generate figures
-\url{https://github.com/snagcliffs/Amath575project}
+%\setbeamertemplate{bibliography item}[online]
+%\bibitem{code} Codes used to generate figures
+%\url{https://github.com/snagcliffs/Amath575project}
 
 \beamertemplatebookbibitems % This gives it a nice book symbol
-\bibitem{Guck} Guckenheimer, J., Holmes, P. \textit{Nonlinear Oscillations, Dynamical Systems, and Bifurcations of Vector Fields}. Springer-Verlag, 1983. Print.
+\bibitem{book} Kelsey's book
 
 \beamertemplatearticlebibitems % and an article symbol
-\bibitem{brazil}  Oliveira, D., Leonel, E. (2008) \textit{Braz. J. Phys.} 38(1):62-64
+\bibitem{TVfista}  Beck, A., Teboulle, M. (2009) \textit{IEEE Trans. on Image Proc.} 18(11):2419-2434
 
-\bibitem{corrdim} Grassberger, P., Procaccia, I. (1983) \textit{Phys. Rev. Letters.} 50(5):346-349
+\bibitem{Wfista} article on wavelet fista
 
 \end{thebibliography}
 \end{frame}
