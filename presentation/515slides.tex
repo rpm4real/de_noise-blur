@@ -137,25 +137,23 @@ Since the blur operator is ill-conditioned, a better approach is to minimize a r
 % Fidelity Term
 \begin{frame}{Fidelity Term Penalty Functions}
 
-\vspace{-4ex}
-\begin{center}
-\includegraphics[scale=0.3]{../figures/dist_t_vs_gauss} \quad
-\includegraphics[scale=0.3]{../figures/gaussian_noise.png} \quad
-\includegraphics[scale=0.3]{../figures/student_t_noise.png}
-\end{center}
+The fidelity term $f(Ax-b)$ measures how well our results comply with the linear blurring model. Depending upon the type of noise present in the observed image, the choice of penalty function may influence the efficacy of our deblurring/denoising procedure. 
 
-\vspace{-3ex}
 \begin{columns}[T]
 	\begin{column}{0.45\linewidth}
 		\begin{block}{Gaussian Noise}
-		Need: strong mean-centered penalization \\
-		\includegraphics[scale=0.1]{../figures/quadratic}
+		\quad \includegraphics[scale=0.15]{../figures/gaussian_noise.png} \hspace{1.5em}
+		\includegraphics[scale=0.1]{../figures/quadratic} \\
+		{\footnotesize Due to the lack of outliers, the quadratic penalty is sufficient} \\[1ex]
+		\hspace{3em} $f(z) = \frac{1}{2} \| z \|^2$
 		\end{block}
 	\end{column}
 	\begin{column}{0.45\linewidth}
 		\begin{block}{Student's t Noise}
-		Need: less penalization of outliers \\
-		\includegraphics[scale=0.1]{../figures/huber}
+		\quad \includegraphics[scale=0.15]{../figures/student_t_noise.png} \hspace{1.5em}
+		\includegraphics[scale=0.1]{../figures/huber} \\
+		{\footnotesize Huber penalty preferred since it is more robust to heavy-tailed noise} \\[1ex]
+		$f(z) = \min_y \frac{1}{2} \| z-y \|^2 + \gamma \| y \|_1$
 		\end{block}
 	\end{column}
 \end{columns}
