@@ -141,28 +141,18 @@ The fidelity term $f(Ax-b)$ measures how well our results comply with the linear
 \begin{columns}[T]
 	\begin{column}{0.45\linewidth}
 		\begin{block}{Gaussian Noise}
-<<<<<<< HEAD
 		\quad \includegraphics[scale=0.15]{../figures/gaussian_noise.png} \hspace{1.5em}
 		\includegraphics[scale=0.1]{../figures/quadratic} \\
 		{\footnotesize Due to the lack of outliers, the quadratic penalty is sufficient} \\[1ex]
 		\hspace{3em} $f(z) = \frac{1}{2} \| z \|^2$
-=======
-		Need: strong mean-centered penalization $\Rightarrow$ Frobenius  \\ % should this be "more penalization of outliers => frobenius?"
-		\includegraphics[scale=0.1]{../figures/quadratic}
->>>>>>> 0678f4a14120b048e60cdcbf0d475f42a9d2d773
 		\end{block}
 	\end{column}
 	\begin{column}{0.45\linewidth}
 		\begin{block}{Student's t Noise}
-<<<<<<< HEAD
 		\quad \includegraphics[scale=0.15]{../figures/student_t_noise.png} \hspace{1.5em}
 		\includegraphics[scale=0.1]{../figures/huber} \\
 		{\footnotesize Huber penalty preferred since it is more robust to heavy-tailed noise} \\[1ex]
 		$f(z) = \min_y \frac{1}{2} \| z-y \|^2 + \gamma \| y \|_1$
-=======
-		Need: less penalization of outliers $\Rightarrow$ Huber \\
-		\includegraphics[scale=0.1]{../figures/huber}
->>>>>>> 0678f4a14120b048e60cdcbf0d475f42a9d2d773
 		\end{block}
 	\end{column}
 \end{columns}
