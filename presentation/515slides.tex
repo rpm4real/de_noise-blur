@@ -354,7 +354,7 @@ $\lambda = 10^{-2}$
 
 \begin{frame}{Total Variation Regularization}
 
-\begin{exampleblock}{Loss Function}
+\begin{exampleblock}{Objective Function}
 $$
 L_b(x) = f(Ax-b) + \lambda \mathrm{TV}(x) + \delta(x | [0,1])
 $$
@@ -569,14 +569,13 @@ s_{ij} &= sgn(q_{ij} ) \min \{ 1, |q_{ij}| \}\\
 %\setbeamertemplate{bibliography item}[online]
 %\bibitem{code} Codes used to generate figures
 %\url{https://github.com/snagcliffs/Amath575project}
-
 \beamertemplatebookbibitems % This gives it a nice book symbol
-\bibitem{book} Kelsey's book
+\bibitem{book} J. G. Nagy, P. C. Hansen, and D. P. O'Leary. \textit{Deblurring Images: Matrices, Spectra, and Filtering.} SIAM, Philadelphia, 2006. 
 
 \beamertemplatearticlebibitems % and an article symbol
-\bibitem{TVfista}  Beck, A., Teboulle, M. (2009) \textit{IEEE Trans. on Image Proc.} 18(11):2419-2434
+\bibitem{Wfista} A. Beck and M. Teboulle. A fast iterative shrinkage-thresholding algorithm for linear inverse problem. \textit{SIAM Journal of Imaging Sciences,} 2(1):183-202, 2009.
 
-\bibitem{Wfista} article on wavelet fista
+\bibitem{TVfista}  A. Beck and M. Teboulle. Fast gradient-based algorithms for constrained total variation image denoising and deblurring problems. \textit{IEEE Transactions on Image Proccessing,} 18(11):2419-2434, 2009. 
 
 \end{thebibliography}
 \end{frame}

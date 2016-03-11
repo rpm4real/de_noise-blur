@@ -13,4 +13,9 @@ A.~Beck and M.~Teboulle.
   problems.
 \newblock {\em SIAM Journal of Imaging Sciences}, 2(1):183--202, 2009.
 
+\bibitem{DeblurBook}
+J.G.Nagy P.C.~Hansen and D.P. O'Leary.
+\newblock {\em Deblurring Images: Matrices, Spectra, and Filtering}.
+\newblock SIAM, Philadelphia, 2006.
+
 \end{thebibliography}
