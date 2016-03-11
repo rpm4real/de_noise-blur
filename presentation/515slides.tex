@@ -207,7 +207,10 @@ words words words words words words words words words words words words words wo
 
 \vspace{2ex}
 \begin{block}{Proximal Gradient Step}
-\[ x^{k+1} = \prox_{\alpha^{-1}\lambda \| W \cdot \|_1} \Big(x^k - \alpha^{-1} A^T\nabla f (Ax^k - b)\Big) \vspace{1ex} \]
+\begin{align*}
+x^{k+1} &= \prox_{\alpha^{-1}\lambda \| W \cdot \|_1} \Big(x^k - \alpha^{-1} A^T\nabla f (Ax^k - b)\Big) \\
+&= W^* \prox_{\alpha^{-1}\lambda \| \cdot \|_1} \Big(W\big(x^k - \alpha^{-1} A^T\nabla f (Ax^k - b)\big)  \Big)  
+\end{align*}
 \end{block}
 \end{frame}
 
@@ -221,7 +224,7 @@ words words words words words words words words words words words words words wo
 \State $\alpha \geq Lip(\nabla f)$
 \For {$k = 1:N$}
 	\State $u^k = y^k - \alpha^{-1} A^T \nabla f(Ay^k-b)$ \vspace{1ex}
-	\State $x^k = \text{sgn}(Wu^k)\max(0,|Wu^k|-\alpha^{-1}\lambda)$ \vspace{1ex}
+	\State $x^k = W^*\text{sgn}(Wu^k)\max(0,|Wu^k|-\alpha^{-1}\lambda)$ \vspace{1ex}
 	\State $t^{k+1} = \frac{1+\sqrt{1+4t_2^k}}{2}$
 	\State $y^{k+1} = x^k + \left(\frac{t^k-1}{t^{k+1}}\right) (x^k - x^{k-1})$
 \EndFor\\
