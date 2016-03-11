@@ -37,7 +37,6 @@
 To do:
 -Should we call it an objective or loss function?  Need to be consistent.
 -Add in plot comparing methods
--On fidelity slide, what does "needs strong mean-cenetred penalization" mean?
 -Image assumptions and regularizers slide needs to be finished
 -How do we compute prox_{\| W \cdot \|_1} ? Should add in on L1 wavelet reg slide
 -Finish conclusions
@@ -86,7 +85,6 @@ To do:
 \begin{frame}{Naive Solution: $x = A^{-1}b$}
 \begin{figure}
 \centering
-%\includegraphics[scale=0.4]{../figures/naive1} \\[2ex]
 \includegraphics[scale=0.2]{../figures/fig1} \,
 \includegraphics[scale=0.2]{../figures/fig2} \,
 \includegraphics[scale=0.2]{../figures/fig3} \\
@@ -97,7 +95,6 @@ To do:
 \begin{frame}{Naive Solution: $x = A^{-1}(b-w)$}
 \begin{figure}
 \centering
-%\includegraphics[scale=0.4]{../figures/naive2} \\[2ex]
 \includegraphics[scale=0.2]{../figures/fig1} \,
 \includegraphics[scale=0.2]{../figures/fig4} \,
 \includegraphics[scale=0.2]{../figures/fig5} \\
@@ -108,9 +105,9 @@ To do:
 % OBJECTIVE FUNCTIONS
 \section{De(noise/blur)ing Objective Functions}
 
-% General Loss Function
+% General Objective Function
 \begin{frame}
-Since the blur operator is ill-conditioned, a better approach is to minimize a regularized loss function.
+Since the blur operator is ill-conditioned, a better approach is to minimize a regularized objective function.
 \begin{block}{General Objective Function}
 \[ L_b(x) \hspace{0.5em} = \hspace{0.5em} \underbrace{f(Ax-b)}_{\text{Fidelity term}} \hspace{0.5em} + \underbrace{\lambda R(x)}_{\text{Regularization}} \]
 \end{block}
@@ -178,16 +175,6 @@ Images are often sparse in wavelet domains, so the L1 wavelet regularizer can be
 For our examples, we let $W$ be the orthogonal 2D Haar or Daubechies wavelet transform using 5 levels. \\[2ex]
 \end{minipage}
 
-
-% Talk about choice of R
-% Haar, FFT
-% What is TV?
-% Show two different definitions of TV from paper.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% We could split this up into two slides so that we can have a little more info on each regularizer. 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \end{frame}
 
 % Regularizers: TV
@@ -209,11 +196,10 @@ words words words words words words words words words words words words words wo
 
 \end{frame}
 
-
 % OPTIMIZATION WITH L1 WAVELET REGULARIZATION
 \section{Optimization with L1 Wavelet Regularization}
 
-% Wavelet Loss Function
+% Wavelet Objective Function
 \begin{frame}{L1 Wavelet Regularization}
 \begin{block}{Objective Function}
 \[ L_b(x) = f(Ax-b) + \lambda \| Wx \|_1 \vspace{1ex} \]
@@ -223,6 +209,45 @@ words words words words words words words words words words words words words wo
 \begin{block}{Proximal Gradient Step}
 \[ x^{k+1} = \prox_{\alpha^{-1}\lambda \| W \cdot \|_1} \Big(x^k - \alpha^{-1} A^T\nabla f (Ax^k - b)\Big) \vspace{1ex} \]
 \end{block}
+\end{frame}
+
+% FISTA algorithm
+\begin{frame}{FISTA L1 Wavelet Regularization}
+\begin{center}
+\begin{minipage}[T]{0.7\textwidth}
+\textbf{FISTA$(b,f,\lambda)$}
+\begin{algorithmic}
+\State $y^1 = x^0 = b; \, t^1 = 1$
+\State $\alpha \geq Lip(\nabla f)$
+\For {$k = 1:N$}
+	\State $u^k = y^k - \alpha^{-1} A^T \nabla f(Ay^k-b)$ \vspace{1ex}
+	\State $x^k = \text{sgn}(Wu^k)\max(0,|Wu^k|-\alpha^{-1}\lambda)$ \vspace{1ex}
+	\State $t^{k+1} = \frac{1+\sqrt{1+4t_2^k}}{2}$
+	\State $y^{k+1} = x^k + \left(\frac{t^k-1}{t^{k+1}}\right) (x^k - x^{k-1})$
+\EndFor\\
+\Return $x^N$
+\end{algorithmic}
+\end{minipage}
+\end{center}
+\end{frame}
+
+% Note on blur operator
+\begin{frame}{Note on Blur Operators}
+For our assumed reflexive boundary conditions, the matrix $A$ is a Kronecker product of Toeplitz-plus-Hankel matrices which can be diagonalized by the discrete cosine transform
+\[ A = C^T\Lambda C, \]
+where the eigenvalues are determined by the blur kernel. This means that to blur an image, we don't actually have to construct $A$:
+\[ Ax = {\tt idct2}\big(\Lambda {\tt dct2}(x)\big) \]
+\end{frame}
+
+\begin{frame}{Note on Blur Operators}
+When $f = \| Ax-b \|^2$ we can exploit the fact that $C$ is unitary:
+
+\begin{align*}
+f(Ax-b) &= \| Ax - b \|^2 \\
+&= \| C^T\Lambda C x - b \|^2 \\
+&= \| \Lambda Cx - Cb \|^2 \\
+&= \| \Lambda \hat{x} - \hat{b} \|^2
+\end{align*}
 \end{frame}
 
 % Results: Gaussian Noise (Haar)
@@ -273,7 +298,7 @@ words words words words words words words words words words words words words wo
 \end{textblock}
 \end{frame}
 
-% Results: Student's-t Noise (Haar)
+% Results: Student's t Noise (Haar)
 \begin{frame}{Results: Student's t Noise (Haar)}
 \begin{center}
 \vspace{-3 mm}
@@ -297,7 +322,7 @@ words words words words words words words words words words words words words wo
 \end{textblock}
 \end{frame}
 
-% Results: Student's-t Noise (Daubechies)
+% Results: Student's t Noise (Daubechies)
 \begin{frame}{Results: Student's t Noise (Daubechies)}
 \begin{center}
 \vspace{-3 mm}
