@@ -111,7 +111,7 @@ To do:
 % General Loss Function
 \begin{frame}
 Since the blur operator is ill-conditioned, a better approach is to minimize a regularized loss function.
-\begin{block}{General Loss Function}
+\begin{block}{General Objective Function}
 \[ L_b(x) \hspace{0.5em} = \hspace{0.5em} \underbrace{f(Ax-b)}_{\text{Fidelity term}} \hspace{0.5em} + \underbrace{\lambda R(x)}_{\text{Regularization}} \]
 \end{block}
 
@@ -159,24 +159,25 @@ The fidelity term $f(Ax-b)$ measures how well our results comply with the linear
 
 \end{frame}
 
-% Regularizers
-\begin{frame}{Image Assumptions and Regularizers}
+% Regularizers: Wavelet
+\begin{frame}{L1 Wavelet Regularization}
 
-\begin{textblock}{6}(2,3.2)
-2-Level Haar Transform
-\end{textblock}
+\vspace{-4ex}
+\[ L_b(x) = f(Ax-b) + \lambda \| W x \|_1 \]
 
-\begin{textblock}{6}(8.7,3)
-$|x_{ij} - x_{i+1,\,j}| + |x_{ij}-x_{i,\,j+1}|$ 
-\end{textblock}
+\vspace{2ex}
+\begin{minipage}[T]{0.45\textwidth}
+	\begin{center}
+	\includegraphics[width=1\textwidth]{../figures/haarTrans.pdf} \\
+	Haar Transform (2 Levels)
+	\end{center}
+\end{minipage}
+\begin{minipage}[T]{0.5\textwidth}
+Images are often sparse in wavelet domains, so the L1 wavelet regularizer can be used to encourage this property in our recovered image. \\
 
-\begin{center}
-\includegraphics[width=0.5\linewidth]{../figures/haarTrans.pdf} \hspace{-1em}
-\includegraphics[width=0.5\linewidth]{../figures/diff.pdf}
-\end{center}
+For our examples, we let $W$ be the orthogonal 2D Haar wavelet transform using 5 levels. \\[2ex]
+\end{minipage}
 
-Our choices of regularizers assume that images are sparse in wavelet domains and that they are relatively smooth (low total variation).
-SPLIT THIS INTO 2 SLIDES
 
 % Talk about choice of R
 % Haar, FFT
@@ -188,6 +189,26 @@ SPLIT THIS INTO 2 SLIDES
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \end{frame}
+
+% Regularizers: TV
+\begin{frame}{Total Variation Regularization}
+
+\vspace{-4ex}
+\[ L_b(x) = f(Ax-b) + \lambda TV(x) \]
+
+\vspace{2ex}
+\begin{minipage}[T]{0.45\textwidth}
+	\begin{center}
+	\includegraphics[width=1\textwidth]{../figures/diff.pdf} \\
+	$|x_{ij} - x_{i+1,\,j}| + |x_{ij}-x_{i,\,j+1}|$
+	\end{center}
+\end{minipage}
+\begin{minipage}[T]{0.5\textwidth}
+words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words \\[4ex]
+\end{minipage}
+
+\end{frame}
+
 
 % OPTIMIZATION WITH L1 WAVELET REGULARIZATION
 \section{Optimization with L1 Wavelet Regularization}
