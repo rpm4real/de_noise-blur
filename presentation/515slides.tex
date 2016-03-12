@@ -116,7 +116,7 @@ Since the blur operator is ill-conditioned, a better approach is to minimize a r
 	\begin{column}{0.45\linewidth}
 		\begin{block}{Fidelity Terms} \vspace{-2.5ex}
 			\[ f = \left\{ \begin{matrix*}[l] 
-			\| \cdot \|_F^2 \\[1ex] h_{\gamma}( \cdot ) \textrm{we should define this} \\[1ex] \gamma^{-1} \log(\cosh(\gamma \cdot)) 
+			\| \cdot \|_F^2 \\[1ex] h_{\gamma}( \cdot ) \\[1ex] \gamma^{-1} \log(\cosh(\gamma \cdot)) 
 			\end{matrix*} \right. \]
 		\end{block}
 	\end{column}
@@ -187,13 +187,13 @@ For our examples, we let $W$ be the orthogonal 2D Haar or Daubechies wavelet tra
 \begin{minipage}[T]{0.45\textwidth}
 	\begin{center}
 	\includegraphics[width=1\textwidth]{../figures/diff.pdf} \\
-	$|x_{ij} - x_{i+1,\,j}| + |x_{ij}-x_{i,\,j+1}|$
+	
 	\end{center}
 \end{minipage}
 \begin{minipage}[T]{0.5\textwidth}
-words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words \\[4ex]
+The TV norm penalizes a finite difference representation of a derivative, assuming small variation in pixels nearby \\[4ex]
 \end{minipage}
-
+\tiny $$ TV_{l_1}(x) = \sum_{i=1}^{m-1} \sum_{j=1}^{n-1} \left( \abs{x_{i,j}  - x_{i+1,j} } + \abs{ x_{i,j} - x_{i,j+1}  } \right) + \sum_{i=1}^{m-1} \abs{ x_{i,n} - x_{i+1,n} } + \sum_{j=1}^{n-1} \abs{ x_{m,j} - x_{m,j+1 } }$$
 \end{frame}
 
 % OPTIMIZATION WITH L1 WAVELET REGULARIZATION
