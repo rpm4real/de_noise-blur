@@ -410,9 +410,6 @@ x^{k+1} &= \prox_{\alpha^{-1}(\lambda \|\cdot \|_{TV} + \delta_{[0,1]})} (\under
 $$ \mathcal{L}(p,q)_{i,j} = p_{i,j} + q_{i,j} - p_{ i-1,j } - q_{ i,j-1 }$$ for $i = 1,\dots,m$, $j = 1,\dots,n$, and 
 
 $ p_{0,j} = p_{m,j} = q_{i,0} = q_{i,n} = 0.$ 
-
-\item $P_C$ is the usual projection operator onto the set $C$
-
 \end{itemize}
 \end{exampleblock}
 
@@ -425,16 +422,18 @@ $ \mathrm{TV}(x) = max_{p,q \in \mathcal{P}} T(x, p,q) \implies T(x,p,q) = \math
 \begin{frame}{Dual Form of TV Denoising with $\|\cdot \|_F^2$}
 
 The problem:
-$$ \min_{x \in C} \norm{x - b}_F^2 + 2 \lambda \mathrm{TV}(x), C = [0,1] $$ 
+\begin{align*}
+\min_{x \in [0,1]} &\norm{x - b}_F^2 + 2 \lambda \mathrm{TV}(x) \\
+\min_{x \in [0,1]} \max_{(p,q,) \in \mathcal{P}} &\norm{x - b}_F^2 + 2 \lambda \mathrm{Tr} ( \mathcal{L}(p,q)^T x )
+\end{align*}
 Dual problem: 
 \begin{align*}
-\min_{(p,q) \in \mathcal{P} } & \underbrace{- \norm{ H_C (b- \lambda \mathcal{L}(p,q) ) }_F^2 + \norm{ b - \lambda \mathcal{L}(p,q) }_F^2}_{h(p,q)} \\
-H_C(x) & = \underbrace{x - P_C (x)}_{\mathrm{prox}}
+\min_{(p,q) \in \mathcal{P} } & \underbrace{- \norm{ H_{[0,1]} (b- \lambda \mathcal{L}(p,q) ) }_F^2 + \norm{ b - \lambda \mathcal{L}(p,q) }_F^2}_{h(p,q)} \\
+H_{[0,1]}(\cdot ) & = (I - P_{[0,1]})(\cdot )
 \end{align*}
 
 Optimality conditions: 
-
-$$ x = P_C(b - \lambda \mathcal{L}(p,q) ).$$
+$$ x = P_C(b - \lambda \mathcal{L}(p,q) )$$
 
 \end{frame}
 
