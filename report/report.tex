@@ -29,7 +29,7 @@
 \newcommand{\AMz}{\underset{z}{arg\, min}}
 
 \begin{document}
-\title{Image Deblurring and Denoising for Various Fidelity Terms and Regularizers}
+\title{Image Deblurring and Denoising \\with Various Fidelity Terms and Regularizers}
 \author{
 Kelsey Maass, ~Samuel Rudy, ~Kevin Mueller, ~and Riley Molloy\\
 University of Washington\\
@@ -339,6 +339,26 @@ We demonstrate some results of denoising and deblurring with the Total Variation
 \label{tv_student}
 \end{figure}
 
+\subsection{The $\log \circ \cosh$ Penalty Function}
+
+Recall that for large values of $\gamma$ the function $\gamma^{-1} \log(\cosh (\gamma \cdot ))$ uniformly converges to the absolute value function.  Since it is also Lipschitz differentiable we are able to use it in our algorithm for TV regularized denoising and deblurring with high values of $\gamma$ to approximate how the standard $L^1$ norm would perform without needing to worry about how to optimize it.
+
+\begin{figure}[H]
+	\begin{center}
+	    \rotatebox{90}{\hspace{1cm} $\log \circ \cosh$ Loss \hspace{3cm} Original Image}
+		\includegraphics[width=0.8\textwidth]{../figures/logcosh_peppers.png}
+		\rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
+		\caption{A comparrison between the $\log \circ \cosh$ and Huber Fidelity Terms }
+		\label{comp_methods}
+	\end{center}
+\end{figure}
+
+To do:
+-it seems to perform better
+-it also takes longer since the step size decreases like 1/gamma
+
+% Discussion
+\section{Discussion and Conclusions}
 
 \begin{figure}[H]
 	
@@ -351,9 +371,6 @@ We demonstrate some results of denoising and deblurring with the Total Variation
 
 
 Figure \ref{comp_methods} shows a rough comparison of our methods by displaying the time complexity and Frobenius error for different fidelity functions, regularization techniques and noise-types. It is clear that TV regularization outperformed wavelet regularization at the price of additional computational complexity. This is not surprising due to TV's extra requirement of solving an inner optimization problem for denoising the image. It can also be seen that student noise generally required less time than Gaussian noise but at the expense of higher error. Finally, applying the Huber for student noise improved results drastically for a slight increase in computation time.  
-
-% Discussion
-\section{Discussion and Conclusions}
 
 In conclusion, we present a survey of regularization and fidelity functions for the image denoising/deblurring problem. In particular, we compare regularization of the 1-norm in the wavelet domain to TV regularization. Furthermore we explore the affect of using the Huber as a fidelity function and potential improvements it can have when applied to heavy tailed noise. Our results show that TV regularization performs better for high amounts of noise, but the wavelet domain is well suited for smaller amounts of noise due to computational speed improvements. 
 
