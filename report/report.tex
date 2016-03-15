@@ -13,6 +13,9 @@
 %]{biblatex}
 %\addbibresource{projectsources.bib}
 \usepackage{xcolor}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{setspace}
 
 \usepackage[paperwidth=8.5in,paperheight=11in,centering,hmargin=1in,vmargin=1in]{geometry}
 \nipsfinalcopy
@@ -173,7 +176,36 @@ The resulting denoising problem with Frobenius norm fidelity function may be sol
 % Algorithms
 \section{Algorithms}
 
-\emph{here we can explain prox-gradient approach for each specific case}
+\begin{minipage}{0.48\textwidth}
+\textbf{MFISTA$(b,f, \lambda)$}
+\begin{algorithmic}
+\State $y^1 = x^0 = b; \, t^1 = 1$
+\State $\alpha \geq Lip(\nabla f)$
+\For {$k = 1:N$}
+	\State $u^k = y^k - \frac{A^T\nabla f (A y^k - b)}{\alpha}$
+	\State $z^k = FGP(u^k, \frac{\lambda}{2 \alpha})$
+	\State $x^k = \underset{x \in \{x^{k-1},z^k\}}{\text{argmin}} \,L_b(x)$
+	\State $t^{k+1} = \frac{1 + \sqrt{1 + 4{t^k}^2}}{2}$ 
+	\State $y^{k+1} = x^k + \frac{t^k}{t^{k+1}}(z^k - x^k)$ 
+	\State \hspace{10 mm}$+ \frac{t^{k-1}}{t^{k+1}}(z^k - x^k) $
+\EndFor\\
+\Return $x^N$
+\end{algorithmic}
+\end{minipage}
+\begin{minipage}{0.48\textwidth}
+
+\textbf{FGP$(b, \lambda)$}
+\begin{algorithmic}
+\State $(r_{ij}^1, s_{ij}^1) = (p_{ij}^0, q_{ij}^0) = 0; \, t^1 = 1$
+\For {$k = 1:N$}
+	\State $(p^k,q^k) = P_\mathcal{P} \left( (r^k,s^k) - \frac{\mathcal{L}^TP_{[0,1]} (b - \lambda \mathcal{L}(r^k,s^k))}{8\lambda} \right)$
+	\State $t^{k+1} = \frac{1 + \sqrt{1 + 4{t^k}^2}}{2}$ 
+	\State $(r^k,s^k) = (p^k,q^k) + \frac{t^k-1}{t^{k+1}}(p^k-p^{k-1}, q^k-q^{k-1})$ 
+\EndFor \\
+\Return $P_{[0,1]} (b - \lambda \mathcal{L}(p^N,q^N))$
+\end{algorithmic}
+
+\end{minipage}
 
 \subsection{Wavelet Regularization}
 
