@@ -141,8 +141,8 @@ The usual Total-Variation deblurring model, as seen in \cite{TV} can be formulat
 \min_{x} \norm{ Ax - b }_F^2 + 2 \lambda \mathrm{TV}(x),
 \end{equation}
 where $\norm{\cdot}$ is taken as either a Frobenius norm or a 2-norm, depending on applications,  $\lambda>0$ is a regularization parameter, and $\mathrm{TV}(x)$ is the Total-Variation semi-norm. Two similar choices exist for the TV-norm: the so-called isotropic type, and the $l_1$ type.  In this work, we work exclusively with the $l_1$-based TV-norm, defined as 
-$$ TV_{l_1}(x) = \sum_{i=1}^{m-1} \sum_{j=1}^{n-1} \left( \abs{x_{i,j}  - x_{i+1,j} } + \abs{ x_{i,j} - x_{i,j+1}  } \right) + \sum_{i=1}^{m-1} \abs{ x_{i,n} - x_{i+1,n} } + \sum_{j=1}^{n-1} \abs{ x_{m,j} - x_{m,j+1 } },$$ for $x \in \R^{m \times n},$ and where the reflexive boundary conditions where $\norm{\cdot}_F$ is the Frobenius norm, $\lambda>0$ is a regularization parameter, and $\mathrm{TV}(x)$ is the Total-Variation semi-norm. Two choices similar choices exist for the TV-norm: the so-called isotropic type, and the $\ell_1$ type. In this work, we work exclusively with the $\ell_1$-based TV-norm, defined as 
-$$ TV_{\ell_1}(x) = \sum_{i=1}^{m-1} \sum_{j=1}^{n-1} \left( \abs{x_{i,j}  - x_{i+1,j} } + \abs{ x_{i,j} - x_{i,j+1}  } \right) + \sum_{i=1}^{m-1} \abs{ x_{i,n} - x_{i+1,n} } + \sum_{j=1}^{n-1} \abs{ x_{m,j} - x_{m,j+1 } },$$ for $x \in \R^{m \times n},$ and where the reflexive boundary conditions
+$$ TV_{l_1}(x) = \sum_{i=1}^{m-1} \sum_{j=1}^{n-1} \left( \abs{x_{i,j}  - x_{i+1,j} } + \abs{ x_{i,j} - x_{i,j+1}  } \right) + \sum_{i=1}^{m-1} \abs{ x_{i,n} - x_{i+1,n} } + \sum_{j=1}^{n-1} \abs{ x_{m,j} - x_{m,j+1 } },$$
+ for $x \in \R^{m \times n},$ and where the reflexive boundary conditions
 \begin{align*}
 x_{m+1,j} - x_{m,j} &= 0, \textrm{ for all }j \\
  x_{i,n+1} - x_{i,n} &= 0, \textrm{ for all }i
@@ -161,7 +161,7 @@ x^{k+1} &= \prox_{\alpha^{-1}(\lambda \|\cdot \|_{TV} + \delta_{[0,1]})} (\under
 &= P_{[0,1]}  \left( \AMz \left( \|u^k - z\|_F^2 + \alpha^{-1}\lambda TV(z) \right) \right)
 \end{align*}
 
-Here the learning rate $\alpha$ is taken to be no larger than than the multiplicative inverse of the Lipschitz constant of the gradient of the fidelity function $f$.  Note that in order to evaluate this expression we must solve a denoising problem with input $u^k = x^k - \alpha^{-1} A^T\nabla f (Ax^k - b)$.  Of particular note is that regardless of the original fidelity term we have a Frobenius norm fidelity term on the new denoising problem.  This allows for the easy manipulation of the original fidelity function, so long as it is convex and has Lipschitz gradient.
+Here the learning rate $\alpha$ is taken to be no larger than than the multiplicative inverse of the Lipschitz constant of $\nabla f$.  Note that in order to evaluate this expression we must solve a denoising problem with input $u^k = x^k - \alpha^{-1} A^T\nabla f (Ax^k - b)$.  Of particular note is that regardless of the original fidelity term we have a Frobenius norm fidelity term on the new denoising problem.  This allows for the easy manipulation of the original fidelity function, so long as it is convex and has Lipschitz gradient.
 
 The resulting denoising problem with Frobenius norm fidelity function may be solved rapidly using the method developed in \cite{TV}.  The $TV$ function is shown to have a dual representation as a trace and the relationship between trace and Frobenius norm is heavily exploited to develop a dual formulation of the denoising problem.  We present their method here, starting with a few new definitions which will be necessary.
 \begin{align*}
@@ -253,7 +253,7 @@ We demonstrate some results of denoising and deblurring with the Total Variation
 \begin{figure}[H]
 	
 	\begin{center}
-		\includegraphics[scale=0.40]{../figures/comparePlot2.pdf}
+		\includegraphics[width=0.8\textwidth]{../figures/comparePlot2.pdf}
 		\caption{Timing information and the Frobenius norm error between the true and observed image until the relative change in the objective function is less than $.001$. }
 		\label{comp_methods}
 	\end{center}
