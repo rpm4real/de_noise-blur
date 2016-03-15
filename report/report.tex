@@ -161,12 +161,12 @@ are assumed.  However, it is a very simple adjustment to use the isotropic defin
 \begin{equation} \label{tv_ours}
 \min_{x} f(Ax - b ) + \lambda \mathrm{TV}_{l_1}(x) + \delta(x | [0,1]),
 \end{equation}
-where $f: \R^{m \times n} \rightarrow [0,\infty)$ is any functional with Lipschitz continuous gradient which gives a measurement of the size of the fidelity term.  In our work, we used the standard Frobenius norm, the Huber penalty, and $\gamma^{-1}\log( \cosh (\gamma \cdot ))$ evaluated element wise in the matrix and summed.\\
+where $f: \R^{m \times n} \rightarrow [0,\infty)$ is any functional with Lipschitz continuous gradient which gives a measurement of the size of the fidelity term.  The specific fidelity terms which we worked with were as listed in \eqref{fidelities}.
 
 Optimization of the objective function was based on the proximal gradient algorithm and expoited the idea of momentum used in FISTA as well as an extra function evaluation at each iteration in order to ensure a non-increasing objective function.  The proximal gradient step is given as follows,
 
 \begin{align*}
-x^{k+1} &= \prox_{\alpha^{-1}(\lambda \|\cdot \|_{TV} + \delta_{[0,1]})} (\underbrace{x^k - \alpha^{-1} A^T\nabla f (Ax^k - b)}_{u^k}) \\
+x^{k+1} &= \prox_{\alpha^{-1}(\lambda \textrm{TV}(\cdot) + \delta_{[0,1]})} (\underbrace{x^k - \alpha^{-1} A^T\nabla f (Ax^k - b)}_{u^k}) \\
 &= \AMz \left( \|u^k - z\|_F^2 + \alpha^{-1}\lambda TV(z) + \delta(z | [0,1]) \right) \\
 &= P_{[0,1]}  \left( \AMz \left( \|u^k - z\|_F^2 + \alpha^{-1}\lambda TV(z) \right) \right)
 \end{align*}
