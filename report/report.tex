@@ -128,17 +128,18 @@ For spatially invariant and doubly symmetric blur kernels, these boundary condit
 \begin{equation}
 A = C^T \Lambda C,
 \end{equation}
-where the eigenvalues of $A$ are determined by the blur kernel. There are two advantages of representing the blur operator in this way. First, we do not have to construct the matrix explicitly. Instead, we can take advantage of the efficient built-in discrete cosine transform function to compute our blurred image:
+where the eigenvalues of $A$ are determined by the blur krnel. There are two advantages of representing the blur operator in this way. First, we do not have to construct the matrix explicitly. Instead, we can take advantage of the efficient built-in discrete cosine transform function to compute our blurred image:
 \begin{equation}
 Ax = C^T \Lambda C x = {\tt idct2}( \Lambda {\tt dct2}(x)) = b.
 \end{equation}
-Second, when our fidelity function is given by $f(Ax -b) = \| Ax - b \|_2^2$, we can exploit the fact that $C$ is orthogonal to evaluate the term more efficiently. 
+Second, when our fidelity function is given by $f(Ax -b) = \| Ax - b \|_F^2$, we can exploit the fact that the Frobenius norm is orthogonally invariant and $C$ is isometric to rewrite the fidelity term as
 \begin{align*}
-f(Ax - b) &= \| Ax - b \|_2^2 \\
-&= \| C^T \Lambda C x - b \|_2^2 \\
-&= \| \Lambda Cx - Cb \|_2^2 \\
-&= \| \Lambda \hat{x} - \hat{b} \|_2^2 
+f(Ax - b) &= \| Ax - b \|_F^2 \\
+&= \| C^T \Lambda C x - b \|_F^2 \\
+&= \| \Lambda Cx - Cb \|_F^2 \\
+&= \| \Lambda \hat{x} - \hat{b} \|_F^2.
 \end{align*}
+In this case we take the Frobenius form of our transformed image matrices $\hat x$ and $\hat b$, multiplying $\hat x$ by the diagonal eigenvalue matrix rather than the full blur matrix. We can also compute and store $\hat b$ for additional efficiency. 
 
 % 1-Norm Wavelet Regularization
 \subsection{Wavelet Regularization}
