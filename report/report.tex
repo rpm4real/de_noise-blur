@@ -16,6 +16,7 @@
 \usepackage{algorithmicx}
 \usepackage{algpseudocode}
 \usepackage{setspace}
+\usepackage{framed}
 
 \usepackage[paperwidth=8.5in,paperheight=11in,centering,hmargin=1in,vmargin=1in]{geometry}
 \nipsfinalcopy
@@ -74,12 +75,6 @@ In order to stabilize the solution, a variety of regularizers can be used which 
 \hat{x} = \arg\min_{x} \| Ax - b \|_F^2 + \lambda R(x),
 \end{equation}
 where the parameter $\lambda > 0$ is chosen to balance the tradeoff between fidelity to the model and the assumed feature. In this paper we compare two choices for the regularization term: $\ell_1$ wavelet regularization with $R(x) = \| Wx \|_1$, and total variation regularization with $R(x) = TV(x)$, which are explored by Beck and Teboulle in \cite{TV} and \cite{FISTA} respectively.
-%\begin{align}
-%&\text{Total variation regularization:} &\hat{x}_{TV} = \arg\min_x \| Ax - b \|_F^2 + 2\lambda \| x \|_{TV} , \\
-%&\text{and } \ell_1 \text{ regularization:} &\hat{x}_{\ell_1} = \arg\min_x \| Ax - b \|_F^2 + \lambda \| Wx \|_1  ,
-%\end{align}
-
-
 
 It is also known that the quadratic penalty is extremely sensitive to outliers. While this does not pose problems for images with Gaussian noise, which may result from atmospheric turbulence, it becomes an issues for images with noise from heavier tailed distributions, such as the Student's t-distribution, which could result from a dirty camera lens. Therefore we also consider different choices for the fidelity term which are more robust to outliers than the quadratic penalty, including the Huber norm
 \begin{equation} \label{huber}
@@ -196,12 +191,34 @@ are assumed.  However, it is a very simple adjustment to use the isotropic defin
 \end{equation}
 where $f: \R^{m \times n} \rightarrow [0,\infty)$ is any functional with Lipschitz continuous gradient which gives a measurement of the size of the fidelity term.  The specific fidelity terms which we worked with were as listed in \eqref{fidelities}.
 
-Optimization of the objective function was based on the proximal gradient algorithm and expoited the idea of momentum used in FISTA as well as an extra function evaluation at each iteration in order to ensure a non-increasing objective function.  The proximal gradient step is given as follows,
+
+
+% Algorithms
+\section{Algorithms}
+A simple way to solve for the real image $x$ give $g(x) = 0$ is to apply the gradient descent algorithm,
+
+\begin{equation}
+x_k = x_{k-1} - t_k \nabla f(x_{k-1}),
+\end{equation}
+
+for suitable stepsize $t_k > 0$. When $g$ is nontrivial and nonsmooth (the usual case), we can rewrite this as a proximal mapping,
+
+\begin{equation}
+\prox_g(x_{k-1} - \nabla f(x_{k-1})) = \min_x \left( \frac{1}{2}||x-x_{k-1} - \nabla f(x_{k-1})||_2^2  + \lambda g(x)\right)
+\end{equation}
+
+The advantage of this form is that many nonsmooth regularizers have a close formed solution for their $\prox$. This approach is referred to as a ``proximal gradient'' method. We use this setup for both cases of regularizers, and cover the details of their implementation in the following subsections. 
+
+\subsection{Wavelet Regularization}
+
+\subsection{Total Variation Regularization}
+
+Optimization of the objective function \eqref{tv_ours} is based on the proximal gradient algorithm and expoits the idea of momentum used in FISTA as well as an extra function evaluation at each iteration in order to ensure a non-increasing objective function.  The proximal gradient step is given as follows,
 
 \begin{align*}
 x^{k+1} &= \prox_{\alpha^{-1}(\lambda \textrm{TV}(\cdot) + \delta_{[0,1]})} (\underbrace{x^k - \alpha^{-1} A^T\nabla f (Ax^k - b)}_{u^k}) \\
-&= \AMz \left( \|u^k - z\|_F^2 + \alpha^{-1}\lambda TV(z) + \delta(z | [0,1]) \right) \\
-&= P_{[0,1]}  \left( \AMz \left( \|u^k - z\|_F^2 + \alpha^{-1}\lambda TV(z) \right) \right)
+&= \arg \min_z \left( \|u^k - z\|_F^2 + \alpha^{-1}\lambda TV(z) + \delta(z | [0,1]) \right) \\
+&= P_{[0,1]}  \left( \arg \min_z \left( \|u^k - z\|_F^2 + \alpha^{-1}\lambda TV(z) \right) \right)
 \end{align*}
 
 Here the learning rate $\alpha$ is taken to be no larger than than the multiplicative inverse of the Lipschitz constant of $\nabla f$.  Note that in order to evaluate this expression we must solve a denoising problem with input $u^k = x^k - \alpha^{-1} A^T\nabla f (Ax^k - b)$.  Of particular note is that regardless of the original fidelity term we have a Frobenius norm fidelity term on the new denoising problem.  This allows for the easy manipulation of the original fidelity function, so long as it is convex and has Lipschitz gradient.
@@ -209,7 +226,7 @@ Here the learning rate $\alpha$ is taken to be no larger than than the multiplic
 The resulting denoising problem with Frobenius norm fidelity function may be solved rapidly using the method developed in \cite{TV}.  The $TV$ function is shown to have a dual representation as a trace and the relationship between trace and Frobenius norm is heavily exploited to develop a dual formulation of the denoising problem.  We present their method here, starting with a few new definitions which will be necessary.
 \begin{align*}
 \mathcal{P} &= \{ (p,q) \in \R^{(m-1) \times n} \times \R^{ m \times (n-1) } :  \abs{p_{i,j} } \le 1, \abs{p_{ i,j } } \le 1 \} \\
- \mathcal{L} : \R^{(m-1) \times n} \times& \R^{ m \times (n-1) } \rightarrow \R^{m \times n}  \text{ such that } \mathcal{L}(p,q)_{i,j} = p_{i,j} + q_{i,j} - p_{ i-1,j } - q_{ i,j-1 }\\ &\hspace{3 cm} \text{ for } i = 1,\dots,m,\,j = 1,\dots,n \text{ \& }  p_{0,j} = p_{m,j} = q_{i,0} = q_{i,n} = 0\\
+ \mathcal{L} &: \R^{(m-1) \times n} \times \R^{ m \times (n-1) } \rightarrow \R^{m \times n}  \text{ such that } \mathcal{L}(p,q)_{i,j} = p_{i,j} + q_{i,j} - p_{ i-1,j } - q_{ i,j-1 }\\ \hspace{3 cm}& \text{ for } i = 1,\dots,m,\,j = 1,\dots,n \text{ and }  p_{0,j} = p_{m,j} = q_{i,0} = q_{i,n} = 0\\
 \end{align*}
 Using these new definitions we claim without proof that the total variation functional may be written as,
 \begin{equation}
@@ -229,25 +246,10 @@ Here the switching of min and max is permitted due to the convexity of the objec
 (p^*,q^*) &= \underset{(p,q) \in \mathcal{P}}{\text{arg }\max}  \norm{P_{[0,1]}(b- \lambda\mathcal{L}(p,q)) -(b- \lambda\mathcal{L}(p,q))}_F^2 - \norm{b- \lambda\mathcal{L}(p,q)}_F^2+ \norm{b}_F^2\\
 x &= P_{[0,1]}(b- \lambda\mathcal{L}(p^*,q^*))
 \end{align*}
-Note that in the dual problem the objective is Lipschitz differentiable.  We claim without proof that the gradient has Lipschitz constant $L \leq 16 \lambda^2$ and refer the reader to \cite{TV} for proof.  This smoothness allows us to implement a projected gradient algorithm which we discuss in the next section.
+Note that in the dual problem the objective is Lipschitz differentiable.  We claim without proof that the gradient has Lipschitz constant $L \leq 16 \lambda^2$ and refer the reader to \cite{TV} for proof.  This smoothness allows us to implement a projected gradient algorithm.
 
-% Algorithms
-\section{Algorithms}
-A simple way to solve for the real image $x$ give $g(x) = 0$ is to apply the gradient descent algorithm,
-
-\begin{equation}
-x_k = x_{k-1} - t_k \nabla f(x_{k-1}),
-\end{equation}
-
-for suitable stepsize $t_k > 0$. When $g$ is nontrivial and nonsmooth (the usual case), we can rewrite this as a proximal mapping,
-
-\begin{equation}
-\prox_g(x_{k-1} - \nabla f(x_{k-1})) = \min_x \left( \frac{1}{2}||x-x_{k-1} - \nabla f(x_{k-1})||_2^2  + \lambda g(x)\right)
-\end{equation}
-
-The advantage of this form is that many nonsmooth regularizers have a close formed solution for their $\prox$.
-
-
+We implement the above optimization scheme by using a slightly optimized method referred to as Monotone FISTA or MFISTA. In FISTA, the objective function values are not guaranteed to be nonincreasing, so MFISTA requires the evaluation of the objective function to check for monotonicity. \emph{talk about how FGP is fista version of the projection equation that's not here yet}
+\begin{framed}
 \begin{minipage}{0.48\textwidth}
 \textbf{MFISTA$(b,f, \lambda)$}
 \begin{algorithmic}
@@ -278,10 +280,9 @@ The advantage of this form is that many nonsmooth regularizers have a close form
 \end{algorithmic}
 
 \end{minipage}
+\end{framed}
 
 \subsection{Wavelet Regularization}
-
-\subsection{Total Variation Regularization}
 
 % Examples
 \section{Examples}
@@ -363,7 +364,7 @@ Recall that for large values of $\gamma$ the function $\gamma^{-1} \log(\cosh (\
 		\includegraphics[width=0.8\textwidth]{../figures/logcosh_peppers.png}
 		\rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
 		\caption{A comparrison between the $\log \circ \cosh$ and Huber Fidelity Terms }
-		\label{comp_methods}
+		\label{log_cosh_pic}
 	\end{center}
 \end{figure}
 
