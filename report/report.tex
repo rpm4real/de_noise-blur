@@ -148,9 +148,9 @@ where $h_\gamma$ and $g_\gamma$ are as in \eqref{huber} and \eqref{log_cosh} res
 \subsection{Total Variation Regularization}
 The usual Total-Variation deblurring model, as seen in \cite{TV} can be formulated in the form of \eqref{general} as 
 \begin{equation} \label{tv_orig}
-\min_{x} \norm{ Ax - b }_F^2 + 2 \lambda \mathrm{TV}(x),
+\min_{x} \norm{ Ax - b }_F^2 + 2 \lambda \mathrm{TV}(x)+ \delta(x | [0,1]),
 \end{equation}
-where $\norm{\cdot}$ is taken as either a Frobenius norm or a 2-norm, depending on applications,  $\lambda>0$ is a regularization parameter, and $\mathrm{TV}(x)$ is the Total-Variation semi-norm. Two similar choices exist for the TV-norm: the so-called isotropic type, and the $l_1$ type.  In this work, we work exclusively with the $l_1$-based TV-norm, defined as 
+where $\norm{\cdot}$ is taken as either a Frobenius norm or a 2-norm, depending on applications,  $\lambda>0$ is a regularization parameter, and $\mathrm{TV}(x)$ is the Total-Variation semi-norm.  We include the indicator function to ensure the resulting image is within the range of pixel values we are considering.  Two similar choices exist for the TV-norm: the so-called isotropic type, and the $l_1$ type.  In this work, we work exclusively with the $l_1$-based TV-norm, defined as 
 $$ TV_{l_1}(x) = \sum_{i=1}^{m-1} \sum_{j=1}^{n-1} \left( \abs{x_{i,j}  - x_{i+1,j} } + \abs{ x_{i,j} - x_{i,j+1}  } \right) + \sum_{i=1}^{m-1} \abs{ x_{i,n} - x_{i+1,n} } + \sum_{j=1}^{n-1} \abs{ x_{m,j} - x_{m,j+1 } },$$
  for $x \in \R^{m \times n},$ and where the reflexive boundary conditions
 \begin{align*}
@@ -178,7 +178,25 @@ The resulting denoising problem with Frobenius norm fidelity function may be sol
 \mathcal{P} &= \{ (p,q) \in \R^{(m-1) \times n} \times \R^{ m \times (n-1) } :  \abs{p_{i,j} } \le 1, \abs{p_{ i,j } } \le 1 \} \\
  \mathcal{L} : \R^{(m-1) \times n} \times& \R^{ m \times (n-1) } \rightarrow \R^{m \times n}  \text{ such that } \mathcal{L}(p,q)_{i,j} = p_{i,j} + q_{i,j} - p_{ i-1,j } - q_{ i,j-1 }\\ &\hspace{3 cm} \text{ for } i = 1,\dots,m,\,j = 1,\dots,n \text{ \& }  p_{0,j} = p_{m,j} = q_{i,0} = q_{i,n} = 0\\
 \end{align*}
-
+Using these new definitions we claim without proof that the total variation functional may be written as,
+\begin{equation}
+TV(x) = \underset{(p,q) \in \mathcal{P}}{\max} \Tr(\mathcal{L}(p,q)^Tx)
+\end{equation}
+we may now exploit the relationship between trace and Frobenius norm to obtain the dual problem for Frobenius denoising using total variation regularizartion.  
+\begin{align*}
+\min_{x \in [0,1]} \norm{x-b}_F^2 +2 \lambda \mathrm{TV}(x) &= \min_{x \in [0,1]}  \underset{(p,q) \in \mathcal{P}}{\max}  \norm{x-b}_F^2 + 2\lambda \Tr(\mathcal{L}(p,q)^Tx) \\
+&= \underset{(p,q) \in \mathcal{P}}{\max}   \min_{x \in [0,1]} \norm{x-b}_F^2 +2 \lambda \Tr(\mathcal{L}(p,q)^Tx) \\
+&=\underset{(p,q) \in \mathcal{P}}{\max}   \min_{x \in [0,1]} \norm{x}_F^2 + \norm{b}_F^2 - 2 \Tr(x^Tb)+ 2\lambda \Tr(\mathcal{L}(p,q)^Tx) \\
+&=\underset{(p,q) \in \mathcal{P}}{\max}   \min_{x \in [0,1]} \norm{x}_F^2 + \norm{b}_F^2 - 2 \Tr(x^T(b- \lambda\mathcal{L}(p,q)))\\
+&=\underset{(p,q) \in \mathcal{P}}{\max}   \min_{x \in [0,1]} \underbrace{\norm{x}_F^2 + \norm{b- \lambda\mathcal{L}(p,q)}_F^2 - 2 \Tr(x^T(b- \lambda\mathcal{L}(p,q)))}_{ = \norm{x-(b- \lambda\mathcal{L}(p,q))}_F^2} -  \norm{b- \lambda\mathcal{L}(p,q)}_F^2+ \norm{b}_F^2\\
+&= \underset{(p,q) \in \mathcal{P}}{\max}   \min_{x \in [0,1]}  \norm{x-(b- \lambda\mathcal{L}(p,q))}_F^2 - \norm{b- \lambda\mathcal{L}(p,q)}_F^2+ \norm{b}_F^2
+\end{align*}
+Here the switching of min and max is permitted due to the convexity of the objective in $x$ and concavity in $p$ and $q$ \cite{TV}.  Note that the problem of maximizing over $x$ is simply the projection of each index of  $b- \lambda\mathcal{L}(p,q)$ onto the set $[0,1]$.  This gives the optimality condition for $x$ in terms of $p$ and $q$ which we plug back in to obtain the dual problem.
+\begin{align*}
+(p^*,q^*) &= \underset{(p,q) \in \mathcal{P}}{\text{arg }\max}  \norm{P_{[0,1]}(b- \lambda\mathcal{L}(p,q)) -(b- \lambda\mathcal{L}(p,q))}_F^2 - \norm{b- \lambda\mathcal{L}(p,q)}_F^2+ \norm{b}_F^2\\
+x &= P_{[0,1]}(b- \lambda\mathcal{L}(p^*,q^*))
+\end{align*}
+Note that in the dual problem the objective is Lipschitz differentiable.  We claim without proof that the gradient has Lipschitz constant $L \leq 16 \lambda^2$ and refer the reader to \cite{TV} for proof.  This smoothness allows us to implement a projected gradient algorithm which we discuss in the next section.
 
 % Algorithms
 \section{Algorithms}
