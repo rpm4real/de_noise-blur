@@ -146,7 +146,7 @@ The wavelet regularization deblurring model, as seen in \cite{FISTA}, can be for
 \end{equation}
 where $W$ corresponds to a given wavelet transform. This regularization is motivated by the fact that natural images often have a sparse representation in wavelet domains, which we can encourage in our recovered image using the $\ell_1$ norm. 
 
-To illustrate this fact, we look at the Haar wavelet transform of the peppers image. For a transform with two levels, we see that most of the pixels, excluding those near the top left corner, are zero or near zero. If we use a wavelet transform with more levels
+To illustrate this fact, we look at the orthogonal two-dimensional Haar wavelet transform of the peppers image. First we transform the image using one level. This results in an image divided into four parts: an image comprising row and column averages (scaled by $\sqrt{2}$), and three images made up of row, column, and diagonal differences. These three images are sparse, i.e. most of their pixels are zero or close to zero. Recursively applying this process, we get a Haar transform of the image using five levels, which is even more sparse. 
 
 \begin{figure}[H]
 \centering
@@ -155,22 +155,7 @@ To illustrate this fact, we look at the Haar wavelet transform of the peppers im
 \caption{a;lskdfj}
 \end{figure}
 
-
-WRITE MORE WRITE MORE!
-
-Our approach considers a more general problem
-\begin{equation} \label{wavelet}
-\min_{x} f(Ax - b ) + \lambda \norm{Wx}_1,
-\end{equation}
-where $f: \R^{m \times n} \rightarrow [0,\infty)$ is some Lipschitz differentiable functional which gives a measurement of the size of the fidelity term. We specifically work with the cases 
-\begin{equation} \label{fidelities}
-f(x) = \begin{cases}
-\norm{x}_F^2 \\
-h_\gamma(x) \\
-g_\gamma(x),
-\end{cases}
-\end{equation}
-where $h_\gamma$ and $g_\gamma$ are as in \eqref{huber} and \eqref{log_cosh} respectively. 
+The Haar wavelet is just the first of many wavelets developed for multi-resolution analysis. In addition to the orthogonal two-dimensional Haar wavelet transform, we therefore also consider the orthogonal two-dimensional Daubechies wavelet transform in our examples. 
 
 % TV Regularization
 \subsection{Total Variation Regularization}
