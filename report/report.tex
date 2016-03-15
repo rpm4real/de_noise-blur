@@ -111,7 +111,7 @@ The advantage of this form is that many nonsmooth regularizers have a close form
 
 % TV Regularization
 \subsection{Total Variation Regularization}
-The usual Total-Variation deblurring model, as seen in (BECK/TOUBELLE REF) can be formulated as 
+The usual Total-Variation deblurring model, as seen in \cite{TV} can be formulated as 
 \begin{equation} \label{tv_orig}
 \min_{x} \norm{ Ax - b }^2 + 2 \lambda \mathrm{TV}(x),
 \end{equation}
@@ -138,6 +138,30 @@ Wavelet regularization implies to take $A = RW$ where  $R$ is the blur matrix an
 
 % Examples
 \section{Examples}
+
+\subsection{Total Variation Regularization}
+
+We demonstrate some results of denoising and deblurring with the Total Variation regularization on real images. As previously shown, each image was given a small amount of either Gaussian or Student's t noise and blurred. Two different fidelity functions were used: the squared Frobenius norm, and the Huber norm. Figure \ref{tv_gauss} demonstrates the results using Gaussian noise, and Figure \ref{tv_student} demonstrates the results using Student's t noise with one degree of freedom. For the Gaussian noise, we set $\lambda = .001$, and $\gamma = .02$ (see TV-regularization in Problem Formulation). For Student's t noise, we set $\lambda = .002$, and $\gamma = .02$.
+
+\begin{figure}[H]
+\begin{center}
+\rotatebox{90}{\hspace{1cm} Original Image \hspace{3cm} Frobenius Loss}
+\includegraphics[width = 0.7\textwidth]{../figures/gaussian_peppers.png} 
+\rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
+\end{center}
+\caption{Total Variation algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-3}$ for the two different fidelity terms of Frobenius and Huber loss.}
+\label{tv_gauss}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\rotatebox{90}{\hspace{1cm} Original Image \hspace{3cm} Frobenius Loss}
+\includegraphics[width = 0.7\textwidth]{../figures/student-t_peppers.png} 
+\rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
+\end{center}
+\caption{Total Variation algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-4}$) for the two different fidelity terms of Frobenius and Huber loss.}
+\label{tv_student}
+\end{figure}
 
 % Discussion
 \section{Discussion and Conclusions}
