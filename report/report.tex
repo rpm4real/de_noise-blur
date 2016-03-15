@@ -66,17 +66,17 @@ In order to stabilize the solution, a variety of regularizers can be used which 
 where the parameter $\lambda > 0$ is chosen to balance the tradeoff between fidelity to the model and the assumed feature. In this paper we compare two choices for the regularization term, 
 \begin{align}
 &\text{Total variation regularization:} &\hat{x}_{TV} = \arg\min_x \| Ax - b \|_2^2 + 2\lambda \| x \|_{TV} , \\
-&\text{and } L_1 \text{ regularization:} &\hat{x}_{L1} = \arg\min_x \| Ax - b \|_2^2 + \lambda \| Wx \|_1  ,
+&\text{and } \ell_1 \text{ regularization:} &\hat{x}_{\ell_1} = \arg\min_x \| Ax - b \|_2^2 + \lambda \| Wx \|_1  ,
 \end{align}
 
 which are explored by Beck and Teboulle in \cite{TV} and \cite{FISTA} respectively.
 
 It is also known that the quadratic penalty is extremely sensitive to outliers. While this does not pose problems for images with Gaussian noise, which may result from atmospheric turbulence, it becomes an issues for images with noise from heavier tailed distributions, such as the Student's t-distribution, which could result from a dirty camera lens. Therefore we also consider different choices for the fidelity term which are more robust to outliers than the quadratic penalty, including the Huber norm
-\begin{equation}
+\begin{equation} \label{huber}
 h_{\gamma}(x) = \min_y \frac{1}{2} \| x - y \|_2^2 + \gamma \| y \|_1,
 \end{equation}
 and the function
-\begin{equation}
+\begin{equation} \label{log_cosh}
 g_{\gamma}(x) = \frac{1}{\gamma} \sum_i \log\left(\cosh\left(\gamma x_i\right)\right).
 \end{equation}
 
@@ -92,54 +92,75 @@ where $\mathcal{A}(x)$ is a convolution of the desired image $x$ with a gaussian
 \end{equation}
 where $\delta(x | [0,1])$ is an indiciator function for the unit interval. 
 
-\emph{here we can explain the general prox-gradient approach, and go into details for specific cases in the following subsections}
-
-
-A simple way to solve for the real image $x$ is to apply the gradient descent algorithm,
+A simple way to solve for the real image $x$ give $g(x) = 0$ is to apply the gradient descent algorithm,
 
 \begin{equation}
 x_k = x_{k-1} - t_k \nabla f(x_{k-1}),
 \end{equation}
 
-for suitable stepsize $t_k > 0$. When $f$ includes nonsmooth regluarization $R$ we can rewrite this as a proximal mapping,
+for suitable stepsize $t_k > 0$. When $g$ is nontrivial and nonsmooth (the usual case), we can rewrite this as a proximal mapping,
 
 \begin{equation}
-\prox_R(x_{k-1} - \nabla f(x_{k-1})) = \min_x \left( \frac{1}{2}||x-x_{k-1} - \nabla f(x_{k-1})||_2^2  + \lambda R(x)\right)
+\prox_g(x_{k-1} - \nabla f(x_{k-1})) = \min_x \left( \frac{1}{2}||x-x_{k-1} - \nabla f(x_{k-1})||_2^2  + \lambda g(x)\right)
 \end{equation}
 
 The advantage of this form is that many nonsmooth regularizers have a close formed solution for their $\prox$.
 
+% 1-Norm Wavelet Regularization
+\subsection{Wavelet Regularization}
+
+The wavelet regularization deblurring model, as seen in \cite{FISTA}, can be formulated in the form of \eqref{general} as 
+\begin{equation} \label{wavelet_orig}
+\min_{x} \norm{ Ax - b }_F^2 + \lambda \norm{Wx}_1 ,
+\end{equation}
+where $\norm{\cdot}_F$ is the Frobenius norm, $\lambda>0$ is a regularization parameter, and $W$ corresponds to a wavelet trasform of a given wavelet type. The primary motivation for this approach is that most images have a sparse representation in the wavelet domain that can be easily exploited by $\ell_1$ regularization. 
+
+Our approach considers a more general problem
+\begin{equation} \label{wavelet}
+\min_{x} f(Ax - b ) + \lambda \norm{Wx}_1,
+\end{equation}
+where $f: \R^{m \times n} \rightarrow [0,\infty)$ is some Lipschitz differentiable functional which gives a measurement of the size of the fidelity term. We specifically work with the cases 
+\begin{equation} \label{fidelities}
+f(x) = \begin{cases}
+\norm{x}_F^2 \\
+h_\gamma(x) \\
+g_\gamma(x),
+\end{cases}
+\end{equation}
+where $h_\gamma$ and $g_\gamma$ are as in \eqref{huber} and \eqref{log_cosh} respectively. 
+
 % TV Regularization
 \subsection{Total Variation Regularization}
-The usual Total-Variation deblurring model, as seen in \cite{TV} can be formulated as 
+The usual Total-Variation deblurring model, as seen in \cite{TV} can be formulated in the form of \eqref{general} as 
 \begin{equation} \label{tv_orig}
-\min_{x} \norm{ Ax - b }^2 + 2 \lambda \mathrm{TV}(x),
+\min_{x} \norm{ Ax - b }_F^2 + 2 \lambda \mathrm{TV}(x),
 \end{equation}
-where $\norm{\cdot}$ is taken as either a Frobenius norm or a 2-norm, depending on applications,  $\lambda>0$ is a regularization parameter, and $\mathrm{TV}(x)$ is the Total-Variation semi-norm. Two choices similar choices exist for the TV-norm: the so-called isotropic type, and the $l_1$ type. In this work, we work exclusively with the $l_1$-based TV-norm, defined as 
-$$ TV_{l_1}(x) = \sum_{i=1}^{m-1} \sum_{j=1}^{n-1} \left( \abs{x_{i,j}  - x_{i+1,j} } + \abs{ x_{i,j} - x_{i,j+1}  } \right) + \sum_{i=1}^{m-1} \abs{ x_{i,n} - x_{i+1,n} } + \sum_{j=1}^{n-1} \abs{ x_{m,j} - x_{m,j+1 } },$$ for $x \in \R^{m \times n},$ and where the reflexive boundary conditions
+where $\norm{\cdot}_F$ is the Frobenius norm, $\lambda>0$ is a regularization parameter, and $\mathrm{TV}(x)$ is the Total-Variation semi-norm. Two choices similar choices exist for the TV-norm: the so-called isotropic type, and the $\ell_1$ type. In this work, we work exclusively with the $\ell_1$-based TV-norm, defined as 
+$$ TV_{\ell_1}(x) = \sum_{i=1}^{m-1} \sum_{j=1}^{n-1} \left( \abs{x_{i,j}  - x_{i+1,j} } + \abs{ x_{i,j} - x_{i,j+1}  } \right) + \sum_{i=1}^{m-1} \abs{ x_{i,n} - x_{i+1,n} } + \sum_{j=1}^{n-1} \abs{ x_{m,j} - x_{m,j+1 } },$$ for $x \in \R^{m \times n},$ and where the reflexive boundary conditions
 \begin{align*}
 x_{m+1,j} - x_{m,j} &= 0, \textrm{ for all }j \\
  x_{i,n+1} - x_{i,n} &= 0, \textrm{ for all }i
 \end{align*}
 are assumed. Our approach considers a more general problem
-\begin{equation} \label{tv_ours}
-\min_{x} f(Ax - b ) + 2 \lambda \mathrm{TV}_{l_1}(x),
+\begin{equation} \label{tv}
+\min_{x} f(Ax - b ) + 2 \lambda \mathrm{TV}_{\ell_1}(x),
 \end{equation}
-where $f: \R^{m \times n} \rightarrow [0,\infty)$ is any continuous functional which gives a measurement of the size of the fidelity term.
+where $f: \R^{m \times n} \rightarrow [0,\infty)$ is some Lipschitz differentiable functional which gives a measurement of the size of the fidelity term. Again, we work with three cases of $f$ as seen in \eqref{fidelities}.
 
-
-% 1-Norm Wavelet Regularization
-\subsection{L1 Wavelet Regularization}
-
-Wavelet regularization implies to take $A = RW$ where  $R$ is the blur matrix and  $W$ is a wavelet basis such that multiplying by $W$ corresponds to performing the inverse wavelet transform. The primary motivation for this approach is that most images have a sparse representation in the wavelet domain that can be easily exploited by $l_1$ regularization. Once transforming our image into a wavelet domain it is clear that the normal prox gradient methods can be applied. 
 
 % Algorithms
 \section{Algorithms}
 
+\emph{here we can explain prox-gradient approach for each specific case}
+
+\subsection{Wavelet Regularization}
+
+\subsection{Total Variation Regularization}
+
 % Examples
 \section{Examples}
 
-\subsection{L1 Wavelet Regularization}
+\subsection{Wavelet Regularization}
 
 
 \begin{figure}[H]
@@ -148,7 +169,7 @@ Wavelet regularization implies to take $A = RW$ where  $R$ is the blur matrix an
 \includegraphics[width = 0.75\textwidth]{../figures/waveletGaussH.pdf} 
 \rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
 \end{center}
-\caption{L1 Wavelet algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-3}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Haar wavelet for deblurring.}
+\caption{$\ell_1$ Wavelet algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-3}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Haar wavelet for deblurring.}
 \label{waveletH_gauss}
 \end{figure}
 
@@ -158,7 +179,7 @@ Wavelet regularization implies to take $A = RW$ where  $R$ is the blur matrix an
 \includegraphics[width = 0.75\textwidth]{../figures/waveletGaussD.pdf} 
 \rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
 \end{center}
-\caption{L1 Wavelet algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-3}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Daubechies wavelet for deblurring.}
+\caption{$\ell_1$ Wavelet algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-3}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Daubechies wavelet for deblurring.}
 \label{waveletD_gauss}
 \end{figure}
 
@@ -168,7 +189,7 @@ Wavelet regularization implies to take $A = RW$ where  $R$ is the blur matrix an
 \includegraphics[width = 0.75\textwidth]{../figures/waveletStudentH.pdf} 
 \rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
 \end{center}
-\caption{L1 Wavelet algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-4}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Haar wavelet for deblurring.}
+\caption{$\ell_1$ Wavelet algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-4}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Haar wavelet for deblurring.}
 \label{waveletH_student}
 \end{figure}
 
@@ -178,7 +199,7 @@ Wavelet regularization implies to take $A = RW$ where  $R$ is the blur matrix an
 \includegraphics[width = 0.75\textwidth]{../figures/waveletStudentD.pdf} 
 \rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
 \end{center}
-\caption{L1 Wavelet algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-4}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Daubechies wavelet for deblurring.}
+\caption{$\ell_1$ Wavelet algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-4}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Daubechies wavelet for deblurring.}
 \label{waveletD_student}
 \end{figure}
 
