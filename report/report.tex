@@ -139,6 +139,49 @@ Wavelet regularization implies to take $A = RW$ where  $R$ is the blur matrix an
 % Examples
 \section{Examples}
 
+\subsection{L1 Wavelet Regularization}
+
+
+\begin{figure}[H]
+\begin{center}
+\rotatebox{90}{\hspace{1cm} Original Image \hspace{3cm} Frobenius Loss}
+\includegraphics[width = 0.75\textwidth]{../figures/waveletGaussH.pdf} 
+\rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
+\end{center}
+\caption{L1 Wavelet algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-3}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Haar wavelet for deblurring.}
+\label{waveletH_gauss}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\rotatebox{90}{\hspace{1cm} Original Image \hspace{3cm} Frobenius Loss}
+\includegraphics[width = 0.75\textwidth]{../figures/waveletGaussD.pdf} 
+\rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
+\end{center}
+\caption{L1 Wavelet algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-3}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Daubechies wavelet for deblurring.}
+\label{waveletD_gauss}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\rotatebox{90}{\hspace{1cm} Original Image \hspace{3cm} Frobenius Loss}
+\includegraphics[width = 0.75\textwidth]{../figures/waveletStudentH.pdf} 
+\rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
+\end{center}
+\caption{L1 Wavelet algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-4}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Haar wavelet for deblurring.}
+\label{waveletH_student}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\rotatebox{90}{\hspace{1cm} Original Image \hspace{3cm} Frobenius Loss}
+\includegraphics[width = 0.75\textwidth]{../figures/waveletStudentD.pdf} 
+\rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
+\end{center}
+\caption{L1 Wavelet algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-4}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Daubechies wavelet for deblurring.}
+\label{waveletD_student}
+\end{figure}
+
 \subsection{Total Variation Regularization}
 
 We demonstrate some results of denoising and deblurring with the Total Variation regularization on real images. As previously shown, each image was given a small amount of either Gaussian or Student's t noise and blurred. Two different fidelity functions were used: the squared Frobenius norm, and the Huber norm. Figure \ref{tv_gauss} demonstrates the results using Gaussian noise, and Figure \ref{tv_student} demonstrates the results using Student's t noise with one degree of freedom. For the Gaussian noise, we set $\lambda = .001$, and $\gamma = .02$ (see TV-regularization in Problem Formulation). For Student's t noise, we set $\lambda = .002$, and $\gamma = .02$.
@@ -146,17 +189,17 @@ We demonstrate some results of denoising and deblurring with the Total Variation
 \begin{figure}[H]
 \begin{center}
 \rotatebox{90}{\hspace{1cm} Original Image \hspace{3cm} Frobenius Loss}
-\includegraphics[width = 0.7\textwidth]{../figures/gaussian_peppers.png} 
+\includegraphics[width = 0.75\textwidth]{../figures/gaussian_peppers.png} 
 \rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
 \end{center}
-\caption{Total Variation algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-3}$ for the two different fidelity terms of Frobenius and Huber loss.}
+\caption{Total Variation algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-3}$) for the two different fidelity terms of Frobenius and Huber loss.}
 \label{tv_gauss}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
 \rotatebox{90}{\hspace{1cm} Original Image \hspace{3cm} Frobenius Loss}
-\includegraphics[width = 0.7\textwidth]{../figures/student-t_peppers.png} 
+\includegraphics[width = 0.75\textwidth]{../figures/student-t_peppers.png} 
 \rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
 \end{center}
 \caption{Total Variation algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-4}$) for the two different fidelity terms of Frobenius and Huber loss.}
