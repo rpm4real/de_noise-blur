@@ -48,7 +48,6 @@ weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm wee
 
 % Introduction
 \section{Introduction}
-
 Image denoising and deblurring problems can be modeled with the linear system
 \begin{equation}
 Ax + w = b,
@@ -74,13 +73,13 @@ In order to stabilize the solution, a variety of regularizers can be used which 
 \begin{equation}
 \hat{x} = \arg\min_{x} \| Ax - b \|_F^2 + \lambda R(x),
 \end{equation}
-where the parameter $\lambda > 0$ is chosen to balance the tradeoff between fidelity to the model and the assumed feature. In this paper we compare two choices for the regularization term, 
-\begin{align}
-&\text{Total variation regularization:} &\hat{x}_{TV} = \arg\min_x \| Ax - b \|_F^2 + 2\lambda \| x \|_{TV} , \\
-&\text{and } \ell_1 \text{ regularization:} &\hat{x}_{\ell_1} = \arg\min_x \| Ax - b \|_F^2 + \lambda \| Wx \|_1  ,
-\end{align}
+where the parameter $\lambda > 0$ is chosen to balance the tradeoff between fidelity to the model and the assumed feature. In this paper we compare two choices for the regularization term: $\ell_1$ wavelet regularization with $R(x) = \| Wx \|_1$, and total variation regularization with $R(x) = TV(x)$, which are explored by Beck and Teboulle in \cite{TV} and \cite{FISTA} respectively.
+%\begin{align}
+%&\text{Total variation regularization:} &\hat{x}_{TV} = \arg\min_x \| Ax - b \|_F^2 + 2\lambda \| x \|_{TV} , \\
+%&\text{and } \ell_1 \text{ regularization:} &\hat{x}_{\ell_1} = \arg\min_x \| Ax - b \|_F^2 + \lambda \| Wx \|_1  ,
+%\end{align}
 
-which are explored by Beck and Teboulle in \cite{TV} and \cite{FISTA} respectively.
+
 
 It is also known that the quadratic penalty is extremely sensitive to outliers. While this does not pose problems for images with Gaussian noise, which may result from atmospheric turbulence, it becomes an issues for images with noise from heavier tailed distributions, such as the Student's t-distribution, which could result from a dirty camera lens. Therefore we also consider different choices for the fidelity term which are more robust to outliers than the quadratic penalty, including the Huber norm
 \begin{equation} \label{huber}
@@ -90,6 +89,8 @@ and the function
 \begin{equation} \label{log_cosh}
 g_{\gamma}(x) = \frac{1}{\gamma} \sum_i \log\left(\cosh\left(\gamma x_i\right)\right).
 \end{equation}
+
+We note that $g_{\gamma}(x)$ approaches the $\ell_1$ penalty uniformly as we increase $\gamma$, leading to linear penalization. The Huber penalty, on the other hand, approaches a linear penalty as we decrease $\gamma$, but with an increasingly smaller slope.
 
 \begin{figure}[H]
 \centering
@@ -142,13 +143,25 @@ f(Ax - b) &= \| Ax - b \|_F^2 \\
 In this case we take the Frobenius form of our transformed image matrices $\hat x$ and $\hat b$, multiplying $\hat x$ by the diagonal eigenvalue matrix rather than the full blur matrix. We can also compute and store $\hat b$ for additional efficiency. 
 
 % 1-Norm Wavelet Regularization
-\subsection{Wavelet Regularization}
+\subsection{$\ell_1$ Wavelet Regularization}
 
 The wavelet regularization deblurring model, as seen in \cite{FISTA}, can be formulated in the form of \eqref{general} as 
 \begin{equation} \label{wavelet_orig}
-\min_{x} \norm{ Ax - b }_F^2 + \lambda \norm{Wx}_1 ,
+\min_{x} f(Ax-b) + \lambda \norm{Wx}_1 ,
 \end{equation}
-where $\norm{\cdot}_F$ is the Frobenius norm, $\lambda>0$ is a regularization parameter, and $W$ corresponds to a wavelet trasform of a given wavelet type. The primary motivation for this approach is that most images have a sparse representation in the wavelet domain that can be easily exploited by $\ell_1$ regularization. 
+where $W$ corresponds to a given wavelet transform. This regularization is motivated by the fact that natural images often have a sparse representation in wavelet domains, which we can encourage in our recovered image using the $\ell_1$ norm. 
+
+To illustrate this fact, we look at the Haar wavelet transform of the peppers image. For a transform with two levels, we see that most of the pixels, excluding those near the top left corner, are zero or near zero. If we use a wavelet transform with more levels
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=2.5in]{../figures/haarTrans2} \quad
+\includegraphics[width=2.5in]{../figures/haarTrans3}
+\caption{a;lskdfj}
+\end{figure}
+
+
+WRITE MORE WRITE MORE!
 
 Our approach considers a more general problem
 \begin{equation} \label{wavelet}
