@@ -184,20 +184,18 @@
 	
 	% Algorithms
 	\section{Algorithms}
-	In order to solve our deblurring and denoising problem, where our objective function is the sum of two convex functions, one smooth and one with a convenient proximal representation, we can employ the proximal gradient method. For each iteration we take a gradient step in $f$ and apply the proximal operator of $g$,
-	
+	In order to solve our deblurring and denoising problem, where our objective function is the sum of two convex functions (one smooth and one with a convenient proximal representation), we can employ the proximal gradient method. For each iteration we take a gradient step in $f$ and apply the proximal operator of $R$,
 	\begin{equation}
 	\begin{aligned}
-	x_{k+1} &= \prox_{\alpha^{-1}\lambda g}\big(x_k - \alpha^{-1} A^T \nabla f(Ax_k-b)\big) \\
-	&= \min_y \frac{1}{2} \Big\| y - \big(x_k - \alpha^{-1} A^T \nabla f(Ax_k-b) \big)\Big\|_2^2 + \alpha^{-1}\lambda g(y)
+	x_{k+1} &= \prox_{\alpha^{-1}\lambda R}\big(x_k - \alpha^{-1} A^T \nabla f(Ax_k-b)\big) \\
+	&= \min_y \frac{1}{2} \Big\| y - \big(x_k - \alpha^{-1} A^T \nabla f(Ax_k-b) \big)\Big\|_2^2 + \alpha^{-1}\lambda R(y)
 	\end{aligned}
 	\end{equation}
 	
 	where $\alpha \geq Lip(\nabla f)$. For faster convergence, we use the modified version of the proximal gradient algorithm, FISTA, which utilizes information from previous iterations:
-	
 	\begin{equation}
 	\begin{aligned}
-	x_{k} &= \prox_{\alpha^{-1}\lambda g}\big(y_k - \alpha^{-1} A^T \nabla f(Ay_k-b)\big) \\[1ex]
+	x_{k} &= \prox_{\alpha^{-1}\lambda R}\big(y_k - \alpha^{-1} A^T \nabla f(Ay_k-b)\big) \\[1ex]
 	t_{k+1} &= \frac{1+\sqrt{1+4t_k^2}}{2} \\
 	y_{k+1} &= x_k + \left( \frac{t_k-1}{t_{k+1}} \right) (x_k - x_{k-1})
 	\end{aligned}
@@ -206,24 +204,35 @@
 	We detail the implementation of FISTA for each choice of regularization term in the two sections that follow.
 	
 	% Wavelet algorithm
-	\subsection{Wavelet Regularization}
+	\subsection{$l_1$ Wavelet Regularization}
 	
-	PROX = W* PROX(Wx) = SOFT-THRESHOLDING OPERATION
+	Because the wavelet transform $W$ is an orthogonal operator, we can evaluate the proximal operator of $R(x) = \|Wx\|_1$ via the soft-thresholding operation:
+	\begin{equation}
+	\begin{aligned}
+	\prox_{\alpha^{-1}\lambda \| W \cdot \|_1}(x) &= \arg\min_y \frac{1}{2} \| y-x \|_2^2 + \alpha^{-1}\lambda \| Wy \|_1 \\
+	&= \arg\min_y \frac{1}{2} \| Wy - Wx \|_2^2 + \alpha^{-1}\lambda \|Wy \|_1 \\
+	&= W^T \arg\min_{Wy} \frac{1}{2} \| Wy - Wx \|_2^2 + \alpha^{-1}\lambda \|Wy \|_1 \\
+	&= W^T \prox_{\alpha^{-1}\lambda \|\cdot\|_1}(Wx) \\
+	&= W^T \text{sgn}(Wx) \max(0, |Wx|-\alpha^{-1}\lambda)
+	\end{aligned}
+	\end{equation}
+	
+	To deblur and denoise our images using the $l_1$ wavelet regularization and either the Frobenius or Huber norm fidelity term, we employ the following algorithm:
 	
 	\begin{center}
 		\begin{minipage}[T]{0.5\textwidth}
 			\begin{framed}
 				\textbf{FISTA$(b,f,\lambda)$}
 				\begin{algorithmic}
-					\State $y^1 = x^0 = b; \, t^1 = 1$
+					\State $y_1 = x_0 = b; \, t_1 = 1$
 					\State $\alpha \geq Lip(\nabla f)$
 					\For {$k = 1:N$}
-					\State $u^k = y^k - \alpha^{-1} A^T \nabla f(Ay^k-b)$ \vspace{1ex}
-					\State $x^k = W^*\text{sgn}(Wu^k)\max(0,|Wu^k|-\alpha^{-1}\lambda)$ \vspace{1ex}
-					\State $t^{k+1} = \frac{1+\sqrt{1+4t_2^k}}{2}$
-					\State $y^{k+1} = x^k + \left(\frac{t^k-1}{t^{k+1}}\right) (x^k - x^{k-1})$
+					\State $u_k = y_k - \alpha^{-1} A^T \nabla f(Ay_k-b)$ \vspace{1ex}
+					\State $x_k = W^T\text{sgn}(Wu_k)\max(0,|Wu_k|-\alpha^{-1}\lambda)$ \vspace{1ex}
+					\State $t_{k+1} = \frac{1+\sqrt{1+4t_k^2}}{2}$
+					\State $y_{k+1} = x_k + \left(\frac{t_k-1}{t_{k+1}}\right) (x_k - x_{k-1})$
 					\EndFor\\
-					\Return $x^N$
+					\Return $x_N$
 				\end{algorithmic}
 			\end{framed}
 		\end{minipage}
