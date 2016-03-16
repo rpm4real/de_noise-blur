@@ -140,7 +140,7 @@ The wavelet regularization deblurring model, as seen in \cite{FISTA}, can be for
 \begin{equation} \label{wavelet_orig}
 \min_{x} f(Ax-b) + \lambda \norm{Wx}_1 ,
 \end{equation}
-where $W$ corresponds to a given wavelet transform. This regularization is motivated by the fact that natural images often have a sparse representation in wavelet domains, which we can encourage in our recovered image using the $\ell_1$ norm. 
+where $W$ corresponds to a given wavelet transform and $\|Wx\|_1$ is the sum of absolute values of all entries of the matrix $Wx$. This regularization is motivated by the fact that natural images often have a sparse representation in wavelet domains, which we can encourage in our recovered image using the $\ell_1$ norm. 
 
 To illustrate this fact, we look at the orthogonal two-dimensional Haar wavelet transform of the peppers image. First we transform the image using the spot operator {\tt opHaar2} with one level. This results in an image where most of the nonzero elements are concentrated in the upper left corner. Recursively applying this process to this portion of the image, we get the Haar transform of the image for five levels, where now most of the elements are zero or near zero. 
 
@@ -155,23 +155,27 @@ The Haar wavelet is just the first of many wavelets developed for multi-resoluti
 
 % TV Regularization
 \subsection{Total Variation Regularization}
-The usual Total-Variation deblurring model, as seen in \cite{TV} can be formulated in the form of \eqref{general} as 
+The total variation deblurring model, as seen in \cite{TV}, can be formulated in the form of \eqref{general} as 
 \begin{equation} \label{tv_orig}
-\min_{x} \norm{ Ax - b }_F^2 + 2 \lambda \mathrm{TV}(x)+ \delta(x | [0,1]),
+\min_{x} f(Ax-b) +  \lambda \mathrm{TV}(x)+ \delta(x | [0,1]),
 \end{equation}
-where $\norm{\cdot}$ is taken as either a Frobenius norm or a 2-norm, depending on applications,  $\lambda>0$ is a regularization parameter, and $\mathrm{TV}(x)$ is the Total-Variation semi-norm.  We include the indicator function to ensure the resulting image is within the range of pixel values we are considering.  Two similar choices exist for the TV-norm: the so-called isotropic type, and the $l_1$ type.  In this work, we work exclusively with the $l_1$-based TV-norm, defined as 
+where $\mathrm{TV}(x)$ is the total variation semi-norm.  We include the indicator function to ensure that the resulting image is within the correct range of pixel values.  Two choices exist for the TV-norm: the isotropic version and the $l_1$-based, anisotropic version. Since both methods yield very similar results, in this project we work exclusively with the $l_1$-based TV-norm, defined as 
 $$ TV_{l_1}(x) = \sum_{i=1}^{m-1} \sum_{j=1}^{n-1} \left( \abs{x_{i,j}  - x_{i+1,j} } + \abs{ x_{i,j} - x_{i,j+1}  } \right) + \sum_{i=1}^{m-1} \abs{ x_{i,n} - x_{i+1,n} } + \sum_{j=1}^{n-1} \abs{ x_{m,j} - x_{m,j+1 } },$$
- for $x \in \R^{m \times n},$ and where the reflexive boundary conditions
+ for $x \in \R^{m \times n},$ where reflexive boundary conditions
 \begin{align*}
 x_{m+1,j} - x_{m,j} &= 0, \textrm{ for all }j \\
  x_{i,n+1} - x_{i,n} &= 0, \textrm{ for all }i
 \end{align*}
-are assumed.  However, it is a very simple adjustment to use the isotropic definition of total variation and all of the same methods still apply. Our approach considers a more general problem
-\begin{equation} \label{tv_ours}
-\min_{x} f(Ax - b ) + \lambda \mathrm{TV}_{l_1}(x) + \delta(x | [0,1]),
-\end{equation}
-where $f: \R^{m \times n} \rightarrow [0,\infty)$ is any functional with Lipschitz continuous gradient which gives a measurement of the size of the fidelity term.  The specific fidelity terms which we worked with were as listed in \eqref{fidelities}.
+are assumed. 
 
+The motivation behind the TV regularization is that images are often "smooth", or that pixels will have values similar to their neighbors. Alternatively, it assumes that high frequency content such as noise increases the total variation of an image, represented as the absolute value of the gradient. To illustrate this, we look at the absolute value of the row and column differences of the peppers image. Here we see that most of the values are indeed small, except for those which represent edges. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=2.5in]{../figures/diff1} \quad
+\includegraphics[width=2.5in]{../figures/diff2}
+\caption{The absolute value of the column (left) and row (left) differences of the peppers image. Note that most of the values are zero or near zero, with most of the variation present in the image edges. }
+\end{figure}
 
 
 % Algorithms
@@ -277,7 +281,7 @@ We implement the above optimization scheme by using a slightly optimized method 
 \includegraphics[width = 0.75\textwidth]{../figures/waveletGaussH.pdf} 
 \rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
 \end{center}
-\caption{$\ell_1$ Wavelet algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-3}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Haar wavelet for deblurring.}
+\caption{$\ell_1$ Wavelet algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Haar wavelet for deblurring.}
 \label{waveletH_gauss}
 \end{figure}
 
@@ -287,7 +291,7 @@ We implement the above optimization scheme by using a slightly optimized method 
 \includegraphics[width = 0.75\textwidth]{../figures/waveletGaussD.pdf} 
 \rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
 \end{center}
-\caption{$\ell_1$ Wavelet algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-3}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Daubechies wavelet for deblurring.}
+\caption{$\ell_1$ Wavelet algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Daubechies wavelet for deblurring.}
 \label{waveletD_gauss}
 \end{figure}
 
@@ -297,7 +301,7 @@ We implement the above optimization scheme by using a slightly optimized method 
 \includegraphics[width = 0.75\textwidth]{../figures/waveletStudentH.pdf} 
 \rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
 \end{center}
-\caption{$\ell_1$ Wavelet algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-4}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Haar wavelet for deblurring.}
+\caption{$\ell_1$ Wavelet algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Haar wavelet for deblurring.}
 \label{waveletH_student}
 \end{figure}
 
@@ -307,7 +311,7 @@ We implement the above optimization scheme by using a slightly optimized method 
 \includegraphics[width = 0.75\textwidth]{../figures/waveletStudentD.pdf} 
 \rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
 \end{center}
-\caption{$\ell_1$ Wavelet algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-4}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Daubechies wavelet for deblurring.}
+\caption{$\ell_1$ Wavelet algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Daubechies wavelet for deblurring.}
 \label{waveletD_student}
 \end{figure}
 
@@ -321,7 +325,7 @@ We demonstrate some results of denoising and deblurring with the Total Variation
 \includegraphics[width = 0.75\textwidth]{../figures/gaussian_peppers.png} 
 \rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
 \end{center}
-\caption{Total Variation algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-3}$) for the two different fidelity terms of Frobenius and Huber loss.}
+\caption{Total Variation algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss.}
 \label{tv_gauss}
 \end{figure}
 
@@ -331,7 +335,7 @@ We demonstrate some results of denoising and deblurring with the Total Variation
 \includegraphics[width = 0.75\textwidth]{../figures/student-t_peppers.png} 
 \rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
 \end{center}
-\caption{Total Variation algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-4}$) for the two different fidelity terms of Frobenius and Huber loss.}
+\caption{Total Variation algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss.}
 \label{tv_student}
 \end{figure}
 

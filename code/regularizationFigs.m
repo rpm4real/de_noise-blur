@@ -13,13 +13,18 @@ X = X/255;
 
 %% sparsity in wavelet domain
 
-W = opHaar2(m,n,2);
+W = opHaar2(m,n,1);
 Y = reshape(W*X(:),m,n);
-figure(), imshow(Y,[]), colorbar
+figure(), imshow(Y,[]), colorbar('Location','SouthOutside')
+
+W = opHaar2(m,n,5);
+Y = reshape(W*X(:),m,n);
+figure(), imshow(Y,[]), colorbar('Location','SouthOutside')
 
 %% low total variation
 
-D1 = diff(X,1,1);
-D2 = diff(X,1,2);
-D = abs(D1(:,1:511) + D2(1:383,:));
-figure(), imshow(D,[]), colorbar
+D1 = abs(diff(X,1,1));
+figure(), imshow(D1,[]), colorbar('Location','SouthOutside')
+
+D2 = abs(diff(X,1,2));
+figure(), imshow(D2,[]), colorbar('Location','SouthOutside')
