@@ -317,21 +317,15 @@
 	\newpage
 	\section{Examples}
 	
-	In this section we compare the performance of our different fidelity term penalty functions and regularizers. In each example the peppers image is first blurred with a $9 \times 9$ Gaussian kernel with standard deviation 1, and then either Gaussian noise or Student's $t$ noise is added, both with standard deviation 0.01, to produce our observed image. 
+	In this section we compare the performance of our different fidelity term penalty functions and regularizers. In each example the peppers image is first blurred with a $9 \times 9$ Gaussian kernel with standard deviation 1, and then either Gaussian noise or Student's $t$ noise is added, both with standard deviation 0.01. Additionally, we determined how many iterations to run each algorithm based on convergence criterion rather than using a fixed number of iterations. For our examples, we stopped iterating once the objective function failed to decrease by more than 0.1\% of its previous value. 
 	
 	\subsection{$l_1$ Wavelet Regularization}
 	
-	DISCUSSION: CHOOSING LAMBDA, COMPARISON OF WAVELET BASES AND PENALTY FUNCTIONS
-	%	We present our results for denoising and deblurring with wavelet regulation
-%	applied to a real image using the discrete cosine and Haar wavelets. We corrupt each image with either high Gaussian or Student's t noise % and blur the image. Additionally, we find an optimal lambda value for each image empirically and compare Huber and Frobenius norm fidelity %functions. In figures \ref{waveletH_student} and \ref{waveletD_student}, it can be seen that the Huber is able to better account for heavy-tailed %noise, where as the Frobenius norm produces either blocky or smudged affects depending on the choice of wavelet basis.
+	Before we can restore a corrupted image, we must first set our objective function parameters $\lambda$ and $\gamma$. For our results we tried various parameter values and chose those that resulted in the smallest error from the true image, $\| x - \hat x \|_F$, which seemed to correspond to the best looking image. Unfortunately, in most applications the true image is not known, so parameters must be chosen by visual inspection. This is demonstrated in Figure 6 below, where we vary $\lambda$ while we deblur and denoise the image with Student's $t$ noise of standard deviation 0.0001 and the Frobenius norm penalty function. 
 	
-	\begin{figure}[H]
-	\centering
-	\rotatebox{90}{\hspace{0.5cm} Daubechies \hspace{3.5em} Haar}
-	\includegraphics[width=6in]{../figures/wavLam4.pdf} \\
-	$\lambda = 0.0001$ \hspace{2cm} $\lambda = 0.001$ \hspace{2.25cm} $\lambda = 0.01$ \hspace{2.25cm} $\lambda = 0.1$
-	\caption{salfj}
-	\end{figure}
+	We see that smaller values of $\lambda$ result in underregularization: the image is successfully deblurred, but the sensitivity of the Frobenius norm to outliers results in star-like artifacts. As we increase $\lambda$ these artifacts diminish, but we pay the price in terms of overregularization. For the Haar wavelet basis this results in pixelation, while for the Daubechies wavelet basis the image appears blurred or smudged. It is clear from looking at the images that $\lambda = 0.01$ does the best job at balancing fidelity and regularization, in fact returning the lowest error. 
+	
+	Unfortunately, the final objective function value does not seem to be a good indicator for image quality, as it increases with the amount of regularization applied regardless of how well the image is actually restored. Therefore hand-tuning the parameters seems to be the only choice when the true image is not known.  \\
 	
 	\begin{minipage}{0.5\textwidth}
 	\begin{center}Error: $\| x - \hat x \|_F$\end{center}
@@ -355,6 +349,14 @@
 	\hline
 	\end{tabular}
 	\end{minipage}
+	
+		\begin{figure}[H]
+	\centering
+	\rotatebox{90}{\hspace{0.5cm} Daubechies \hspace{3.5em} Haar}
+	\includegraphics[width=6in]{../figures/wavLam4.pdf} \\
+	$\lambda = 0.0001$ \hspace{2cm} $\lambda = 0.001$ \hspace{2.25cm} $\lambda = 0.01$ \hspace{2.25cm} $\lambda = 0.1$
+	\caption{Results obtained from debluring and denoising the peppers image with Student's $t$ noise, the Frobenius norm fidelity function, and $l_1$ wavelet regularization. As we vary $\lambda$, we note how under- and overregularization affects image quality for our two wavelet bases.}
+	\end{figure}
 	
 	\begin{figure}[H]
 		\begin{center}
