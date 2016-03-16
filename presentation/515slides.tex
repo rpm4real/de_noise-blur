@@ -191,7 +191,7 @@ For our examples, we let $W$ be the orthogonal 2D Haar or Daubechies wavelet tra
 	\end{center}
 \end{minipage}
 \begin{minipage}[T]{0.5\textwidth}
-The TV norm penalizes a finite difference representation of a derivative, assuming small variation in pixels nearby \\[4ex]
+The TV norm penalizes a finite difference representation of a derivative, assuming small variation in pixels nearby. \\[4ex]
 \end{minipage}
 \tiny $$ TV_{l_1}(x) = \sum_{i=1}^{m-1} \sum_{j=1}^{n-1} \left( \abs{x_{i,j}  - x_{i+1,j} } + \abs{ x_{i,j} - x_{i,j+1}  } \right) + \sum_{i=1}^{m-1} \abs{ x_{i,n} - x_{i+1,n} } + \sum_{j=1}^{n-1} \abs{ x_{m,j} - x_{m,j+1 } }$$
 \end{frame}

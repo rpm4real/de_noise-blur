@@ -200,6 +200,24 @@ We detail the implementation of FISTA for each choice of regularization term in 
 % Wavelet algorithm
 \subsection{Wavelet Regularization}
 
+\begin{center}
+\begin{minipage}[T]{0.5\textwidth}
+\begin{framed}
+\textbf{FISTA$(b,f,\lambda)$}
+\begin{algorithmic}
+\State $y^1 = x^0 = b; \, t^1 = 1$
+\State $\alpha \geq Lip(\nabla f)$
+\For {$k = 1:N$}
+	\State $u^k = y^k - \alpha^{-1} A^T \nabla f(Ay^k-b)$ \vspace{1ex}
+	\State $x^k = W^*\text{sgn}(Wu^k)\max(0,|Wu^k|-\alpha^{-1}\lambda)$ \vspace{1ex}
+	\State $t^{k+1} = \frac{1+\sqrt{1+4t_2^k}}{2}$
+	\State $y^{k+1} = x^k + \left(\frac{t^k-1}{t^{k+1}}\right) (x^k - x^{k-1})$
+\EndFor\\
+\Return $x^N$
+\end{algorithmic}
+\end{framed}
+\end{minipage}
+\end{center}
 
 % TV algorithm
 \subsection{Total Variation Regularization}
