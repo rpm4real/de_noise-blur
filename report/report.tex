@@ -217,7 +217,7 @@
 	\end{aligned}
 	\end{equation}
 	
-	To deblur and denoise our images using the $l_1$ wavelet regularization and either the Frobenius or Huber norm fidelity term, we employ the following algorithm:
+	To deblur and denoise our images using the $l_1$ wavelet regularization and either the Frobenius or Huber norm fidelity term, we therefore employ the following algorithm:
 	
 	\begin{center}
 		\begin{minipage}[T]{0.5\textwidth}
@@ -321,9 +321,9 @@
 	applied to a real image using the discrete cosine and Haar wavelets. We corrupt each image with either high Gaussian or Student's t noise and blur the image. Additionally, we find an optimal lambda value for each image empirically and compare Huber and Frobenius norm fidelity functions. In figures \ref{waveletH_student} and \ref{waveletD_student}, it can be seen that the Huber is able to better account for heavy-tailed noise, where as the Frobenius norm produces either blocky or smudged affects depending on the choice of wavelet basis.
 	\begin{figure}[H]
 		\begin{center}
-			\rotatebox{90}{\hspace{1cm} Original Image \hspace{3cm} Frobenius Loss}
+			\rotatebox{90}{\hspace{1cm} Frobenius Loss \hspace{2.25cm} Original Image}
 			\includegraphics[width = 0.75\textwidth]{../figures/waveletGaussH.pdf} 
-			\rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
+			\rotatebox{90}{\hspace{1.5cm} Huber Loss \hspace{2cm} Blurred and Noisy}
 		\end{center}
 		\caption{$\ell_1$ Wavelet algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Haar wavelet for deblurring.}
 		\label{waveletH_gauss}
@@ -331,9 +331,9 @@
 	
 	\begin{figure}[H]
 		\begin{center}
-			\rotatebox{90}{\hspace{1cm} Original Image \hspace{3cm} Frobenius Loss}
+			\rotatebox{90}{\hspace{1cm} Frobenius Loss \hspace{2.25cm} Original Image}
 			\includegraphics[width = 0.75\textwidth]{../figures/waveletGaussD.pdf} 
-			\rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
+			\rotatebox{90}{\hspace{1.5cm} Huber Loss \hspace{2cm} Blurred and Noisy}
 		\end{center}
 		\caption{$\ell_1$ Wavelet algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Daubechies wavelet for deblurring.}
 		\label{waveletD_gauss}
@@ -341,9 +341,9 @@
 	
 	\begin{figure}[H]
 		\begin{center}
-			\rotatebox{90}{\hspace{1cm} Original Image \hspace{3cm} Frobenius Loss}
+			\rotatebox{90}{\hspace{1cm} Frobenius Loss \hspace{2.25cm} Original Image}
 			\includegraphics[width = 0.75\textwidth]{../figures/waveletStudentH.pdf} 
-			\rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
+			\rotatebox{90}{\hspace{1.5cm} Huber Loss \hspace{2cm} Blurred and Noisy}
 		\end{center}
 		\caption{$\ell_1$ Wavelet algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Haar wavelet for deblurring.}
 		\label{waveletH_student}
@@ -351,9 +351,9 @@
 	
 	\begin{figure}[H]
 		\begin{center}
-			\rotatebox{90}{\hspace{1cm} Original Image \hspace{3cm} Frobenius Loss}
+			\rotatebox{90}{\hspace{1cm} Frobenius Loss \hspace{2.25cm} Original Image}
 			\includegraphics[width = 0.75\textwidth]{../figures/waveletStudentD.pdf} 
-			\rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
+			\rotatebox{90}{\hspace{1.5cm} Huber Loss \hspace{2cm} Blurred and Noisy}
 		\end{center}
 		\caption{$\ell_1$ Wavelet algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Daubechies wavelet for deblurring.}
 		\label{waveletD_student}
@@ -365,9 +365,9 @@
 	
 	\begin{figure}[H]
 		\begin{center}
-			\rotatebox{90}{\hspace{1cm} Original Image \hspace{3cm} Frobenius Loss}
+			\rotatebox{90}{\hspace{1cm} Frobenius Loss \hspace{2.25cm} Original Image}
 			\includegraphics[width = 0.75\textwidth]{../figures/gaussian_peppers.png} 
-			\rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
+			\rotatebox{90}{\hspace{1.5cm} Huber Loss \hspace{2cm} Blurred and Noisy}
 		\end{center}
 		\caption{Total Variation algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss.}
 		\label{tv_gauss}
@@ -375,9 +375,9 @@
 	
 	\begin{figure}[H]
 		\begin{center}
-			\rotatebox{90}{\hspace{1cm} Original Image \hspace{3cm} Frobenius Loss}
+			\rotatebox{90}{\hspace{1cm} Frobenius Loss \hspace{2.25cm} Original Image}
 			\includegraphics[width = 0.75\textwidth]{../figures/student-t_peppers.png} 
-			\rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
+			\rotatebox{90}{\hspace{1.5cm} Huber Loss \hspace{2cm} Blurred and Noisy}
 		\end{center}
 		\caption{Total Variation algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss.}
 		\label{tv_student}
@@ -389,9 +389,9 @@
 	
 	\begin{figure}[H]
 		\begin{center}
-			\rotatebox{90}{\hspace{1cm} $\log \circ \cosh$ Loss \hspace{3cm} Original Image}
+			\rotatebox{90}{\hspace{1.25cm} $\log \circ \cosh$ Loss \hspace{2.5cm} Original Image}
 			\includegraphics[width=0.8\textwidth]{../figures/logcosh_peppers.png}
-			\rotatebox{270}{\hspace{-9cm} Blurred and Noisy \hspace{2.6cm} Huber Loss}
+			\rotatebox{90}{\hspace{1.5cm} Huber Loss \hspace{2.25cm} Blurred and Noisy}
 			\caption{A comparrison between the $\log \circ \cosh$ and Huber Fidelity Terms }
 			\label{log_cosh_pic}
 		\end{center}
