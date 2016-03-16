@@ -43,7 +43,7 @@ University of Washington\\
 \begin{center}
 \textbf{Abstract}
 \end{center}
-weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm weeee worm 
+We examine the optimization formulations which previous texts employ in denoising and deblurring images. In addition, we experiment with various different fidelity terms in an attempt to better capture more heavy-tailed noise. The algorithmic approach to these optimization formulations are outlined, and various parameters in the setup are tuned in search of optimum results. 
 \end{minipage}
 \end{center}
 
@@ -89,8 +89,8 @@ SOMETHING ABOUT WHY WE WOULD CONSIDER LOG COSH? ADVANTAGES? APPROACHES L1 FOR LA
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\textwidth]{../figures/penalty_functions.png} 
-\caption{CAPTION CAPTION CAPTION}
+\includegraphics[scale=.35]{../figures/penalty_functions.png} 
+\caption{The various penality functions we utilize in our fidelity term, and their comparision to the $\ell_1$ norm.}
 \end{figure}
 
 % Problem Formulation
@@ -168,7 +168,7 @@ x_{m+1,j} - x_{m,j} &= 0, \textrm{ for all }j \\
 \end{align*}
 are assumed. 
 
-The motivation behind the TV regularization is that images are often "smooth", or that pixels will have values similar to their neighbors. Alternatively, it assumes that high frequency content such as noise increases the total variation of an image, represented as the absolute value of the gradient. To illustrate this, we look at the absolute value of the row and column differences of the peppers image. Here we see that most of the values are indeed small, except for those which represent edges. 
+The motivation behind the TV regularization is that images are often ``smooth", or that pixels will have values similar to their neighbors. Alternatively, it assumes that high frequency content such as noise increases the total variation of an image, represented as the absolute value of the gradient. To illustrate this, we look at the absolute value of the row and column differences of the peppers image. Here we see that most of the values are indeed small, except for those which represent edges. 
 
 \begin{figure}[H]
 \centering
@@ -198,7 +198,7 @@ The advantage of this form is that many nonsmooth regularizers have a close form
 
 \subsection{Total Variation Regularization}
 
-Optimization of the objective function \eqref{tv_ours} is based on the proximal gradient algorithm and expoits the idea of momentum used in FISTA as well as an extra function evaluation at each iteration in order to ensure a non-increasing objective function.  The proximal gradient step is given as follows,
+Optimization of the objective function \eqref{tv_orig} is based on the proximal gradient algorithm and expoits the idea of momentum used in FISTA as well as an extra function evaluation at each iteration in order to ensure a non-increasing objective function.  The proximal gradient step is given as follows,
 
 \begin{align*}
 x^{k+1} &= \prox_{\alpha^{-1}(\lambda \textrm{TV}(\cdot) + \delta_{[0,1]})} (\underbrace{x^k - \alpha^{-1} A^T\nabla f (Ax^k - b)}_{u^k}) \\
