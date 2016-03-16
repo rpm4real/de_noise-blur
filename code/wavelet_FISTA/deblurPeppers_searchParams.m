@@ -13,8 +13,8 @@ X = X/255;
 [m,n] = size(X);
 
 % blur and add noise
-%Bpars.nType = 'gaussian'; Bpars.nLevelG = 1e-2; Bpars.bLevel = 1;
-Bpars.nType = 'student'; Bpars.nLevelS = 1e-2; Bpars.bLevel = 1;
+%Bpars.nType = 'gaussian'; Bpars.nLevelG = 1e-2;
+Bpars.nType = 'student'; Bpars.nLevelS = 1e-2;
 Bobs = blurt(X,Bpars);
 
 % wavelet transform
@@ -25,7 +25,7 @@ W = opWavelet2(m,n,'Daubechies');
 tol = 1e-3;
 
 % deblurring parameters
-Dpars.fig = 0; Dpars.dispfunc = 0; Dpars.MAXITER = 200; Dpars.P = psfGauss([9,9],Bpars.bLevel);
+Dpars.fig = 0; Dpars.dispfunc = 0; Dpars.MAXITER = 200;
 
 %% find best parameters for 2-norm 
 

@@ -17,7 +17,7 @@ function [X_out,fun_all]=deblur_wavelet_huber(Bobs,W,lambda,gamma,tol,pars)
 % tol...........................Convergence tolerance
 % pars..........................Parameters structure
 % pars.P........................PSF of the blurring operator 
-%                               (default 9x9 gaussian kernel with stdev 2)
+%                               (default 9x9 gaussian kernel with stdev 1)
 % pars.center...................A vector of length 2 containing the center
 %                               of the PSF (default [5,5])
 % pars.MAXITER..................Maximum number of iterations (Default=100)
@@ -29,7 +29,7 @@ function [X_out,fun_all]=deblur_wavelet_huber(Bobs,W,lambda,gamma,tol,pars)
 % OUTPUT
 % 
 % X_out ........................Solution of the problem
-%                               min{||A(X)-Bobs||^2+lambda \|Wx\|_1
+%                               min{f(Ax-b)+lambda||Wx||_1}
 % fun_all ......................Array containing all function values
 %                               obtained in the FISTA method
 %
@@ -40,7 +40,7 @@ flag=exist('pars');
 if (flag&&isfield(pars,'P'))
     P=pars.P;
 else
-    P=psfGauss([9,9],2);
+    P=psfGauss([9,9],1);
 end
 if (flag&&isfield(pars,'center'))
     center=pars.center;
@@ -136,7 +136,6 @@ for i=1:MAXITER
     % check convergence
     if i>1
         if abs(fun_all(i)-fun_all(i-1))/fun_all(i-1)<tol
-            i
             break
         end
     end

@@ -21,7 +21,6 @@ wav = 1;
 noise = 1;
 
 % set wavelet and blur/noise parameters
-Bpars.bLevel = 1;
 if wav == 1
     W = opHaar2(m,n);
     if noise == 1
@@ -50,7 +49,7 @@ end
 Bobs = blurt(X,Bpars);
 
 % deblur/denoise image
-Dpars.fig = 0; Dpars.dispfunc = 0; Dpars.MAXITER = 200; Dpars.P = psfGauss([9,9],Bpars.bLevel);
+Dpars.fig = 0; Dpars.dispfunc = 0; Dpars.MAXITER = 200;
 [X_out1] = deblur_wavelet_2norm(Bobs,W,lambda1,tol,Dpars);
 [X_out2] = deblur_wavelet_huber(Bobs,W,lambda2,gamma,tol,Dpars);
 

@@ -12,7 +12,7 @@ function Bobs = blurt(X,pars)
 % pars.nLevelG      Gaussian noise level (default = 1e-3)
 % pars.nLevelS      Student's T noise level (default = 1e-4)
 % pars.bSize        Blur PSF dimension (default = 9)
-% pars.bLevel       Blur PSF standard deviation (default = 2)
+% pars.bLevel       Blur PSF standard deviation (default = 1)
 %
 % OUTPUT
 % 
@@ -45,7 +45,7 @@ end
 if (flag&&isfield(pars,'bLevel'))
     bLevel = pars.bLevel;
 else
-    bLevel = 2;
+    bLevel = 1;
 end
 
 % convert to BW if necessary
