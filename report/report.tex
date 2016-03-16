@@ -177,36 +177,42 @@ The motivation behind the TV regularization is that images are often "smooth", o
 \caption{The absolute value of the column (left) and row (left) differences of the peppers image. Note that most of the values are zero or near zero, with most of the variation present in the image edges. }
 \end{figure}
 
-
 % Algorithms
 \section{Algorithms}
-A simple way to solve for the real image $x$ give $g(x) = 0$ is to apply the gradient descent algorithm,
-
+In order to solve our deblurring and denoising problem, where our objective function is the sum of two convex functions, one smooth and one with a convenient proximal representation, we can employ the proximal gradient method. For each iteration we take a gradient step in $f$ and apply the proximal operator of $g$,
 \begin{equation}
-x_k = x_{k-1} - t_k \nabla f(x_{k-1}),
+\begin{aligned}
+x_{k+1} &= \prox_{\alpha^{-1}\lambda g}\big(x_k - \alpha^{-1} A^T \nabla f(Ax_k-b)\big) \\
+&= \min_y \frac{1}{2} \Big\| y - \big(x_k - \alpha^{-1} A^T \nabla f(Ax_k-b) \big)\Big\|_2^2 + \alpha^{-1}\lambda g(y)
+\end{aligned}
+\end{equation}
+where $\alpha \geq Lip(\nabla f)$. For faster convergence, we use the modified version of the proximal gradient algorithm, FISTA, which utilizes information from previous iterations:
+\begin{equation}
+\begin{aligned}
+x_{k} &= \prox_{\alpha^{-1}\lambda g}\big(y_k - \alpha^{-1} A^T \nabla f(Ay_k-b)\big) \\
+t_{k+1} &= \frac{1+\sqrt{1+4t_k^2}}{2} \\
+y_{k+1} &= x_k + \left( \frac{t_k-1}{t_{k+1}} \right) (x_k - x_{k-1})
+\end{aligned}
 \end{equation}
 
-for suitable stepsize $t_k > 0$. When $g$ is nontrivial and nonsmooth (the usual case), we can rewrite this as a proximal mapping,
+We detail the implementation of FISTA for each choice of regularization term in the two sections that follow.
 
-\begin{equation}
-\prox_g(x_{k-1} - \nabla f(x_{k-1})) = \min_x \left( \frac{1}{2}||x-x_{k-1} - \nabla f(x_{k-1})||_2^2  + \lambda g(x)\right)
-\end{equation}
-
-The advantage of this form is that many nonsmooth regularizers have a close formed solution for their $\prox$. This approach is referred to as a ``proximal gradient'' method. We use this setup for both cases of regularizers, and cover the details of their implementation in the following subsections. 
-
+% Wavelet algorithm
 \subsection{Wavelet Regularization}
 
+
+% TV algorithm
 \subsection{Total Variation Regularization}
 
-Optimization of the objective function \eqref{tv_ours} is based on the proximal gradient algorithm and expoits the idea of momentum used in FISTA as well as an extra function evaluation at each iteration in order to ensure a non-increasing objective function.  The proximal gradient step is given as follows,
+Optimization of the objective function \eqref{tv_ours} is based on the proximal gradient algorithm and exploits the idea of momentum used in FISTA as well as an extra function evaluation at each iteration in order to ensure a non-increasing objective function.  The proximal gradient step is given as follows,
 
 \begin{align*}
-x^{k+1} &= \prox_{\alpha^{-1}(\lambda \textrm{TV}(\cdot) + \delta_{[0,1]})} (\underbrace{x^k - \alpha^{-1} A^T\nabla f (Ax^k - b)}_{u^k}) \\
-&= \arg \min_z \left( \|u^k - z\|_F^2 + \alpha^{-1}\lambda TV(z) + \delta(z | [0,1]) \right) \\
-&= P_{[0,1]}  \left( \arg \min_z \left( \|u^k - z\|_F^2 + \alpha^{-1}\lambda TV(z) \right) \right)
+x_{k+1} &= \prox_{\alpha^{-1}(\lambda \textrm{TV}(\cdot) + \delta_{[0,1]})} (\underbrace{x_k - \alpha^{-1} A^T\nabla f (Ax_k - b)}_{u_k}) \\
+&= \arg \min_z \left( \|u_k - z\|_F^2 + \alpha^{-1}\lambda TV(z) + \delta(z | [0,1]) \right) \\
+&= P_{[0,1]}  \left( \arg \min_z \left( \|u_k - z\|_F^2 + \alpha^{-1}\lambda TV(z) \right) \right)
 \end{align*}
 
-Here the learning rate $\alpha$ is taken to be no larger than than the multiplicative inverse of the Lipschitz constant of $\nabla f$.  Note that in order to evaluate this expression we must solve a denoising problem with input $u^k = x^k - \alpha^{-1} A^T\nabla f (Ax^k - b)$.  Of particular note is that regardless of the original fidelity term we have a Frobenius norm fidelity term on the new denoising problem.  This allows for the easy manipulation of the original fidelity function, so long as it is convex and has Lipschitz gradient.
+Here the learning rate $\alpha$ is taken to be no larger than than the multiplicative inverse of the Lipschitz constant of $\nabla f$.  Note that in order to evaluate this expression we must solve a denoising problem with input $u_k = x_k - \alpha^{-1} A^T\nabla f (Ax_k - b)$.  Of particular note is that regardless of the original fidelity term we have a Frobenius norm fidelity term on the new denoising problem.  This allows for the easy manipulation of the original fidelity function, so long as it is convex and has Lipschitz gradient.
 
 The resulting denoising problem with Frobenius norm fidelity function may be solved rapidly using the method developed in \cite{TV}.  The $TV$ function is shown to have a dual representation as a trace and the relationship between trace and Frobenius norm is heavily exploited to develop a dual formulation of the denoising problem.  We present their method here, starting with a few new definitions which will be necessary.
 \begin{align*}
@@ -238,36 +244,34 @@ We implement the above optimization scheme by using a slightly optimized method 
 \begin{minipage}{0.48\textwidth}
 \textbf{MFISTA$(b,f, \lambda)$}
 \begin{algorithmic}
-\State $y^1 = x^0 = b; \, t^1 = 1$
+\State $y_1 = x_0 = b; \, t_1 = 1$
 \State $\alpha \geq Lip(\nabla f)$
 \For {$k = 1:N$}
-	\State $u^k = y^k - \frac{A^T\nabla f (A y^k - b)}{\alpha}$
-	\State $z^k = FGP(u^k, \frac{\lambda}{2 \alpha})$
-	\State $x^k = \underset{x \in \{x^{k-1},z^k\}}{\text{argmin}} \,L_b(x)$
-	\State $t^{k+1} = \frac{1 + \sqrt{1 + 4{t^k}^2}}{2}$ 
-	\State $y^{k+1} = x^k + \frac{t^k}{t^{k+1}}(z^k - x^k)$ 
-	\State \hspace{10 mm}$+ \frac{t^{k-1}}{t^{k+1}}(z^k - x^k) $
+	\State $u_k = y^k - \frac{A^T\nabla f (A y_k - b)}{\alpha}$
+	\State $z_k = FGP(u_k, \frac{\lambda}{2 \alpha})$
+	\State $x_k = \underset{x \in \{x_{k-1},z_k\}}{\text{argmin}} \,L_b(x)$
+	\State $t_{k+1} = \frac{1 + \sqrt{1 + 4t_k^2}}{2}$ 
+	\State $y_{k+1} = x^k + \frac{t_k}{t_{k+1}}(z_k - x_k)$ 
+	\State \hspace{10 mm}$+ \frac{t_{k-1}}{t_{k+1}}(z_k - x_k) $
 \EndFor\\
-\Return $x^N$
+\Return $x_N$
 \end{algorithmic}
 \end{minipage}
 \begin{minipage}{0.48\textwidth}
 
 \textbf{FGP$(b, \lambda)$}
 \begin{algorithmic}
-\State $(r_{ij}^1, s_{ij}^1) = (p_{ij}^0, q_{ij}^0) = 0; \, t^1 = 1$
+\State $(r_{ij}^1, s_{ij}^1) = (p_{ij}^0, q_{ij}^0) = 0; \, t_1 = 1$
 \For {$k = 1:N$}
-	\State $(p^k,q^k) = P_\mathcal{P} \left( (r^k,s^k) - \frac{\mathcal{L}^TP_{[0,1]} (b - \lambda \mathcal{L}(r^k,s^k))}{8\lambda} \right)$
-	\State $t^{k+1} = \frac{1 + \sqrt{1 + 4{t^k}^2}}{2}$ 
-	\State $(r^k,s^k) = (p^k,q^k) + \frac{t^k-1}{t^{k+1}}(p^k-p^{k-1}, q^k-q^{k-1})$ 
+	\State $(p_k,q_k) = P_\mathcal{P} \left( (r_k,s_k) - \frac{\mathcal{L}^TP_{[0,1]} (b - \lambda \mathcal{L}(r_k,s_k))}{8\lambda} \right)$
+	\State $t_{k+1} = \frac{1 + \sqrt{1 + 4t_k^2}}{2}$ 
+	\State $(r_k,s_k) = (p_k,q_k) + \frac{t_k-1}{t_{k+1}}(p_k-p_{k-1}, q_k-q_{k-1})$ 
 \EndFor \\
-\Return $P_{[0,1]} (b - \lambda \mathcal{L}(p^N,q^N))$
+\Return $P_{[0,1]} (b - \lambda \mathcal{L}(p_N,q_N))$
 \end{algorithmic}
 
 \end{minipage}
 \end{framed}
-
-\subsection{Wavelet Regularization}
 
 % Examples
 \section{Examples}
