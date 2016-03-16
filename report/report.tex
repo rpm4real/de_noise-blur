@@ -43,7 +43,10 @@
 			\begin{center}
 				\textbf{Abstract}
 			\end{center}
-			We examine the optimization formulations which previous texts employ in denoising and deblurring images. In addition, we experiment with various different fidelity terms in an attempt to better capture more heavy-tailed noise. The algorithmic approach to these optimization formulations are outlined, and various parameters in the setup are tuned in search of optimum results. 
+			Image deblurring and denoising is often formulated as a regularized least-squares problem. In this project, we compare the performance of two 
+			different regularizers, the $l_1$ wavelet regularization and total variation regularization used by Beck and Teboulle in \cite{FISTA} and \cite{TV}. 
+			We also experiment with different robust penalty functions, such as the Huber loss, in order to restore images with noise drawn from heavy-tailed 
+			distributions. Results are obtained using variants of the FISTA algorithm. 
 		\end{minipage}
 	\end{center}
 	
@@ -57,9 +60,9 @@
 	\begin{equation}
 	\hat{x}_{LS} = \arg\min_x \| Ax - b \|_F^2 ,
 	\end{equation}
-	gives a reasonable solution. Unfortunately, this approach doesn't provide any new information for the denoising problem, and for image deblurring problems $A$ is often ill-conditioned, so the solution is contaminated by round-off error and amplified noise \cite{DeblurBook}. To illustrate this, we consider the pepper image below. If we blur the image and compute the naive solution $x = A^{-1}b$, the result is obscured by round-off error in the form of ringing artifacts. The result is even worse when we add noise.
+	gives a reasonable solution. Unfortunately, this approach doesn't provide any new information for the denoising problem, and for image deblurring problems $A$ is often ill-conditioned, so the solution is contaminated by round-off error and amplified noise \cite{DeblurBook}. To illustrate this, we consider the pepper image in Figure 1. If we blur the image and compute the naive solution $x = A^{-1}b$, the result is obscured by round-off error in the form of ringing artifacts. The result is even worse when we add noise.
 	
-	\begin{figure}[H]
+	\begin{figure}
 		\centering
 		\includegraphics[width=2in]{../figures/fig1}
 		\includegraphics[width=2in]{../figures/fig2}
@@ -76,7 +79,7 @@
 	\end{equation}
 	where the parameter $\lambda > 0$ is chosen to balance the tradeoff between fidelity to the model and the assumed feature. In this paper we compare two choices for the regularization term: $\ell_1$ wavelet regularization with $R(x) = \| Wx \|_1$, and total variation regularization with $R(x) = TV(x)$, which are explored by Beck and Teboulle in \cite{TV} and \cite{FISTA} respectively.
 	
-	It is also known that the quadratic penalty is extremely sensitive to outliers. While this does not pose problems for images with Gaussian noise, which may result from atmospheric turbulence, it becomes an issues for images with noise from heavier tailed distributions, such as the Student's t-distribution, which could result from a dirty camera lens. Therefore we also consider different choices for the fidelity term which are more robust to outliers than the quadratic penalty, including the Huber norm
+	It is also known that the quadratic penalty is extremely sensitive to outliers. While this does not pose problems for images with Gaussian noise, which may result from atmospheric turbulence, it becomes an issues for images with noise from heavy-tailed distributions, such as the Student's t-distribution, which could result from a dirty camera lens. Therefore we also consider different choices for the fidelity term which are more robust to outliers, including the Huber norm
 	\begin{equation} \label{huber}
 	h_{\gamma}(x) = \min_y \frac{1}{2} \| x - y \|_F^2 + \gamma \| y \|_1,
 	\end{equation}
