@@ -313,19 +313,19 @@
 	% Examples
 	\section{Examples}
 	
-	EXPLAIN DIFFERENT IMAGES CONSIDERED: BLUR KERNEL, NOISE USED
+	In this section we compare the performance of our different fidelity term penalty functions and regularizers. In each example the peppers image is first blurred with a $9 \times 9$ Gaussian kernel with standard deviation 1, and then either Gaussian noise or Student's $t$ noise is added, both with standard deviation 0.01, to produce our observed image. 
 	
-	\subsection{Wavelet Regularization}
+	\subsection{$\ell_1$ Wavelet Regularization}
 	
-	We present our results for denoising and deblurring with wavelet regulation
-	applied to a real image using the discrete cosine and Haar wavelets. We corrupt each image with either high Gaussian or Student's t noise and blur the image. Additionally, we find an optimal lambda value for each image empirically and compare Huber and Frobenius norm fidelity functions. In figures \ref{waveletH_student} and \ref{waveletD_student}, it can be seen that the Huber is able to better account for heavy-tailed noise, where as the Frobenius norm produces either blocky or smudged affects depending on the choice of wavelet basis.
+%	We present our results for denoising and deblurring with wavelet regulation
+%	applied to a real image using the discrete cosine and Haar wavelets. We corrupt each image with either high Gaussian or Student's t noise and blur the image. Additionally, we find an optimal lambda value for each image empirically and compare Huber and Frobenius norm fidelity functions. In figures \ref{waveletH_student} and \ref{waveletD_student}, it can be seen that the Huber is able to better account for heavy-tailed noise, where as the Frobenius norm produces either blocky or smudged affects depending on the choice of wavelet basis.
 	\begin{figure}[H]
 		\begin{center}
 			\rotatebox{90}{\hspace{1cm} Frobenius Loss \hspace{2.25cm} Original Image}
 			\includegraphics[width = 0.75\textwidth]{../figures/waveletGaussH.pdf} 
 			\rotatebox{90}{\hspace{1.5cm} Huber Loss \hspace{2cm} Blurred and Noisy}
 		\end{center}
-		\caption{$\ell_1$ Wavelet algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Haar wavelet for deblurring.}
+		\caption{Images with Gaussian noise restored with the $\ell_1$ Haar wavelet regularizer.}
 		\label{waveletH_gauss}
 	\end{figure}
 	
@@ -335,7 +335,7 @@
 			\includegraphics[width = 0.75\textwidth]{../figures/waveletGaussD.pdf} 
 			\rotatebox{90}{\hspace{1.5cm} Huber Loss \hspace{2cm} Blurred and Noisy}
 		\end{center}
-		\caption{$\ell_1$ Wavelet algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Daubechies wavelet for deblurring.}
+		\caption{Images with Gaussian noise restored with the $\ell_1$ Daubechies wavelet regularizer.}
 		\label{waveletD_gauss}
 	\end{figure}
 	
@@ -345,7 +345,7 @@
 			\includegraphics[width = 0.75\textwidth]{../figures/waveletStudentH.pdf} 
 			\rotatebox{90}{\hspace{1.5cm} Huber Loss \hspace{2cm} Blurred and Noisy}
 		\end{center}
-		\caption{$\ell_1$ Wavelet algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Haar wavelet for deblurring.}
+		\caption{Images with Student's $t$ noise restored with the $\ell_1$ Haar wavelet regularizer.}
 		\label{waveletH_student}
 	\end{figure}
 	
@@ -355,7 +355,7 @@
 			\includegraphics[width = 0.75\textwidth]{../figures/waveletStudentD.pdf} 
 			\rotatebox{90}{\hspace{1.5cm} Huber Loss \hspace{2cm} Blurred and Noisy}
 		\end{center}
-		\caption{$\ell_1$ Wavelet algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss. This method used the Daubechies wavelet for deblurring.}
+		\caption{Images with Student's $t$ noise restored with the $\ell_1$ Daubechies wavelet regularizer.}
 		\label{waveletD_student}
 	\end{figure}
 	
