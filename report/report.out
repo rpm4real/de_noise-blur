@@ -1,0 +1,13 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Problem Formulation}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Blur Operators}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{l1 Wavelet Regularization}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Total Variation Regularization}{section.2}% 5
+\BOOKMARK [1][-]{section.3}{Algorithms}{}% 6
+\BOOKMARK [2][-]{subsection.3.1}{l1 Wavelet Regularization}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.2}{Total Variation Regularization}{section.3}% 8
+\BOOKMARK [1][-]{section.4}{Examples}{}% 9
+\BOOKMARK [2][-]{subsection.4.1}{l1 Wavelet Regularization}{section.4}% 10
+\BOOKMARK [2][-]{subsection.4.2}{Total Variation Regularization}{section.4}% 11
+\BOOKMARK [2][-]{subsection.4.3}{The \040Penalty Function}{section.4}% 12
+\BOOKMARK [1][-]{section.5}{Discussion and Conclusions}{}% 13

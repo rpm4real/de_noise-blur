@@ -1,0 +1,76 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
+\HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
+\global\let\oldnewlabel\newlabel
+\gdef\newlabel#1#2{\newlabelxx{#1}#2}
+\gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
+\AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
+\let\newlabel\oldnewlabel
+\fi}
+\fi}
+\global\let\hyper@last\relax 
+\gdef\HyperFirstAtBeginDocument#1{#1}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{FISTA}
+\citation{TV}
+\citation{DeblurBook}
+\citation{TV}
+\citation{FISTA}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}}
+\newlabel{huber}{{4}{1}{Introduction}{equation.1.4}{}}
+\newlabel{log_cosh}{{5}{1}{Introduction}{equation.1.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \relax \fontsize  {9}{10pt}\selectfont  In the top row we observe the naive solution applied to a blurred image, including the true image $x$ (left), the blurred image $b$ (middle), and the recovered image $A^{-1}b$. On the bottom row, we see the effects of adding noise illustrated by the true image $x$ (left), the blurred and noisy image $b-w$ (middle), and the recovered image $A^{-1}(b-w)$.}}{2}{figure.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The various penality functions we utilize in our fidelity term, and their comparision to the $l_1$ norm.}}{2}{figure.2}}
+\citation{DeblurBook}
+\citation{FISTA}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Problem Formulation}{3}{section.2}}
+\newlabel{general}{{6}{3}{Problem Formulation}{equation.2.6}{}}
+\newlabel{loss}{{7}{3}{Problem Formulation}{equation.2.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Blur Operators}{3}{subsection.2.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces A single pixel before blurring (left) and after blurring (right). The image on the right is called the \emph  {point spread function}, or the blur kernel. In this example the blur kernel is computed by generating a $9 \times 9$ Gaussian with standard deviation one centered about the pixel and normalized so that all elements sum to one. }}{3}{figure.3}}
+\citation{TV}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}$l_1$ Wavelet Regularization}{4}{subsection.2.2}}
+\newlabel{wavelet_orig}{{10}{4}{$l_1$ Wavelet Regularization}{equation.2.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces The 2D Haar wavelet transform of the peppers image using one level (left) and five levels (right). Note that the images are sparse. }}{4}{figure.4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Total Variation Regularization}{4}{subsection.2.3}}
+\newlabel{tv_orig}{{11}{4}{Total Variation Regularization}{equation.2.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces The absolute value of the column (left) and row (left) differences of the peppers image. Note that most of the values are zero or near zero, with most of the variation present in the image edges. }}{5}{figure.5}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Algorithms}{5}{section.3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}$l_1$ Wavelet Regularization}{5}{subsection.3.1}}
+\citation{TV}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Total Variation Regularization}{6}{subsection.3.2}}
+\citation{TV}
+\citation{TV}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Examples}{8}{section.4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}$l_1$ Wavelet Regularization}{8}{subsection.4.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Results obtained from debluring and denoising the peppers image with Student's $t$ noise, the Frobenius norm fidelity function, and $l_1$ wavelet regularization. As we vary $\lambda $, we note how under- and overregularization affects image quality for our two wavelet bases.}}{8}{figure.6}}
+\newlabel{lambda_comp}{{6}{8}{Results obtained from debluring and denoising the peppers image with Student's $t$ noise, the Frobenius norm fidelity function, and $l_1$ wavelet regularization. As we vary $\lambda $, we note how under- and overregularization affects image quality for our two wavelet bases}{figure.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Images with Gaussian noise restored with the $l_1$ Haar wavelet regularizer.}}{9}{figure.7}}
+\newlabel{waveletH_gauss}{{7}{9}{Images with Gaussian noise restored with the $l_1$ Haar wavelet regularizer}{figure.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Images with Gaussian noise restored with the $l_1$ Daubechies wavelet regularizer.}}{9}{figure.8}}
+\newlabel{waveletD_gauss}{{8}{9}{Images with Gaussian noise restored with the $l_1$ Daubechies wavelet regularizer}{figure.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Images with Student's $t$ noise restored with the $l_1$ Haar wavelet regularizer.}}{10}{figure.9}}
+\newlabel{waveletH_student}{{9}{10}{Images with Student's $t$ noise restored with the $l_1$ Haar wavelet regularizer}{figure.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Images with Student's $t$ noise restored with the $l_1$ Daubechies wavelet regularizer.}}{10}{figure.10}}
+\newlabel{waveletD_student}{{10}{10}{Images with Student's $t$ noise restored with the $l_1$ Daubechies wavelet regularizer}{figure.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Total Variation Regularization}{11}{subsection.4.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Total Variation algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss.}}{11}{figure.11}}
+\newlabel{tv_gauss}{{11}{11}{Total Variation algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss}{figure.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Total Variation algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss.}}{12}{figure.12}}
+\newlabel{tv_student}{{12}{12}{Total Variation algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss}{figure.12}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}The $\log \circ \cosh $ Penalty Function}{12}{subsection.4.3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces A comparrison between the $\log \circ \cosh $ and Huber Fidelity Terms }}{13}{figure.13}}
+\newlabel{log_cosh_pic}{{13}{13}{A comparrison between the $\log \circ \cosh $ and Huber Fidelity Terms}{figure.13}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Discussion and Conclusions}{13}{section.5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces  Frobenius norm error between the true and observed image plotted against time for relative change in the objective function less than $.001$. }}{13}{figure.14}}
+\newlabel{comp_methods}{{14}{13}{Frobenius norm error between the true and observed image plotted against time for relative change in the objective function less than $.001$}{figure.14}{}}
+\bibstyle{unsrt}
+\bibdata{sources}
+\bibcite{DeblurBook}{1}
+\bibcite{TV}{2}
+\bibcite{FISTA}{3}

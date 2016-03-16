@@ -356,6 +356,7 @@
 	\includegraphics[width=6in]{../figures/wavLam4.pdf} \\
 	$\lambda = 0.0001$ \hspace{2cm} $\lambda = 0.001$ \hspace{2.25cm} $\lambda = 0.01$ \hspace{2.25cm} $\lambda = 0.1$
 	\caption{Results obtained from debluring and denoising the peppers image with Student's $t$ noise, the Frobenius norm fidelity function, and $l_1$ wavelet regularization. As we vary $\lambda$, we note how under- and overregularization affects image quality for our two wavelet bases.}
+	\label{lambda_comp}
 	\end{figure}
 	
 	DISCUSS WHICH REGULARIZER IS BETTER, WHICH NORM IS BETTER, WHAT PARAMETERS I USED
@@ -459,7 +460,7 @@
 	
 	In conclusion, we present a survey of regularization and fidelity functions for the image denoising/deblurring problem. In particular, we compare regularization of the 1-norm in the wavelet domain to TV regularization. Furthermore we explore the affect of using the Huber as a fidelity function and potential improvements it can have when applied to heavy tailed noise. Our results show that TV regularization performs better for high amounts of noise, but the wavelet domain is well suited for smaller amounts of noise due to computational speed improvements. 
 	
-	In our research we came across many challenges and avenues for future work. It is clear from \ref{lambda_find}, that the correct choice of the regularization parameter is very important for maximizing results. However, the correct value varies for different classes of images. Therefore, there is a high need for finding the correct value for the regularization parameter across images. Additionally, finding an appropriate error metric can be a difficult challenge when quantitatively analyzing performance for the methods shown. The Frobenius norm of the error is the most common metric, but does can do a poor job of correctly evaluating the improvements from denoising and deblurring algorithms due to large structural changes of the images. 
+	In our research we came across many challenges and avenues for future work. It is clear from figure \ref{lambda_comp}, that the correct choice of the regularization parameter is important for maximizing results but varies for different classes of images. Therefore, there is a high need for finding a correct method for attaining the regularization parameter across images. Additionally, finding an appropriate error metric can be a difficult challenge when quantitatively analyzing performance for the methods shown. The Frobenius norm of the error is the most common metric, but can do a poor job of correctly evaluating the improvements from denoising and deblurring algorithms due to large structural changes of the images. 
 	
 	
 	
