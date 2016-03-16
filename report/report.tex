@@ -62,22 +62,11 @@
 	\end{equation}
 	gives a reasonable solution. Unfortunately, this approach doesn't provide any new information for the denoising problem, and for image deblurring problems $A$ is often ill-conditioned, so the solution is contaminated by round-off error and amplified noise \cite{DeblurBook}. To illustrate this, we consider the pepper image in Figure 1. If we blur the image and compute the naive solution $x = A^{-1}b$, the result is obscured by round-off error in the form of ringing artifacts. The result is even worse when we add noise.
 	
-	\begin{figure}
-		\centering
-		\includegraphics[width=2in]{../figures/fig1}
-		\includegraphics[width=2in]{../figures/fig2}
-		\includegraphics[width=2in]{../figures/fig3} \\[1ex]
-		\includegraphics[width=2in]{../figures/fig1}
-		\includegraphics[width=2in]{../figures/fig4}
-		\includegraphics[width=2in]{../figures/fig5}
-		\caption{\small In the top row we observe the naive solution applied to a blurred image, including the true image $x$ (left), the blurred image $b$ (middle), and the recovered image $A^{-1}b$. On the bottom row, we see the effects of adding noise illustrated by the true image $x$ (left), the blurred and noisy image $b-w$ (middle), and the recovered image $A^{-1}(b-w)$.}
-	\end{figure}
-	
 	In order to stabilize the solution, a variety of regularizers can be used which exploit features of the true image such as smoothness or sparsity in a wavelet domain. This results in the problem formulation
 	\begin{equation}
 	\hat{x} = \arg\min_{x} \| Ax - b \|_F^2 + \lambda R(x),
 	\end{equation}
-	where the parameter $\lambda > 0$ is chosen to balance the tradeoff between fidelity to the model and the assumed feature. In this paper we compare two choices for the regularization term: $\ell_1$ wavelet regularization with $R(x) = \| Wx \|_1$, and total variation regularization with $R(x) = TV(x)$, which are explored by Beck and Teboulle in \cite{TV} and \cite{FISTA} respectively.
+	where the parameter $\lambda > 0$ is chosen to balance the tradeoff between fidelity to the model and the assumed feature. In this paper we compare two choices for the regularization term: $l_1$ wavelet regularization with $R(x) = \| Wx \|_1$, and total variation regularization with $R(x) = TV(x)$, which are explored by Beck and Teboulle in \cite{TV} and \cite{FISTA} respectively.
 	
 	It is also known that the quadratic penalty is extremely sensitive to outliers. While this does not pose problems for images with Gaussian noise, it becomes an issues for images with noise from heavy-tailed distributions, such as the Student's t-distribution, which could result from a dirty camera lens. Therefore we also consider different choices for the fidelity term which are more robust to outliers, including the Huber norm
 	\begin{equation} \label{huber}
@@ -88,15 +77,28 @@
 	g_{\gamma}(x) = \frac{1}{\gamma} \sum_i \log\left(\cosh\left(\gamma x_i\right)\right).
 	\end{equation}
 	
-	SOMETHING ABOUT WHY WE WOULD CONSIDER LOG COSH? ADVANTAGES? APPROACHES L1 FOR LARGE GAMMA? DOES THIS BELONG HERE? SHOULD IT BE SMALLER?
+	\newpage
+	SOMETHING ABOUT WHY WE WOULD CONSIDER LOG COSH? ADVANTAGES? APPROACHES L1 FOR LARGE GAMMA? DOES THIS BELONG HERE? SHOULD IT BE SMALLER? REFERENCE FIG 2 \\
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=2in]{../figures/fig1}
+		\includegraphics[width=2in]{../figures/fig2}
+		\includegraphics[width=2in]{../figures/fig3} \\[1ex]
+		\includegraphics[width=2in]{../figures/fig1}
+		\includegraphics[width=2in]{../figures/fig4}
+		\includegraphics[width=2in]{../figures/fig5}
+		\caption{\small In the top row we observe the naive solution applied to a blurred image, including the true image $x$ (left), the blurred image $b$ (middle), and the recovered image $A^{-1}b$. On the bottom row, we see the effects of adding noise illustrated by the true image $x$ (left), the blurred and noisy image $b-w$ (middle), and the recovered image $A^{-1}(b-w)$.}
+	\end{figure}
 	
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=.35]{../figures/penalty_functions.png} 
-		\caption{The various penality functions we utilize in our fidelity term, and their comparision to the $\ell_1$ norm.}
+		\caption{The various penality functions we utilize in our fidelity term, and their comparision to the $l_1$ norm.}
 	\end{figure}
 	
 	% Problem Formulation
+	\newpage
 	\section{Problem Formulation}
 	The general approach to the image deblurring and denoising problem can now be stated as a minimization problem of the form
 	\begin{equation} \label{general}
@@ -139,13 +141,13 @@
 	In this case we take the Frobenius form of our transformed images $\hat x$ and $\hat b$, multiplying $\hat x$ by the diagonal eigenvalue matrix rather than the full blur matrix. We can also compute and store $\hat b$ for additional efficiency. 
 	
 	% 1-Norm Wavelet Regularization
-	\subsection{$\ell_1$ Wavelet Regularization}
+	\subsection{$l_1$ Wavelet Regularization}
 	
 	The wavelet regularization deblurring model, as seen in \cite{FISTA}, can be written in the form of \eqref{general} as 
 	\begin{equation} \label{wavelet_orig}
 	\min_{x} f(Ax-b) + \lambda \norm{Wx}_1 ,
 	\end{equation}
-	where $W$ corresponds to a given wavelet transform and $\|Wx\|_1$ is the sum of absolute values of all entries of the matrix $Wx$. This regularization is motivated by the fact that natural images often have a sparse representation in wavelet domains, which we can encourage in our recovered image using the $\ell_1$ norm. 
+	where $W$ corresponds to a given wavelet transform and $\|Wx\|_1$ is the sum of absolute values of all entries of the matrix $Wx$. This regularization is motivated by the fact that natural images often have a sparse representation in wavelet domains, which we can encourage in our recovered image using the $l_1$ norm. 
 	
 	To illustrate this fact, we look at the orthogonal two-dimensional Haar wavelet transform of the peppers image. First we transform the image using the spot operator {\tt opHaar2} with one level. This results in an image where most of the elements are zero or near zero, except for those in the upper left quadrant. If we repeat this process for more times, taking the transform of the resulting corner image, we get the Haar transform of the image for five levels, which is even more sparse. 
 	
@@ -217,6 +219,7 @@
 	\end{aligned}
 	\end{equation}
 	
+	\newpage
 	To deblur and denoise our images using the $l_1$ wavelet regularization and either the Frobenius or Huber norm fidelity term, we therefore employ the following algorithm:
 	
 	\begin{center}
@@ -311,21 +314,55 @@
 	\end{framed}
 	
 	% Examples
+	\newpage
 	\section{Examples}
 	
 	In this section we compare the performance of our different fidelity term penalty functions and regularizers. In each example the peppers image is first blurred with a $9 \times 9$ Gaussian kernel with standard deviation 1, and then either Gaussian noise or Student's $t$ noise is added, both with standard deviation 0.01, to produce our observed image. 
 	
-	\subsection{$\ell_1$ Wavelet Regularization}
+	\subsection{$l_1$ Wavelet Regularization}
 	
-%	We present our results for denoising and deblurring with wavelet regulation
-%	applied to a real image using the discrete cosine and Haar wavelets. We corrupt each image with either high Gaussian or Student's t noise and blur the image. Additionally, we find an optimal lambda value for each image empirically and compare Huber and Frobenius norm fidelity functions. In figures \ref{waveletH_student} and \ref{waveletD_student}, it can be seen that the Huber is able to better account for heavy-tailed noise, where as the Frobenius norm produces either blocky or smudged affects depending on the choice of wavelet basis.
+	DISCUSSION: CHOOSING LAMBDA, COMPARISON OF WAVELET BASES AND PENALTY FUNCTIONS
+	%	We present our results for denoising and deblurring with wavelet regulation
+%	applied to a real image using the discrete cosine and Haar wavelets. We corrupt each image with either high Gaussian or Student's t noise % and blur the image. Additionally, we find an optimal lambda value for each image empirically and compare Huber and Frobenius norm fidelity %functions. In figures \ref{waveletH_student} and \ref{waveletD_student}, it can be seen that the Huber is able to better account for heavy-tailed %noise, where as the Frobenius norm produces either blocky or smudged affects depending on the choice of wavelet basis.
+	
+	\begin{figure}[H]
+	\centering
+	\rotatebox{90}{\hspace{0.5cm} Daubechies \hspace{3.5em} Haar}
+	\includegraphics[width=6in]{../figures/wavLam4.pdf} \\
+	$\lambda = 0.0001$ \hspace{2cm} $\lambda = 0.001$ \hspace{2.25cm} $\lambda = 0.01$ \hspace{2.25cm} $\lambda = 0.1$
+	\caption{salfj}
+	\end{figure}
+	
+	\begin{minipage}{0.5\textwidth}
+	\begin{center}Error: $\| x - \hat x \|_F$\end{center}
+	\begin{tabular}{|c|c|c|c|c|}
+	\hline 
+	& $\lambda$ = 1e-4 & $\lambda$ = 1e-3 & $\lambda$ = 1e-2 & $\lambda$ = 1e-1 \\
+	\hline
+	H &50.4436   &22.2812   &10.8628   &15.8965 \\
+	D &50.0977   &20.8619    &7.6839   &12.9139 \\
+	\hline
+	\end{tabular}
+	\end{minipage}
+	\begin{minipage}{0.5\textwidth}
+	\begin{center}Objective Function: $\frac{1}{2}\|Ax-b\|_F^2+\lambda \|Wx\|_1$\end{center}
+	\begin{tabular}{|c|c|c|c|c|}
+	\hline
+	&$\lambda$ = 1e-4 & $\lambda$ = 1e-3 & $\lambda$ = 1e-2 & $\lambda$ = 1e-1 \\
+	\hline
+	H &3.0954    &9.3127   &52.2841  &379.5130 \\
+	D &3.0598    &8.8598   &48.0596  &350.2697 \\
+	\hline
+	\end{tabular}
+	\end{minipage}
+	
 	\begin{figure}[H]
 		\begin{center}
 			\rotatebox{90}{\hspace{1cm} Frobenius Loss \hspace{2.25cm} Original Image}
 			\includegraphics[width = 0.75\textwidth]{../figures/waveletGaussH.pdf} 
 			\rotatebox{90}{\hspace{1.5cm} Huber Loss \hspace{2cm} Blurred and Noisy}
 		\end{center}
-		\caption{Images with Gaussian noise restored with the $\ell_1$ Haar wavelet regularizer.}
+		\caption{Images with Gaussian noise restored with the $l_1$ Haar wavelet regularizer.}
 		\label{waveletH_gauss}
 	\end{figure}
 	
@@ -335,7 +372,7 @@
 			\includegraphics[width = 0.75\textwidth]{../figures/waveletGaussD.pdf} 
 			\rotatebox{90}{\hspace{1.5cm} Huber Loss \hspace{2cm} Blurred and Noisy}
 		\end{center}
-		\caption{Images with Gaussian noise restored with the $\ell_1$ Daubechies wavelet regularizer.}
+		\caption{Images with Gaussian noise restored with the $l_1$ Daubechies wavelet regularizer.}
 		\label{waveletD_gauss}
 	\end{figure}
 	
@@ -345,7 +382,7 @@
 			\includegraphics[width = 0.75\textwidth]{../figures/waveletStudentH.pdf} 
 			\rotatebox{90}{\hspace{1.5cm} Huber Loss \hspace{2cm} Blurred and Noisy}
 		\end{center}
-		\caption{Images with Student's $t$ noise restored with the $\ell_1$ Haar wavelet regularizer.}
+		\caption{Images with Student's $t$ noise restored with the $l_1$ Haar wavelet regularizer.}
 		\label{waveletH_student}
 	\end{figure}
 	
@@ -355,7 +392,7 @@
 			\includegraphics[width = 0.75\textwidth]{../figures/waveletStudentD.pdf} 
 			\rotatebox{90}{\hspace{1.5cm} Huber Loss \hspace{2cm} Blurred and Noisy}
 		\end{center}
-		\caption{Images with Student's $t$ noise restored with the $\ell_1$ Daubechies wavelet regularizer.}
+		\caption{Images with Student's $t$ noise restored with the $l_1$ Daubechies wavelet regularizer.}
 		\label{waveletD_student}
 	\end{figure}
 	
