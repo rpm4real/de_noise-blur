@@ -57,7 +57,7 @@ where $b$ is the observed image, $w$ is some unknown noise, and $x$ is the true 
 \begin{equation}
 \hat{x}_{LS} = \arg\min_x \| Ax - b \|_F^2 ,
 \end{equation}
-gives a reasonable solution. Unfortunately, this approach doesn't provide any new information for the denoising problem, and for image deblurring problems $A$ is often ill-conditioned, so the solution is contaminated by round-off error and amplified noise. To illustrate this, we consider the pepper image below. If we blur the image and compute the naive solution $x = A^{-1}b$, the result is obscured by round-off error in the form of ringing artifacts. The result is even worse when we add noise.
+gives a reasonable solution. Unfortunately, this approach doesn't provide any new information for the denoising problem, and for image deblurring problems $A$ is often ill-conditioned, so the solution is contaminated by round-off error and amplified noise \cite{DeblurBook}. To illustrate this, we consider the pepper image below. If we blur the image and compute the naive solution $x = A^{-1}b$, the result is obscured by round-off error in the form of ringing artifacts. The result is even worse when we add noise.
 
 \begin{figure}[H]
 \centering
@@ -85,21 +85,21 @@ and the function
 g_{\gamma}(x) = \frac{1}{\gamma} \sum_i \log\left(\cosh\left(\gamma x_i\right)\right).
 \end{equation}
 
-We note that $g_{\gamma}(x)$ approaches the $\ell_1$ penalty uniformly as we increase $\gamma$, leading to linear penalization. The Huber penalty, on the other hand, approaches a linear penalty as we decrease $\gamma$, but with an increasingly smaller slope.
+SOMETHING ABOUT WHY WE WOULD CONSIDER LOG COSH? ADVANTAGES? APPROACHES L1 FOR LARGE GAMMA? 
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.8\textwidth]{../figures/penalty_functions.png} 
-\caption{al;sdfj?}
+\caption{CAPTION CAPTION CAPTION}
 \end{figure}
 
 % Problem Formulation
 \section{Problem Formulation}
-The general approach to the image deblurring and denoising problem can now be stated as a minimization problem of the form \cite{DeblurBook}
+The general approach to the image deblurring and denoising problem can now be stated as a minimization problem of the form
 \begin{equation} \label{general}
  \min_x f(Ax -b) + \lambda R(x),
 \end{equation}
-where $Ax$ is a discrete convolution of the true image with a blur kernel, the  \emph{fidelity term} $f(Ax-b)$ measures how well the recovered image complies with the linear model, and $R(x)$ is our chosen \emph{regularization}. The parameter $\lambda > 0$ is chosen to balance the tradeoff between fidelity to the model and noise sensitivity. Furthermore, if we assume that the pixels of our image satisfy $x_{i,j} \in [0,1]$, we can add an additional term to the objective function
+where $Ax$ is a discrete convolution of the true image with a blur kernel, the  \emph{fidelity term} $f(Ax-b)$ measures how well the recovered image complies with the linear model, and $R(x)$ is our chosen \emph{regularization}. Furthermore, if we assume that the pixels of our image satisfy $x_{i,j} \in [0,1]$, we can add an additional term to the objective function
 \begin{equation} \label{loss}
  L_b(x) = f(Ax-b) + \lambda R(x) + \delta(x | [0,1] ),
 \end{equation}
@@ -107,7 +107,7 @@ where $\delta(x | [0,1])$ is the indicator function for the set $[0,1]$.
 
 % Blur operators
 \subsection{Blur Operators}
-The blurring matrix $A$ is built from two ingredients: the blur kernel, which specifies how each pixel spreads out in the blurred image, and the boundary conditions, which specify our assumptions about the scene just outside of our observed image. For our examples, we use a $9 \times 9$ Gaussian blur kernel with a standard deviation of one. The Gaussian kernel is popular in blurring applications, and can be used to simulate atmospheric turbulence. 
+The blurring matrix $A$ is built from two ingredients: the blur kernel, which specifies how each pixel spreads out in the blurred image, and the boundary conditions, which specify our assumptions about the scene just outside of our observed image. For our examples, we use a $9 \times 9$ Gaussian blur kernel with a standard deviation of one. The Gaussian kernel is popular in blurring applications, and can be used to simulate atmospheric turbulence \cite{DeblurBook}. 
 
 \begin{figure}[H]
 \centering
@@ -116,15 +116,11 @@ The blurring matrix $A$ is built from two ingredients: the blur kernel, which sp
 \caption{A single pixel before (left) and after blurring (right). The image on the right is called the \emph{point spread function}, or the blur kernel. In this example the blur kernel computed by generating a $9 \times 9$ Gaussian with mean zero and standard deviation one, normalized so that the pixels sum to one.  }
 \end{figure}
 
-In order to blur or deblur pixels near the border of our image, we need to decide how to represent the pixels just outside of our image boundaries, which we do not have. If we assume that these pixels mirror those inside, then we impose reflexive boundary conditions. For example, letting $X$ be the pixels within our given image, we can construct an extended image $X_{ext}$ with
-\[ X_{lr} = {\tt fliplr}(X) \quad X_{ud} = {\tt flipud}(X) \quad X_x = {\tt fliplr}(X_{ud}) \]
-\[ X_{ext} = \begin{bmatrix} X_x & X_{ud} & X_x \\ X_{lr} & X & X_{lr} \\ X_x & X_{ud} & X_x \end{bmatrix} \]
-
-For spatially invariant and doubly symmetric blur kernels, these boundary conditions result in a blurring matrix that can be diagonalized by the orthogonal two-dimensional discrete cosine transform
+In order to blur or deblur pixels near the border of our image, we need to decide how to represent the pixels just outside of our image boundaries, which we do not have. If we assume that these pixels mirror those inside, then we impose reflexive boundary conditions. For spatially invariant and doubly symmetric blur kernels, these boundary conditions result in a blurring matrix that can be diagonalized by the orthogonal two-dimensional discrete cosine transform
 \begin{equation}
 A = C^T \Lambda C,
 \end{equation}
-where the eigenvalues of $A$ are determined by the blur krnel. There are two advantages of representing the blur operator in this way. First, we do not have to construct the matrix explicitly. Instead, we can take advantage of the efficient built-in discrete cosine transform function to compute our blurred image:
+where the eigenvalues of $A$ are determined by the blur kernel. There are two advantages of representing the blur operator in this way. First, we do not have to construct the matrix explicitly. Instead, we can take advantage of the efficient built-in discrete cosine transform function to compute our blurred image:
 \begin{equation}
 Ax = C^T \Lambda C x = {\tt idct2}( \Lambda {\tt dct2}(x)) = b.
 \end{equation}
@@ -146,16 +142,16 @@ The wavelet regularization deblurring model, as seen in \cite{FISTA}, can be for
 \end{equation}
 where $W$ corresponds to a given wavelet transform. This regularization is motivated by the fact that natural images often have a sparse representation in wavelet domains, which we can encourage in our recovered image using the $\ell_1$ norm. 
 
-To illustrate this fact, we look at the orthogonal two-dimensional Haar wavelet transform of the peppers image. First we transform the image using one level. This results in an image divided into four parts: an image comprising row and column averages (scaled by $\sqrt{2}$), and three images made up of row, column, and diagonal differences. These three images are sparse, i.e. most of their pixels are zero or close to zero. Recursively applying this process, we get a Haar transform of the image using five levels, which is even more sparse. 
+To illustrate this fact, we look at the orthogonal two-dimensional Haar wavelet transform of the peppers image. First we transform the image using the spot operator {\tt opHaar2} with one level. This results in an image where most of the nonzero elements are concentrated in the upper left corner. Recursively applying this process to this portion of the image, we get the Haar transform of the image for five levels, where now most of the elements are zero or near zero. 
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=2.5in]{../figures/haarTrans2} \quad
 \includegraphics[width=2.5in]{../figures/haarTrans3}
-\caption{a;lskdfj}
+\caption{The 2D Haar wavelet transform of the peppers image using one level (left) and five levels (right). Note that the images are sparse. }
 \end{figure}
 
-The Haar wavelet is just the first of many wavelets developed for multi-resolution analysis. In addition to the orthogonal two-dimensional Haar wavelet transform, we therefore also consider the orthogonal two-dimensional Daubechies wavelet transform in our examples. 
+The Haar wavelet is just the first of many wavelets developed for multi-resolution analysis. In addition to the orthogonal two-dimensional Haar wavelet transform, we therefore also consider the orthogonal two-dimensional Daubechies wavelet transform implemented with the spot operator {\tt opWavelet2}. 
 
 % TV Regularization
 \subsection{Total Variation Regularization}
