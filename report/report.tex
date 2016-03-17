@@ -244,41 +244,40 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 	\subsection{Total Variation Regularization}
 	
 	Optimization of the objective function \eqref{tv_orig} is based on the proximal gradient algorithm and exploits the idea of momentum used in FISTA as well as an extra function evaluation at each iteration in order to ensure a non-increasing objective function.  The proximal gradient step is given as follows,
-	
 	\begin{align*}
 	x_{k+1} &= \prox_{\alpha^{-1}(\lambda \textrm{TV}(\cdot) + \delta_{[0,1]})} (\underbrace{x_k - \alpha^{-1} A^T\nabla f (Ax_k - b)}_{u_k}) \\
 	&= \arg \min_z \left( \|u_k - z\|_F^2 + \alpha^{-1}\lambda TV(z) + \delta(z | [0,1]) \right) \\
 	&= P_{[0,1]}  \left( \arg \min_z \left( \|u_k - z\|_F^2 + \alpha^{-1}\lambda TV(z) \right) \right)
 	\end{align*}
-	
 	Here the learning rate $\alpha$ is taken to be no larger than than the multiplicative inverse of the Lipschitz constant of $\nabla f$.  Note that in order to evaluate this expression we must solve a denoising problem with input $u_k = x_k - \alpha^{-1} A^T\nabla f (Ax_k - b)$.  Of particular note is that regardless of the original fidelity term we have a Frobenius norm fidelity term on the new denoising problem.  This allows for the easy manipulation of the original fidelity function, so long as it is convex and has Lipschitz gradient.
 	
 	The resulting denoising problem with Frobenius norm fidelity function may be solved rapidly using the method developed in \cite{TV}.  The $TV$ function is shown to have a dual representation as a trace and the relationship between trace and Frobenius norm is heavily exploited to develop a dual formulation of the denoising problem.  We present their method here, starting with a few new definitions which will be necessary.
 	\begin{align*}
 	\mathcal{P} &= \{ (p,q) \in \R^{(m-1) \times n} \times \R^{ m \times (n-1) } :  \abs{p_{i,j} } \le 1, \abs{p_{ i,j } } \le 1 \} \\
-	\mathcal{L} &: \R^{(m-1) \times n} \times \R^{ m \times (n-1) } \rightarrow \R^{m \times n}  \text{ such that } \mathcal{L}(p,q)_{i,j} = p_{i,j} + q_{i,j} - p_{ i-1,j } - q_{ i,j-1 }\\ \hspace{3 cm}& \text{ for } i = 1,\dots,m,\,j = 1,\dots,n \text{ and }  p_{0,j} = p_{m,j} = q_{i,0} = q_{i,n} = 0\\
+	\mathcal{L} &: \R^{(m-1) \times n} \times \R^{ m \times (n-1) } \rightarrow \R^{m \times n}  \text{ such that } \mathcal{L}(p,q)_{i,j} = p_{i,j} + q_{i,j} - p_{ i-1,j } - q_{ i,j-1 }\\ \hspace{3 cm}& \text{ for } i = 1,\dots,m,\,j = 1,\dots,n \text{ and }  p_{0,j} = p_{m,j} = q_{i,0} = q_{i,n} = 0
 	\end{align*}
-	Using these new definitions we claim without proof that the total variation functional may be written as,
+	Using these new definitions we claim without proof that the total variation functional may be written as
 	\begin{equation}
-	TV(x) = \underset{(p,q) \in \mathcal{P}}{\max} \Tr(\mathcal{L}(p,q)^Tx)
+	TV(x) = \underset{(p,q) \in \mathcal{P}}{\max} \Tr(\mathcal{L}(p,q)^Tx),
 	\end{equation}
-	we may now exploit the relationship between trace and Frobenius norm to obtain the dual problem for Frobenius denoising using total variation regularizartion.  
+	we may now exploit the relationship between trace and Frobenius norm to obtain the dual problem for Frobenius denoising using total variation regularization.  \\
 	\begin{align*}
 	\min_{x \in [0,1]} \norm{x-b}_F^2 +2 \lambda \mathrm{TV}(x) &= \min_{x \in [0,1]}  \underset{(p,q) \in \mathcal{P}}{\max}  \norm{x-b}_F^2 + 2\lambda \Tr(\mathcal{L}(p,q)^Tx) \\
 	&= \underset{(p,q) \in \mathcal{P}}{\max}   \min_{x \in [0,1]} \norm{x-b}_F^2 +2 \lambda \Tr(\mathcal{L}(p,q)^Tx) \\
 	&=\underset{(p,q) \in \mathcal{P}}{\max}   \min_{x \in [0,1]} \norm{x}_F^2 + \norm{b}_F^2 - 2 \Tr(x^Tb)+ 2\lambda \Tr(\mathcal{L}(p,q)^Tx) \\
 	&=\underset{(p,q) \in \mathcal{P}}{\max}   \min_{x \in [0,1]} \norm{x}_F^2 + \norm{b}_F^2 - 2 \Tr(x^T(b- \lambda\mathcal{L}(p,q)))\\
 	&=\underset{(p,q) \in \mathcal{P}}{\max}   \min_{x \in [0,1]} \underbrace{\norm{x}_F^2 + \norm{b- \lambda\mathcal{L}(p,q)}_F^2 - 2 \Tr(x^T(b- \lambda\mathcal{L}(p,q)))}_{ = \norm{x-(b- \lambda\mathcal{L}(p,q))}_F^2} -  \norm{b- \lambda\mathcal{L}(p,q)}_F^2+ \norm{b}_F^2\\
-	&= \underset{(p,q) \in \mathcal{P}}{\max}   \min_{x \in [0,1]}  \norm{x-(b- \lambda\mathcal{L}(p,q))}_F^2 - \norm{b- \lambda\mathcal{L}(p,q)}_F^2+ \norm{b}_F^2
+	&= \underset{(p,q) \in \mathcal{P}}{\max}   \min_{x \in [0,1]}  \norm{x-(b- \lambda\mathcal{L}(p,q))}_F^2 - \norm{b- \lambda\mathcal{L}(p,q)}_F^2+ \norm{b}_F^2 \\
 	\end{align*}
 	Here the switching of min and max is permitted due to the convexity of the objective in $x$ and concavity in $p$ and $q$ \cite{TV}.  Note that the problem of maximizing over $x$ is simply the projection of each index of  $b- \lambda\mathcal{L}(p,q)$ onto the set $[0,1]$.  This gives the optimality condition for $x$ in terms of $p$ and $q$ which we plug back in to obtain the dual problem.
+	
 	\begin{align*}
 	(p^*,q^*) &= \underset{(p,q) \in \mathcal{P}}{\text{arg }\max}  \norm{P_{[0,1]}(b- \lambda\mathcal{L}(p,q)) -(b- \lambda\mathcal{L}(p,q))}_F^2 - \norm{b- \lambda\mathcal{L}(p,q)}_F^2+ \norm{b}_F^2\\
-	x &= P_{[0,1]}(b- \lambda\mathcal{L}(p^*,q^*))
+	x &= P_{[0,1]}(b- \lambda\mathcal{L}(p^*,q^*)) \\
 	\end{align*}
 	Note that in the dual problem the objective is Lipschitz differentiable.  We claim without proof that the gradient has Lipschitz constant $L \leq 16 \lambda^2$ and refer the reader to \cite{TV} for proof.  This smoothness allows us to implement a projected gradient algorithm.
 	
-	We implement the above optimization scheme by using a slightly optimized method referred to as Monotone FISTA or MFISTA. In FISTA, the objective function values are not guaranteed to be nonincreasing, so MFISTA requires the evaluation of the objective function to check for monotonicity.  Convergence plots shown in \cite{TV} indicate that MFISTA offers substantial improvements for images with substantial amounts of noise.  We also implement a sped-up projected gradient algorithm using the same momentum technique as in FISTA.  This algorithm is labeled as FGP, for fast gradient projection.
+	We implement the above optimization scheme by using a slightly optimized method referred to as Monotone FISTA or MFISTA. In FISTA, the objective function values are not guaranteed to be nonincreasing, so MFISTA requires the evaluation of the objective function to check for monotonicity.  Convergence plots shown in \cite{TV} indicate that MFISTA offers substantial improvements for images with substantial amounts of noise.  We also implement a sped-up projected gradient algorithm using the same momentum technique as in FISTA.  This algorithm is labeled as FGP, for fast gradient projection. \\
 	\begin{framed}
 		\begin{minipage}{0.48\textwidth}
 			\textbf{MFISTA$(b,f, \lambda)$}
@@ -312,14 +311,10 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 		\end{minipage}
 	\end{framed}
 	
-	% Examples
-	\section{Examples}
-	
-	In this section we compare the performance of our different fidelity term penalty functions and regularizers. In each example the peppers image is first blurred with a $9 \times 9$ Gaussian kernel with standard deviation 1, and then either Gaussian noise or Student's $t$ noise is added, both with standard deviation 0.01. Additionally, we determined how many iterations to run each algorithm based on convergence criterion rather than using a fixed number of iterations. For our examples, we stopped iterating once the objective function failed to decrease by more than 0.1\% of its previous value.  When testing the total variation algorithm the objective function often remained constant due to the structure of the MFISTA algorithm so the break condition was restricted to the case in which decay of the objective function was both sufficiently small and non-zero.
-	
-	\subsection{$l_1$ Wavelet Regularization}
-	
-	Before we can restore a corrupted image, we must first set our objective function parameters $\lambda$ and $\gamma$. For our results we tried various parameter values and chose those that resulted in the smallest error from the true image, $\| x - \hat x \|_F$, which seemed to correspond to the best looking image. Unfortunately, in most applications the true image is not known, so parameters must be chosen by visual inspection. This is demonstrated in Figure 6 below, where we vary $\lambda$ while we deblur and denoise the image with Student's $t$ noise of standard deviation 0.0001 and the Frobenius norm penalty function. 
+	% Choosing parameters
+	\newpage
+	\subsection{Choosing parameters}
+	Before we can restore a corrupted image, we must first set our objective function parameters $\lambda$ and $\gamma$. For our results in the in next section we tried various parameter values and chose those that resulted in the smallest error from the true image, $\| x - \hat x \|_F$, which seemed to correspond to the best looking image. Unfortunately, in most applications the true image is not known, so parameters must be chosen by visual inspection. This is demonstrated in Figure 6 below, where we vary $\lambda$ while we deblur and denoise the image with Student's $t$ noise with one degree of freedom and a standard deviation of 0.0001 and the Frobenius norm penalty function. 
 	
 	We see that smaller values of $\lambda$ result in underregularization: the image is successfully deblurred, but the sensitivity of the Frobenius norm to outliers results in star-like artifacts. As we increase $\lambda$ these artifacts diminish, but we pay the price in terms of overregularization. For the Haar wavelet basis this results in pixelation, while for the Daubechies wavelet basis the image appears blurred or smudged. It is clear from looking at the images that $\lambda = 0.01$ does the best job at balancing fidelity and regularization, in fact returning the lowest error. 
 	
@@ -348,7 +343,7 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 	\end{tabular}
 	\end{minipage}
 	
-	\begin{figure}[p]
+	\begin{figure}[h]
 	\centering
 	\rotatebox{90}{\hspace{0.5cm} Daubechies \hspace{3.5em} Haar}
 	\includegraphics[width=6in]{../figures/wavLam4.pdf} \\
@@ -357,8 +352,20 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 	\label{lambda_comp}
 	\end{figure}
 	
-	DISCUSS WHICH REGULARIZER IS BETTER, WHICH NORM IS BETTER
-	\begin{figure}[p]
+	% Examples
+	\section{Examples}
+	
+	In this section we compare the performance of our different fidelity term penalty functions and regularizers. In each example the peppers image is first blurred with a $9 \times 9$ Gaussian kernel with standard deviation 1, and then either Gaussian noise or Student's $t$ noise is added, both with standard deviation 0.01. Additionally, we determined how many iterations to run each algorithm based on convergence criterion rather than using a fixed number of iterations. For our examples, we stopped iterating once the objective function failed to decrease by more than 0.1\% of its previous value.  When testing the total variation algorithm the objective function often remained constant due to the structure of the MFISTA algorithm so the break condition was restricted to the case in which decay of the objective function was both sufficiently small and non-zero.
+	
+%	\subsection{$l_1$ Wavelet Regularization}
+%	
+%
+%	
+%	DISCUSS WHICH REGULARIZER IS BETTER, WHICH NORM IS BETTER
+	
+	% Wavelet Gauss
+	\subsection{$l_1$ Wavelet Regularization: Gaussian Noise}
+	\begin{figure}[H]
 		\begin{center}
 			\rotatebox{90}{\hspace{1cm} Frobenius Loss \hspace{2.25cm} Original Image}
 			\includegraphics[width = 0.75\textwidth]{../figures/waveletGaussH.pdf} 
@@ -367,8 +374,8 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 		\caption{Images with Gaussian noise restored with the $l_1$ Haar wavelet regularizer. The Frobenius loss formulation uses $\lambda = 0.001$, while the Huber loss formulation uses $\lambda = 0.001$ and $\gamma = 0.01$. }
 		\label{waveletH_gauss}
 	\end{figure}
-	
-	\begin{figure}[p]
+	\vspace{-1ex}
+	\begin{figure}[H]
 		\begin{center}
 			\rotatebox{90}{\hspace{1cm} Frobenius Loss \hspace{2.25cm} Original Image}
 			\includegraphics[width = 0.75\textwidth]{../figures/waveletGaussD.pdf} 
@@ -378,7 +385,9 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 		\label{waveletD_gauss}
 	\end{figure}
 	
-	\begin{figure}[p]
+	% Wavelet Student
+	\subsection{$l_1$ Wavelet Regularization: Student's $t$ Noise}
+	\begin{figure}[H]
 		\begin{center}
 			\rotatebox{90}{\hspace{1cm} Frobenius Loss \hspace{2.25cm} Original Image}
 			\includegraphics[width = 0.75\textwidth]{../figures/waveletStudentH.pdf} 
@@ -387,8 +396,8 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 		\caption{Images with Student's $t$ noise restored with the $l_1$ Haar wavelet regularizer. The Frobenius loss formulation uses $\lambda = 0.01$, while the Huber loss formulation uses $\lambda = 0.001$ and $\gamma = 0.01$.}
 		\label{waveletH_student}
 	\end{figure}
-	
-	\begin{figure}[p]
+	\vspace{-1ex}
+	\begin{figure}[H]
 		\begin{center}
 			\rotatebox{90}{\hspace{1cm} Frobenius Loss \hspace{2.25cm} Original Image}
 			\includegraphics[width = 0.75\textwidth]{../figures/waveletStudentD.pdf} 
@@ -400,39 +409,39 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 	
 	\subsection{Total Variation Regularization}
 	
-	We demonstrate some results of denoising and deblurring with the Total Variation regularization on real images. As previously shown, each image was given a small amount of either Gaussian or Student's t noise and blurred. Two different fidelity functions were used: the squared Frobenius norm, and the Huber norm. Figure \ref{tv_gauss} demonstrates the results using Gaussian noise, and Figure \ref{tv_student} demonstrates the results using Student's t noise with one degree of freedom. For the Gaussian noise, we set $\lambda = .001$, and $\gamma = .02$ (see TV-regularization in Problem Formulation). For Student's t noise, we set $\lambda = .002$, and $\gamma = .02$.
+%	We demonstrate some results of denoising and deblurring with the Total Variation regularization on real images. As previously shown, each image was given a small amount of either Gaussian or Student's t noise and blurred. Two different fidelity functions were used: the squared Frobenius norm, and the Huber norm. Figure \ref{tv_gauss} demonstrates the results using Gaussian noise, and Figure \ref{tv_student} demonstrates the results using Student's t noise with one degree of freedom. For the Gaussian noise, we set $\lambda = .001$, and $\gamma = .02$ (see TV-regularization in Problem Formulation). For Student's t noise, we set $\lambda = .002$, and $\gamma = .02$.
 	
-	\begin{figure}[p]
+	\begin{figure}[H]
 		\begin{center}
 			\rotatebox{90}{\hspace{1cm} Frobenius Loss \hspace{2.25cm} Original Image}
 			\includegraphics[width = 0.75\textwidth]{../figures/gaussian_peppers.png} 
 			\rotatebox{90}{\hspace{1.5cm} Huber Loss \hspace{2cm} Blurred and Noisy}
 		\end{center}
-		\caption{Total Variation algorithm performed on an image with Gaussian noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss.}
+		\caption{Images with Gaussian noise restored with the total variation regularization. The Frobenius loss formulation uses $\lambda = 0.001$, while the Huber loss formulation uses $\lambda = 0.001$ and $\gamma = 0.02$.}
 		\label{tv_gauss}
 	\end{figure}
-	
-	\begin{figure}[p]
+	\vspace{-1ex}
+	\begin{figure}[H]
 		\begin{center}
 			\rotatebox{90}{\hspace{1cm} Frobenius Loss \hspace{2.25cm} Original Image}
 			\includegraphics[width = 0.75\textwidth]{../figures/student-t_peppers.png} 
 			\rotatebox{90}{\hspace{1.5cm} Huber Loss \hspace{2cm} Blurred and Noisy}
 		\end{center}
-		\caption{Total Variation algorithm performed on an image with Student's t noise (magnitude $1 \times 10^{-2}$) for the two different fidelity terms of Frobenius and Huber loss.}
+		\caption{Images with Student's $t$ noise restored with the total variation regularization. The Frobenius loss formulation uses $\lambda = 0.002$, while the Huber loss formulation uses $\lambda = 0.002$ and $\gamma = 0.02$. }
 		\label{tv_student}
 	\end{figure}
 	
 	\subsection{The $\log \circ \cosh$ Penalty Function}
 	
 	Recall that for large values of $\gamma$ the function $\gamma^{-1} \log(\cosh (\gamma \cdot ))$ uniformly converges to the absolute value function.  Since it is also Lipschitz differentiable we are able to use it in our algorithm for TV regularized denoising and deblurring with high values of $\gamma$ to approximate how the standard $L^1$ norm would perform without needing to worry about how to optimize it.  Figure \ref{log_cosh_pic}
-compares the effectiveness of $\log \circ \cosh$ with Huber for the denoising and deblurring problem with student's t noise.
+compares the effectiveness of $\log \circ \cosh$ with Huber for the denoising and deblurring problem with Student's $t$ noise.
 	
-	\begin{figure}[p]
+	\begin{figure}[H]
 		\begin{center}
 			\rotatebox{90}{\hspace{1.25cm} $\log \circ \cosh$ Loss \hspace{2.5cm} Original Image}
 			\includegraphics[width=0.8\textwidth]{../figures/logcosh_peppers.png}
 			\rotatebox{90}{\hspace{1.5cm} Huber Loss \hspace{2.25cm} Blurred and Noisy}
-			\caption{A comparrison between the $\log \circ \cosh$ and Huber Fidelity Terms }
+			\caption{A comparison between the $\log \circ \cosh$ and Huber Fidelity Terms }
 			\label{log_cosh_pic}
 		\end{center}
 	\end{figure}
@@ -467,7 +476,7 @@ compares the effectiveness of $\log \circ \cosh$ with Huber for the denoising an
 	\bibliographystyle{unsrt}
 	\bibliography{sources}
 	
-	REFERENCE TO SPOT OPERATORS http://www.cs.ubc.ca/labs/scl/spot/
+	The spot operators used to implement blur operators and wavelet transforms can be found {\color{blue}\href{http://www.cs.ubc.ca/labs/scl/spot/}{here}}.
 	
 	
 \end{document}
