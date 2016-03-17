@@ -424,7 +424,8 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 	
 	\subsection{The $\log \circ \cosh$ Penalty Function}
 	
-	Recall that for large values of $\gamma$ the function $\gamma^{-1} \log(\cosh (\gamma \cdot ))$ uniformly converges to the absolute value function.  Since it is also Lipschitz differentiable we are able to use it in our algorithm for TV regularized denoising and deblurring with high values of $\gamma$ to approximate how the standard $L^1$ norm would perform without needing to worry about how to optimize it.
+	Recall that for large values of $\gamma$ the function $\gamma^{-1} \log(\cosh (\gamma \cdot ))$ uniformly converges to the absolute value function.  Since it is also Lipschitz differentiable we are able to use it in our algorithm for TV regularized denoising and deblurring with high values of $\gamma$ to approximate how the standard $L^1$ norm would perform without needing to worry about how to optimize it.  Figure \ref{log_cosh_pic}
+compares the effectiveness of $\log \circ \cosh$ with Huber for the denoising and deblurring problem with student's t noise.
 	
 	\begin{figure}[p]
 		\begin{center}
@@ -435,8 +436,6 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 			\label{log_cosh_pic}
 		\end{center}
 	\end{figure}
-	
-	Based on this example alone, the $\log \circ \cosh$ penalty appears to perform slightly better than the Huber penalty, though the difference is slight and only becomes visible with enlarged views of the images.  $\log \circ \cosh$ appears to preserve edges better.  We cannot say it necessarily performs better though since the difference could be the result of the choice of parameters and their relative performance could be reversed for alternative forms of noise.  In fact, we may expect $\log \circ \cosh$ to over penalize low magnitude differences in the case of more tightly distributed (e.g. gaussian) noise.  Another caveat is that since the Lipschitz constant of $\nabla \gamma^{-1} \log ( \cosh ( \gamma x )) = \tanh (\gamma x)$ is equal to $\gamma$ and thus becomes large, the step size in out MFISTA algorithm becomes small and we expect more computational expense for this penalty function.
 	
 	% Discussion
 	\section{Discussion and Conclusions}
@@ -452,6 +451,8 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 	
 	
 	Figure \ref{comp_methods} shows a rough comparison of our methods by displaying the time complexity and Frobenius error for different fidelity functions, regularization techniques and noise-types. It is clear that TV regularization outperformed wavelet regularization at the price of additional computational complexity. This is not surprising due to TV's extra requirement of solving an inner optimization problem for denoising the image. It can also be seen that student noise generally required less time than Gaussian noise but at the expense of higher error. Finally, applying the Huber for student noise improved results drastically for a slight increase in computation time.  
+	
+	Based on figure \ref{log_cosh_pic} alone, the $\log \circ \cosh$ penalty appears to perform slightly better than the Huber penalty, though the difference is slight and only becomes visible with enlarged views of the images.  $\log \circ \cosh$ appears to preserve edges better.  We cannot say it necessarily performs better though since the difference could be the result of the choice of parameters and their relative performance could be reversed for alternative forms of noise.  In fact, we may expect $\log \circ \cosh$ to over penalize low magnitude differences in the case of more tightly distributed (e.g. gaussian) noise.  Another caveat is that since the Lipschitz constant of $\nabla \gamma^{-1} \log ( \cosh ( \gamma x )) = \tanh (\gamma x)$ is equal to $\gamma$ and thus becomes large, the step size in out MFISTA algorithm becomes small and we expect more computational expense for this penalty function.  Timing information was not collected for this method, though it was noted that there was not a significant increase in the number of iterations needed for convergence.
 	
 	In conclusion, we present a survey of regularization and fidelity functions for the image denoising/deblurring problem. In particular, we compare regularization of the 1-norm in the wavelet domain to TV regularization. Furthermore we explore the affect of using the Huber as a fidelity function and potential improvements it can have when applied to heavy tailed noise. Our results show that TV regularization performs better for high amounts of noise, but the wavelet domain is well suited for smaller amounts of noise due to computation speed improvements. 
 	
