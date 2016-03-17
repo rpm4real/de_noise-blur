@@ -243,7 +243,7 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 	% TV algorithm
 	\subsection{Total Variation Regularization}
 	
-	Optimization of the objective function \eqref{tv_ours} is based on the proximal gradient algorithm and exploits the idea of momentum used in FISTA as well as an extra function evaluation at each iteration in order to ensure a non-increasing objective function.  The proximal gradient step is given as follows,
+	Optimization of the objective function \eqref{tv_orig} is based on the proximal gradient algorithm and exploits the idea of momentum used in FISTA as well as an extra function evaluation at each iteration in order to ensure a non-increasing objective function.  The proximal gradient step is given as follows,
 	
 	\begin{align*}
 	x_{k+1} &= \prox_{\alpha^{-1}(\lambda \textrm{TV}(\cdot) + \delta_{[0,1]})} (\underbrace{x_k - \alpha^{-1} A^T\nabla f (Ax_k - b)}_{u_k}) \\
@@ -278,7 +278,7 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 	\end{align*}
 	Note that in the dual problem the objective is Lipschitz differentiable.  We claim without proof that the gradient has Lipschitz constant $L \leq 16 \lambda^2$ and refer the reader to \cite{TV} for proof.  This smoothness allows us to implement a projected gradient algorithm.
 	
-	We implement the above optimization scheme by using a slightly optimized method referred to as Monotone FISTA or MFISTA. In FISTA, the objective function values are not guaranteed to be nonincreasing, so MFISTA requires the evaluation of the objective function to check for monotonicity. \emph{talk about how FGP is fista version of the projection equation that's not here yet}
+	We implement the above optimization scheme by using a slightly optimized method referred to as Monotone FISTA or MFISTA. In FISTA, the objective function values are not guaranteed to be nonincreasing, so MFISTA requires the evaluation of the objective function to check for monotonicity.  Convergence plots shown in \cite{TV} indicate that MFISTA offers substantial improvements for images with substantial amounts of noise.  We also implement a sped-up projected gradient algorithm using the same momentum technique as in FISTA.  This algorithm is labeled as FGP, for fast gradient projection.
 	\begin{framed}
 		\begin{minipage}{0.48\textwidth}
 			\textbf{MFISTA$(b,f, \lambda)$}
