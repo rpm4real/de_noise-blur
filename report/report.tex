@@ -68,7 +68,7 @@
 	\end{equation}
 	where the parameter $\lambda > 0$ is chosen to balance the tradeoff between fidelity to the model and the assumed feature. In this paper we compare two choices for the regularization term: $l_1$ wavelet regularization with $R(x) = \| Wx \|_1$, and total variation regularization with $R(x) = TV(x)$, which are explored by Beck and Teboulle in \cite{TV} and \cite{FISTA} respectively.
 	
-	It is also known that the quadratic penalty is extremely sensitive to outliers. While this does not pose problems for images with Gaussian noise, it becomes an issues for images with noise from heavy-tailed distributions, such as the Student's t-distribution, which could result from a dirty camera lens. Therefore we also consider different choices for the fidelity term which are more robust to outliers, including the Huber norm
+	It is also known that the quadratic penalty is extremely sensitive to outliers. While this does not pose problems for images with Gaussian noise, it becomes an issues for images with noise from heavy-tailed distributions, such as the Student's $t$-distribution, which could result from a dirty camera lens. Therefore we also consider different choices for the fidelity term which are more robust to outliers, including the Huber norm
 	\begin{equation} \label{huber}
 	h_{\gamma}(x) = \min_y \frac{1}{2} \| x - y \|_F^2 + \gamma \| y \|_1,
 	\end{equation}
@@ -77,7 +77,7 @@
 	g_{\gamma}(x) = \frac{1}{\gamma} \sum_i \log\left(\cosh\left(\gamma x_i\right)\right).
 	\end{equation}
 	
-For the sake of completeness we also wanted to experiment with the 1-norm penalty but were not able to implement it due to the lack of smoothness.  Instead, we tried using a smooth approximation to the 1-norm.  The function we came up with was $\gamma^{-1} \log( \cosh(\gamma x))$ seen in figure 2 with $\gamma = 5$, which uniformly converges to the absolute value function as $\gamma$ tends towards positive infinity.  Further, the Lipschitz constant of the gradient only increases linearly with $\gamma$.  The 1-norm could also have been approximated by the Huber loss via taking $\gamma \to 0$ while simultaneously adjusting $\lambda$ to effectively increase the slope of the fidelity function.  This presents other challenges however.  For instance it is highly nontrivial to tune the parameters of the algorithm and doing so while also worrying about taking two limits would further complicate an already challenging problem.  The behavior of $\gamma^{-1} \log( \cosh(\gamma x))$ away from the origin does not significantly change with $\gamma$ and hence parameter tuning for the near $L^1$ case is simpler than with Huber.
+For the sake of completeness we also wanted to experiment with the 1-norm penalty but were not able to implement it due to the lack of smoothness.  Instead, we tried using a smooth approximation to the 1-norm.  The function we came up with was $\gamma^{-1} \log( \cosh(\gamma x))$ seen in Figure 2 with $\gamma = 5$, which uniformly converges to the absolute value function as $\gamma$ tends towards positive infinity.  Further, the Lipschitz constant of the gradient only increases linearly with $\gamma$.  The 1-norm could also have been approximated by the Huber loss via taking $\gamma \to 0$ while simultaneously adjusting $\lambda$ to effectively increase the slope of the fidelity function.  This presents other challenges however.  For instance it is highly nontrivial to tune the parameters of the algorithm and doing so while also worrying about taking two limits would further complicate an already challenging problem.  The behavior of $\gamma^{-1} \log( \cosh(\gamma x))$ away from the origin does not significantly change with $\gamma$ and hence parameter tuning for the near $l_1$ case is simpler than with Huber.
 	
 	\begin{figure}[H]
 		\centering
@@ -148,7 +148,7 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 	\end{equation}
 	where $W$ corresponds to a given wavelet transform and $\|Wx\|_1$ is the sum of absolute values of all entries of the matrix $Wx$. This regularization is motivated by the fact that natural images often have a sparse representation in wavelet domains, which we can encourage in our recovered image using the $l_1$ norm. 
 	
-	To illustrate this fact, we look at the orthogonal two-dimensional Haar wavelet transform of the peppers image. First we transform the image using the spot operator {\tt opHaar2} with one level. This results in an image where most of the elements are zero or near zero, except for those in the upper left quadrant. If we repeat this process for more times, taking the transform of the resulting corner image, we get the Haar transform of the image for five levels, which is even more sparse. 
+	To illustrate this fact, we look at the orthogonal two-dimensional Haar wavelet transform of the peppers image. First we transform the image using the spot operator {\tt opHaar2} with one level. This results in an image where most of the elements are zero or near zero, except for those in the upper left quadrant. If we repeat this process four more times, taking the transform of the resulting corner image, we get the Haar transform of the image for five levels, which is even more sparse. 
 	
 	\begin{figure}[H]
 		\centering
@@ -249,7 +249,7 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 	&= \arg \min_z \left( \|u_k - z\|_F^2 + \alpha^{-1}\lambda TV(z) + \delta(z | [0,1]) \right) \\
 	&= P_{[0,1]}  \left( \arg \min_z \left( \|u_k - z\|_F^2 + \alpha^{-1}\lambda TV(z) \right) \right)
 	\end{align*}
-	Here the learning rate $\alpha$ is taken to be no larger than than the multiplicative inverse of the Lipschitz constant of $\nabla f$.  Note that in order to evaluate this expression we must solve a denoising problem with input $u_k = x_k - \alpha^{-1} A^T\nabla f (Ax_k - b)$.  Of particular note is that regardless of the original fidelity term we have a Frobenius norm fidelity term on the new denoising problem.  This allows for the easy manipulation of the original fidelity function, so long as it is convex and has Lipschitz gradient.
+	Here the learning rate $\alpha$ is taken to be no larger than than the multiplicative inverse of the Lipschitz constant of $\nabla f$.  Note that in order to evaluate this expression we must solve a denoising problem with input $u_k = x_k - \alpha^{-1} A^T\nabla f (Ax_k - b)$.  Of particular note is that regardless of the original fidelity term we have a Frobenius norm fidelity term in the new denoising problem.  This allows for the easy manipulation of the original fidelity function, so long as it is convex and has a Lipschitz gradient.
 	
 	The resulting denoising problem with Frobenius norm fidelity function may be solved rapidly using the method developed in \cite{TV}.  The $TV$ function is shown to have a dual representation as a trace and the relationship between trace and Frobenius norm is heavily exploited to develop a dual formulation of the denoising problem.  We present their method here, starting with a few new definitions which will be necessary.
 	\begin{align*}
@@ -260,7 +260,7 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 	\begin{equation}
 	TV(x) = \underset{(p,q) \in \mathcal{P}}{\max} \Tr(\mathcal{L}(p,q)^Tx),
 	\end{equation}
-	we may now exploit the relationship between trace and Frobenius norm to obtain the dual problem for Frobenius denoising using total variation regularization.  \\
+	and we may now exploit the relationship between trace and Frobenius norm to obtain the dual problem for Frobenius denoising using total variation regularization.  \\
 	\begin{align*}
 	\min_{x \in [0,1]} \norm{x-b}_F^2 +2 \lambda \mathrm{TV}(x) &= \min_{x \in [0,1]}  \underset{(p,q) \in \mathcal{P}}{\max}  \norm{x-b}_F^2 + 2\lambda \Tr(\mathcal{L}(p,q)^Tx) \\
 	&= \underset{(p,q) \in \mathcal{P}}{\max}   \min_{x \in [0,1]} \norm{x-b}_F^2 +2 \lambda \Tr(\mathcal{L}(p,q)^Tx) \\
@@ -314,7 +314,7 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 	% Choosing parameters
 	\newpage
 	\subsection{Parameter Selection}
-	Before we can restore a corrupted image, we must first set our objective function parameters $\lambda$ and $\gamma$. For our results in the in next section we tried various parameter values and chose those that resulted in the smallest error from the true image, $\| x - \hat x \|_F$, which seemed to correspond to the best looking image. Unfortunately, in most applications the true image is not known, so parameters must be chosen by visual inspection. This is demonstrated in Figure 6 below, where we vary $\lambda$ while we deblur and denoise the image with Student's $t$ noise with one degree of freedom and a standard deviation of 0.0001 and the Frobenius norm penalty function. 
+	Before we can restore a corrupted image, we must first set our objective function parameters $\lambda$ and $\gamma$. For our results in the next section we tried various parameter values and chose those that resulted in the smallest error from the true image, $\| x - \hat x \|_F$, which seemed to correspond to the best looking image. Unfortunately, in most applications the true image is not known, so parameters must be chosen by visual inspection. This is demonstrated in Figure 6 below, where we vary $\lambda$ while we deblur and denoise the image with Student's $t$ noise with one degree of freedom and a standard deviation of 0.0001 and the Frobenius norm penalty function. 
 	
 	We see that smaller values of $\lambda$ result in underregularization: the image is successfully deblurred, but the sensitivity of the Frobenius norm to outliers results in star-like artifacts. As we increase $\lambda$ these artifacts diminish, but we pay the price in terms of overregularization. For the Haar wavelet basis this results in pixelation, while for the Daubechies wavelet basis the image appears blurred or smudged. It is clear from looking at the images that $\lambda = 0.01$ does the best job at balancing fidelity and regularization, in fact returning the lowest error. 
 	
@@ -441,7 +441,7 @@ compares the effectiveness of $\log \circ \cosh$ with Huber for the denoising an
 			\rotatebox{90}{\hspace{1.25cm} $\log \circ \cosh$ Loss \hspace{2.5cm} Original Image}
 			\includegraphics[width=0.8\textwidth]{../figures/logcosh_peppers.png}
 			\rotatebox{90}{\hspace{1.5cm} Huber Loss \hspace{2.25cm} Blurred and Noisy}
-			\caption{A comparison between the $\log \circ \cosh$ and Huber fidelity terms }
+			\caption{A comparison between the $\log \circ \cosh$ and Huber fidelity terms. }
 			\label{log_cosh_pic}
 		\end{center}
 	\end{figure}
@@ -452,7 +452,7 @@ compares the effectiveness of $\log \circ \cosh$ with Huber for the denoising an
 	\begin{figure}[t]
 		
 		\begin{center}
-			\includegraphics[width=0.8\textwidth]{../figures/comparePlot2.pdf}
+			\includegraphics[width=0.7\textwidth]{../figures/comparePlot2.pdf}
 			\caption{Frobenius norm error between the restored and true image plotted against time required for the relative change in the objective function to drop below $0.1\%$.}
 			\label{comp_methods}
 		\end{center}
@@ -462,17 +462,18 @@ compares the effectiveness of $\log \circ \cosh$ with Huber for the denoising an
 	
 	In Figure \ref{log_cosh_pic} we compare the $\log \circ \cosh$ penalty to the Huber with Student's $t$ noise, where it appears to perform slightly better in terms of edge resolution and noise reduction. However, their performance may be reversed for other types of noise. For example, we may expect $\log \circ \cosh$ to over-penalize low magnitude differences in the case of more tightly distributed (e.g. Gaussian) noise. Another caveat is that since the Lipschitz constant of $\nabla \gamma^{-1} \log ( \cosh ( \gamma x )) = \tanh (\gamma x)$ is equal to $\gamma$, the step size in the MFISTA algorithm decreases as we increase $\gamma$, thereby increasing the computational expense for this penalty function. Timing information was not collected for this method, but there did not appear to be a significant increase in the number of iterations needed for convergence for the examples we implemented.
 		
-	In order to objectively compare our different methods, we plot computation time verses the Frobenius error between the restored image and the true image in Figure \ref{comp_methods}. Here we note again that the Huber norm produces better results than the Frobenius norm, though it requires more time, with the most significant difference appearing Student's $t$ noise, especially for the total variation method. It is also clear that total variation regularization outperforms the $l_1$ wavelet regularization, though at the price of additional computational complexity. This is not altogether surprising due to the fact that the total variation algorithm involves solving an additional denoising problem for each iteration of deblurring. It can also be seen that the images with Student's $t$ noise generally required less time to restore than images with Gaussian noise, though the results had slightly more error.
+	In order to objectively compare our different methods, we plot computation time verses the Frobenius error between the restored image and the true image in Figure \ref{comp_methods}. Here we note again that the Huber norm produces better results than the Frobenius norm, though it requires more time, with the most significant difference appearing for images with Student's $t$ noise, especially for the total variation method. It is also clear that total variation regularization outperforms the $l_1$ wavelet regularization, though at the price of additional computational complexity. This is not altogether surprising due to the fact that the total variation algorithm involves solving an additional denoising problem for each iteration of deblurring. It can also be seen that the images with Student's $t$ noise generally required less time to restore than images with Gaussian noise, though the results had slightly more error.
 	
-	Overall in our survey of different fidelity functions and regularizations for the deblurring and denoising problem we find that the results are greatly impacted by the amount and type of noise. For lower amounts of noise, especially Gaussian noise, all of our formulations perform well, but when higher, heavy-tailed noise is present, the total variation regularizer paired with the Huber or $\log \circ \cosh$ penalty function perform the best, though requiring more computation time. Unfortunately we did not look into how each of our algorithms scale, so this increased complexity may become significant for larger pictures, and in that case the wavelet regularizers may be the better choice. 
+	Overall in our survey of different fidelity functions and regularizations for the deblurring and denoising problem we find that the results are greatly impacted by the amount and type of noise. For lower amounts of noise, especially Gaussian noise, all of our formulations perform well, but when higher, heavy-tailed noise is present, the total variation regularizer paired with the Huber or $\log \circ \cosh$ penalty function performs the best, though requiring more computation time. Unfortunately we did not look into how each of our algorithms scale, so this increased complexity may become more significant for larger pictures, and in that case the wavelet regularizers may be the better choice. 
 	
-	In our research we also came across many challenges and avenues for future work. It is clear from Figure \ref{lambda_comp}, that the correct choice of the regularization parameter is important for maximizing results but varies for different classes of images. Therefore, there is a need for finding an objective method for selecting the regularization parameter across different images. Additionally, finding an appropriate error metric can be challenging when quantitatively analyzing performance for our various methods. While the Frobenius norm of the error is a common choice, it does not always accurately evaluate qualitative improvements in image restoration due to the effect of large structural changes in the image. 
+	In our research we also came across many challenges and avenues for future work. It is clear from Figure \ref{lambda_comp} that the correct choice of the regularization parameter is important for maximizing results but varies for different classes of images. Therefore, there is a need for finding an objective method for selecting the regularization parameter across different images. Additionally, finding an appropriate error metric can be challenging when quantitatively analyzing performance for our various methods. While the Frobenius norm of the error is a common choice, it does not always accurately evaluate qualitative improvements in image restoration due to the effect of large structural changes in the image. Furthermore, in applications the true image is unknown, so evaluation must be done by visual inspection.
 	
 	%\printbibliography[title={Sources}]
 	\bibliographystyle{unsrt}
 	\bibliography{sources}
 	
+	{\footnotesize
 	All of our code can be found on {\color{blue}\href{https://github.com/rpm4real/de_noise-blur}{github}}. \\
-	The spot operators used to implement blur operators and wavelet transforms can be found {\color{blue}\href{http://www.cs.ubc.ca/labs/scl/spot/}{here}}.
+	The spot operators used to implement blur operators and wavelet transforms can be found {\color{blue}\href{http://www.cs.ubc.ca/labs/scl/spot/}{here}}.}
 	
 \end{document}
