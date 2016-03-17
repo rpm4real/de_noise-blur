@@ -441,7 +441,7 @@ compares the effectiveness of $\log \circ \cosh$ with Huber for the denoising an
 			\rotatebox{90}{\hspace{1.25cm} $\log \circ \cosh$ Loss \hspace{2.5cm} Original Image}
 			\includegraphics[width=0.8\textwidth]{../figures/logcosh_peppers.png}
 			\rotatebox{90}{\hspace{1.5cm} Huber Loss \hspace{2.25cm} Blurred and Noisy}
-			\caption{A comparison between the $\log \circ \cosh$ and Huber Fidelity Terms }
+			\caption{A comparison between the $\log \circ \cosh$ and Huber fidelity terms }
 			\label{log_cosh_pic}
 		\end{center}
 	\end{figure}
@@ -468,15 +468,11 @@ compares the effectiveness of $\log \circ \cosh$ with Huber for the denoising an
 	
 	In our research we came across many challenges and avenues for future work. It is clear from figure \ref{lambda_comp}, that the correct choice of the regularization parameter is important for maximizing results but varies for different classes of images. Therefore, there is a high need for finding a correct method for attaining the regularization parameter across images. Additionally, finding an appropriate error metric can be a difficult challenge when quantitatively analyzing performance for the methods shown. The Frobenius norm of the error is the most common metric, but can do a poor job of correctly evaluating the improvements from denoising and deblurring algorithms due to the large structural changes of the images. 
 	
-	
-	
-	
-	
 	%\printbibliography[title={Sources}]
 	\bibliographystyle{unsrt}
 	\bibliography{sources}
 	
+	All of our code can be found on {\color{blue}\href{https://github.com/rpm4real/de_noise-blur}{github}}. \\
 	The spot operators used to implement blur operators and wavelet transforms can be found {\color{blue}\href{http://www.cs.ubc.ca/labs/scl/spot/}{here}}.
-	
 	
 \end{document}
