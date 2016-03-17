@@ -348,7 +348,7 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 	\end{tabular}
 	\end{minipage}
 	
-	\begin{figure}[H]
+	\begin{figure}[p]
 	\centering
 	\rotatebox{90}{\hspace{0.5cm} Daubechies \hspace{3.5em} Haar}
 	\includegraphics[width=6in]{../figures/wavLam4.pdf} \\
@@ -358,7 +358,7 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 	\end{figure}
 	
 	DISCUSS WHICH REGULARIZER IS BETTER, WHICH NORM IS BETTER
-	\begin{figure}[H]
+	\begin{figure}[p]
 		\begin{center}
 			\rotatebox{90}{\hspace{1cm} Frobenius Loss \hspace{2.25cm} Original Image}
 			\includegraphics[width = 0.75\textwidth]{../figures/waveletGaussH.pdf} 
@@ -368,7 +368,7 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 		\label{waveletH_gauss}
 	\end{figure}
 	
-	\begin{figure}[H]
+	\begin{figure}[p]
 		\begin{center}
 			\rotatebox{90}{\hspace{1cm} Frobenius Loss \hspace{2.25cm} Original Image}
 			\includegraphics[width = 0.75\textwidth]{../figures/waveletGaussD.pdf} 
@@ -378,7 +378,7 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 		\label{waveletD_gauss}
 	\end{figure}
 	
-	\begin{figure}[H]
+	\begin{figure}[p]
 		\begin{center}
 			\rotatebox{90}{\hspace{1cm} Frobenius Loss \hspace{2.25cm} Original Image}
 			\includegraphics[width = 0.75\textwidth]{../figures/waveletStudentH.pdf} 
@@ -388,7 +388,7 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 		\label{waveletH_student}
 	\end{figure}
 	
-	\begin{figure}[H]
+	\begin{figure}[p]
 		\begin{center}
 			\rotatebox{90}{\hspace{1cm} Frobenius Loss \hspace{2.25cm} Original Image}
 			\includegraphics[width = 0.75\textwidth]{../figures/waveletStudentD.pdf} 
@@ -402,7 +402,7 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 	
 	We demonstrate some results of denoising and deblurring with the Total Variation regularization on real images. As previously shown, each image was given a small amount of either Gaussian or Student's t noise and blurred. Two different fidelity functions were used: the squared Frobenius norm, and the Huber norm. Figure \ref{tv_gauss} demonstrates the results using Gaussian noise, and Figure \ref{tv_student} demonstrates the results using Student's t noise with one degree of freedom. For the Gaussian noise, we set $\lambda = .001$, and $\gamma = .02$ (see TV-regularization in Problem Formulation). For Student's t noise, we set $\lambda = .002$, and $\gamma = .02$.
 	
-	\begin{figure}[H]
+	\begin{figure}[p]
 		\begin{center}
 			\rotatebox{90}{\hspace{1cm} Frobenius Loss \hspace{2.25cm} Original Image}
 			\includegraphics[width = 0.75\textwidth]{../figures/gaussian_peppers.png} 
@@ -412,7 +412,7 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 		\label{tv_gauss}
 	\end{figure}
 	
-	\begin{figure}[H]
+	\begin{figure}[p]
 		\begin{center}
 			\rotatebox{90}{\hspace{1cm} Frobenius Loss \hspace{2.25cm} Original Image}
 			\includegraphics[width = 0.75\textwidth]{../figures/student-t_peppers.png} 
@@ -426,7 +426,7 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 	
 	Recall that for large values of $\gamma$ the function $\gamma^{-1} \log(\cosh (\gamma \cdot ))$ uniformly converges to the absolute value function.  Since it is also Lipschitz differentiable we are able to use it in our algorithm for TV regularized denoising and deblurring with high values of $\gamma$ to approximate how the standard $L^1$ norm would perform without needing to worry about how to optimize it.
 	
-	\begin{figure}[H]
+	\begin{figure}[p]
 		\begin{center}
 			\rotatebox{90}{\hspace{1.25cm} $\log \circ \cosh$ Loss \hspace{2.5cm} Original Image}
 			\includegraphics[width=0.8\textwidth]{../figures/logcosh_peppers.png}
@@ -436,14 +436,12 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 		\end{center}
 	\end{figure}
 	
-	To do:
-	-it seems to perform better
-	-it also takes longer since the step size decreases like 1/gamma
+	Based on this example alone, the $\log \circ \cosh$ penalty appears to perform slightly better than the Huber penalty, though the difference is slight and only becomes visible with enlarged views of the images.  $\log \circ \cosh$ appears to preserve edges better.  We cannot say it necessarily performs better though since the difference could be the result of the choice of parameters and their relative performance could be reversed for alternative forms of noise.  In fact, we may expect $\log \circ \cosh$ to over penalize low magnitude differences in the case of more tightly distributed (e.g. gaussian) noise.  Another caveat is that since the Lipschitz constant of $\nabla \gamma^{-1} \log ( \cosh ( \gamma x )) = \tanh (\gamma x)$ is equal to $\gamma$ and thus becomes large, the step size in out MFISTA algorithm becomes small and we expect more computational expense for this penalty function.
 	
 	% Discussion
 	\section{Discussion and Conclusions}
 	
-	\begin{figure}[H]
+	\begin{figure}[t]
 		
 		\begin{center}
 			\includegraphics[width=0.8\textwidth]{../figures/comparePlot2.pdf}
