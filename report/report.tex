@@ -77,8 +77,7 @@
 	g_{\gamma}(x) = \frac{1}{\gamma} \sum_i \log\left(\cosh\left(\gamma x_i\right)\right).
 	\end{equation}
 	
-	\newpage
-	SOMETHING ABOUT WHY WE WOULD CONSIDER LOG COSH? ADVANTAGES? APPROACHES L1 FOR LARGE GAMMA? DOES THIS BELONG HERE? SHOULD IT BE SMALLER? REFERENCE FIG 2 \\
+For the sake of completeness we also wanted to experiment with the 1-norm penalty but were not able to implement it due to the lack of smoothness.  Instead, we tried using a smooth approximation to the 1-norm.  The function we came up with was $\gamma^{-1} \log( \cosh(\gamma x))$ seen in \ref{loss} with $\gamma = 5$, which uniformly converges to the absolute value function as $\gamma$ tends towards positive infinity.  Further, the Lipschitz constant of the gradient only increases linearly with $\gamma$.  The 1-norm could also have been approximated by the Huber loss via taking $\gamma \to 0$ while simultaneously adjusting $\lambda$ to effectively increase the slope of the fidelity function.  This presents other challenges however.  For instance it is highly nontrivial to tune the parameters of the algorithm and doing so while also worrying about taking two limits would further complicate an already challenging problem.  The behavior of $\gamma^{-1} \log( \cosh(\gamma x))$ away from the origin does not significantly change with $\gamma$ and hence parameter tuning for the near $L^1$ case is simpler than with Huber.
 	
 	\begin{figure}[H]
 		\centering
