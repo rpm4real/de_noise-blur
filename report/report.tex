@@ -315,7 +315,7 @@ For the sake of completeness we also wanted to experiment with the 1-norm penalt
 	% Examples
 	\section{Examples}
 	
-	In this section we compare the performance of our different fidelity term penalty functions and regularizers. In each example the peppers image is first blurred with a $9 \times 9$ Gaussian kernel with standard deviation 1, and then either Gaussian noise or Student's $t$ noise is added, both with standard deviation 0.01. Additionally, we determined how many iterations to run each algorithm based on convergence criterion rather than using a fixed number of iterations. For our examples, we stopped iterating once the objective function failed to decrease by more than 0.1\% of its previous value. 
+	In this section we compare the performance of our different fidelity term penalty functions and regularizers. In each example the peppers image is first blurred with a $9 \times 9$ Gaussian kernel with standard deviation 1, and then either Gaussian noise or Student's $t$ noise is added, both with standard deviation 0.01. Additionally, we determined how many iterations to run each algorithm based on convergence criterion rather than using a fixed number of iterations. For our examples, we stopped iterating once the objective function failed to decrease by more than 0.1\% of its previous value.  When testing the total variation algorithm the objective function often remained constant due to the structure of the MFISTA algorithm so the break condition was restricted to the case in which decay of the objective function was both sufficiently small and non-zero.
 	
 	\subsection{$l_1$ Wavelet Regularization}
 	
