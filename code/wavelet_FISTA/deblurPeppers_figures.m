@@ -50,8 +50,14 @@ Bobs = blurt(X,Bpars);
 
 % deblur/denoise image
 Dpars.fig = 0; Dpars.dispfunc = 0; Dpars.MAXITER = 200;
+tic
 [X_out1] = deblur_wavelet_2norm(Bobs,W,lambda1,tol,Dpars);
+toc
+norm(X-X_out1,'fro')
+tic
 [X_out2] = deblur_wavelet_huber(Bobs,W,lambda2,gamma,tol,Dpars);
+toc
+norm(X-X_out2,'fro')
 
 % view results
 figure()
